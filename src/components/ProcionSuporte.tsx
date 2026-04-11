@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Copy, X, Wifi, WifiOff } from "lucide-react";
-import iconeSrc from "@/assets/icone.png";
+import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -37,16 +37,8 @@ export default function ProcionSuporte() {
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-primary px-6 py-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary-foreground/10 backdrop-blur-sm">
-            <img src={iconeSrc} alt="Procion" className="h-10 w-10 object-contain" />
-          </div>
-          <h1 className="text-2xl font-bold tracking-tight text-primary-foreground">
-            PROCION SUPORTE
-          </h1>
-          <p className="mt-1 text-sm font-medium text-primary-foreground/70">
-            Atendimento remoto
-          </p>
+        <div className="bg-primary px-6 py-8 flex items-center justify-center">
+          <img src={logoSrc} alt="Procion Suporte" className="h-16 object-contain" />
         </div>
 
         {/* Body */}
