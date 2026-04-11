@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { Copy, X, Monitor, Wifi, WifiOff } from "lucide-react";
+import { Copy, X, Wifi, WifiOff } from "lucide-react";
+import iconeSrc from "@/assets/icone.png";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
