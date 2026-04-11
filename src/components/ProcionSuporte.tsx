@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Copy, X, Wifi, WifiOff, Paperclip, File, Trash2, Upload } from "lucide-react";
+import { Copy, X, Wifi, WifiOff, Paperclip, File, Trash2, Upload, Plug } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-type ConnectionStatus = "initializing" | "connecting" | "connected";
+type ConnectionStatus = "idle" | "connecting" | "connected";
 
 interface AttachedFile {
   name: string;
@@ -13,7 +13,7 @@ interface AttachedFile {
 }
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; colorClass: string; icon: typeof Wifi }> = {
-  initializing: { label: "Inicializando", colorClass: "bg-status-idle", icon: WifiOff },
+  idle: { label: "Desconectado", colorClass: "bg-status-idle", icon: WifiOff },
   connecting: { label: "Conectando...", colorClass: "bg-status-connecting", icon: Wifi },
   connected: { label: "Conectado", colorClass: "bg-status-connected", icon: Wifi },
 };
@@ -29,16 +29,24 @@ function formatFileSize(bytes: number): string {
 }
 
 export default function ProcionSuporte() {
-  const [status, setStatus] = useState<ConnectionStatus>("initializing");
+  const [status, setStatus] = useState<ConnectionStatus>("idle");
   const [supportId] = useState(() => generateSupportId());
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const t1 = setTimeout(() => setStatus("connecting"), 1500);
-    const t2 = setTimeout(() => setStatus("connected"), 3500);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
+  const handleConnect = useCallback(() => {
+    if (status === "connected") {
+      setStatus("idle");
+      toast.info("Desconectado do suporte");
+      return;
+    }
+    setStatus("connecting");
+    toast.info("Conectando ao suporte...");
+    setTimeout(() => {
+      setStatus("connected");
+      toast.success("Conectado com sucesso!");
+    }, 2000);
+  }, [status]);
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
@@ -76,17 +84,17 @@ export default function ProcionSuporte() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-white shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-primary px-6 py-8 flex items-center justify-center">
-          <img src={logoSrc} alt="Hádron Suporte" className="h-16 object-contain" />
+          <img src={logoSrc} alt="Procion Suporte" className="h-16 object-contain" />
         </div>
 
         {/* Body */}
         <div className="px-6 py-6 space-y-5">
           {/* Status */}
           <div className="flex items-center justify-center gap-2.5">
-            <span className={`inline-block h-2.5 w-2.5 rounded-full ${colorClass} ${status !== "connected" ? "animate-pulse-dot" : ""}`} />
+            <span className={`inline-block h-2.5 w-2.5 rounded-full ${colorClass} ${status === "connecting" ? "animate-pulse-dot" : ""}`} />
             <StatusIcon className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm font-medium text-muted-foreground">{label}</span>
           </div>
@@ -96,12 +104,25 @@ export default function ProcionSuporte() {
             <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">
               Seu ID de suporte
             </label>
-            <div className="rounded-xl border-2 border-border bg-white px-6 py-5 text-center">
+            <div className="rounded-xl border-2 border-border bg-card px-6 py-5 text-center">
               <span className="text-3xl font-mono font-bold tracking-[0.25em] text-foreground">
                 {supportId}
               </span>
             </div>
           </div>
+
+          {/* Connect Button */}
+          <Button
+            onClick={handleConnect}
+            className={`w-full gap-2 h-12 text-base font-semibold ${
+              status === "connected"
+                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                : "bg-accent text-accent-foreground hover:bg-accent/90"
+            }`}
+          >
+            <Plug className="h-5 w-5" />
+            {status === "connected" ? "Desconectar" : "Conectar"}
+          </Button>
 
           {/* File Attachment */}
           <div className="space-y-2">
