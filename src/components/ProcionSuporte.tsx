@@ -35,7 +35,7 @@ export default function ProcionSuporte() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-white shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-primary px-6 py-8 flex items-center justify-center">
           <img src={logoSrc} alt="Procion Suporte" className="h-16 object-contain" />
@@ -55,7 +55,7 @@ export default function ProcionSuporte() {
             <label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground text-center">
               Seu ID de suporte
             </label>
-            <div className="rounded-xl border-2 border-border bg-muted/50 px-6 py-5 text-center">
+            <div className="rounded-xl border-2 border-border bg-white px-6 py-5 text-center">
               <span className="text-3xl font-mono font-bold tracking-[0.25em] text-foreground">
                 {supportId}
               </span>
