@@ -6,7 +6,7 @@ function createWindow() {
     width: 480,
     height: 700,
     resizable: false,
-    title: "Procion Suporte Remoto",
+    title: "Hádron Suporte Remoto",
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
