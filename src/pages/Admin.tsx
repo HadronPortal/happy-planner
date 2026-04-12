@@ -4,25 +4,25 @@ import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
 import ClientDetailSheet from "@/components/admin/ClientDetailSheet";
-import { MOCK_CLIENTS, SupportClient } from "@/data/supportData";
+import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [techFilter, setTechFilter] = useState("all");
-  const [selectedClient, setSelectedClient] = useState<SupportClient | null>(null);
+  const [selectedClient, setSelectedClient] = useState<DbClient | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const clients = MOCK_CLIENTS;
+  const { clients, loading } = useSupportClients();
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
       const matchSearch =
         !search ||
-        c.company.toLowerCase().includes(search.toLowerCase()) ||
-        c.supportId.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
+        c.empresa.toLowerCase().includes(search.toLowerCase()) ||
+        c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
       const matchStatus = statusFilter === "all" || c.status === statusFilter;
-      const matchTech = techFilter === "all" || c.technician === techFilter;
+      const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
       return matchSearch && matchStatus && matchTech;
     });
   }, [clients, search, statusFilter, techFilter]);
@@ -34,21 +34,19 @@ export default function AdminPanel() {
     waiting: clients.filter((c) => c.status === "waiting").length,
   }), [clients]);
 
-  const handleViewDetails = (client: SupportClient) => {
+  const handleViewDetails = (client: DbClient) => {
     setSelectedClient(client);
     setDetailOpen(true);
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Background grid */}
       <div className="fixed inset-0 opacity-[0.03]" style={{
         backgroundImage: `linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)`,
         backgroundSize: '60px 60px'
       }} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
             <img src={logoSrc} alt="Hádron" className="h-10 object-contain" />
@@ -65,10 +63,8 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        {/* Stats */}
         <StatsBar {...stats} />
 
-        {/* Filters */}
         <ClientFilters
           search={search}
           onSearchChange={setSearch}
@@ -78,16 +74,13 @@ export default function AdminPanel() {
           onTechFilterChange={setTechFilter}
         />
 
-        {/* Table */}
-        <ClientTable clients={filtered} onViewDetails={handleViewDetails} />
+        <ClientTable clients={filtered} loading={loading} onViewDetails={handleViewDetails} />
 
-        {/* Footer */}
         <p className="text-center text-[10px] text-muted-foreground/40 pt-4">
           © {new Date().getFullYear()} Hádron Suporte — Painel administrativo
         </p>
       </div>
 
-      {/* Detail sheet */}
       <ClientDetailSheet
         client={selectedClient}
         open={detailOpen}
