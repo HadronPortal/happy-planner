@@ -57,7 +57,7 @@ export default function HadronSuporte() {
           <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary to-transparent" />
 
           {/* Header */}
-          <div className="px-8 pt-8 pb-4 flex flex-col items-center bg-black rounded-b-xl">
+          <div className="px-8 pt-8 pb-4 flex flex-col items-center">
             <img
               src={logoSrc}
               alt="Hádron Suporte"
