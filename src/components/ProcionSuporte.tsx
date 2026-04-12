@@ -33,10 +33,7 @@ export default function HadronSuporte() {
 
   useEffect(() => {
     const t1 = setTimeout(() => setStatus("connecting"), 1500);
-    const t2 = setTimeout(() => {
-      setStatus("connected");
-      toast.success("Conectado com sucesso");
-    }, 3500);
+    const t2 = setTimeout(() => setStatus("connected"), 3500);
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [supportId]);
 
