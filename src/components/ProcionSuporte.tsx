@@ -84,7 +84,7 @@ export default function HadronSuporte() {
               Seu ID de suporte
             </p>
             <div className="relative rounded-xl border border-secondary/30 bg-muted/30 px-6 py-6 text-center animate-glow-border">
-              <span className="text-4xl font-mono font-bold tracking-[0.3em] text-foreground">
+              <span className="text-3xl sm:text-4xl font-mono font-bold tracking-[0.3em] text-foreground whitespace-nowrap">
                 {supportId}
               </span>
             </div>
