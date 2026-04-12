@@ -90,7 +90,7 @@ export default function DownloadPage() {
 
                 {/* Download button */}
                 <Button
-                  className="w-full h-14 text-base font-bold gap-2.5 bg-primary text-primary-foreground hover:bg-primary/85 shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 transition-all"
+                  className="w-full h-14 text-base font-bold gap-2.5 bg-primary text-primary-foreground hover:bg-primary/85 transition-colors"
                   onClick={() => {
                     // Future: real download link
                     window.open("#", "_self");
