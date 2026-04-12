@@ -1,11 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown } from "lucide-react";
+import { useState, useCallback } from "react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-
-type ConnectionStatus = "initializing" | "connecting" | "connected";
+import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -13,46 +12,10 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
   connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
 };
 
-function generateSupportId(): string {
-  return `${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)} ${Math.floor(100 + Math.random() * 900)}`;
-}
-
-function generatePassword(): string {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < 6; i++) result += chars[Math.floor(Math.random() * chars.length)];
-  return result;
-}
-
 export default function HadronSuporte() {
-  const [status, setStatus] = useState<ConnectionStatus>("initializing");
-  const [supportId, setSupportId] = useState(() => generateSupportId());
-  const [password, setPassword] = useState(() => generatePassword());
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setStatus("connecting"), 1500);
-    const t2 = setTimeout(() => setStatus("connected"), 3500);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, [supportId]);
-
-  const handleCopy = useCallback(() => {
-    navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
-    toast.success("ID copiado para a área de transferência");
-  }, [supportId]);
-
-  const handleRestart = useCallback(() => {
-    setStatus("initializing");
-    setSupportId(generateSupportId());
-    setPassword(generatePassword());
-    toast.info("Reiniciando suporte...");
-  }, []);
-
-  const handleRefreshPassword = useCallback(() => {
-    setPassword(generatePassword());
-    toast.info("Senha atualizada");
-  }, []);
 
   const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
@@ -86,6 +49,13 @@ export default function HadronSuporte() {
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
+              <button
+                onClick={fechar}
+                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+                title="Fechar"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
 
@@ -104,7 +74,7 @@ export default function HadronSuporte() {
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2">ID</span>
-                  <button onClick={handleCopy} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <button onClick={copiarId} className="text-muted-foreground hover:text-foreground transition-colors">
                     <Copy className="h-3.5 w-3.5" />
                   </button>
                 </div>
@@ -118,7 +88,7 @@ export default function HadronSuporte() {
                 <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2">Senha de uso único</span>
                 <div className="flex items-center gap-2 pl-2">
                   <span className="text-base font-mono font-semibold text-foreground tracking-wider">{password}</span>
-                  <button onClick={handleRefreshPassword} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <button onClick={refreshPassword} className="text-muted-foreground hover:text-foreground transition-colors">
                     <RotateCcw className="h-3.5 w-3.5" />
                   </button>
                 </div>
@@ -126,7 +96,7 @@ export default function HadronSuporte() {
 
               {/* Restart */}
               <button
-                onClick={handleRestart}
+                onClick={reiniciar}
                 className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
