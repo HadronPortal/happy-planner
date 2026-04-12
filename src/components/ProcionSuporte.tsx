@@ -83,7 +83,7 @@ export default function HadronSuporte() {
             <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-muted-foreground text-center mb-3">
               Seu ID de suporte
             </p>
-            <div className="relative rounded-xl border border-secondary/30 bg-muted/30 px-6 py-6 text-center animate-glow-border">
+            <div className="relative rounded-xl border border-secondary/30 bg-muted/30 px-6 py-6 text-center">
               <span className="text-3xl sm:text-4xl font-mono font-bold tracking-[0.3em] text-foreground whitespace-nowrap">
                 {supportId}
               </span>
@@ -95,14 +95,14 @@ export default function HadronSuporte() {
             <div className="flex gap-3">
               <Button
                 onClick={handleCopy}
-                className="flex-1 gap-2 h-12 text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/85 shadow-lg shadow-primary/20 transition-all hover:shadow-xl hover:shadow-primary/30"
+                className="flex-1 gap-2 h-12 text-sm font-bold bg-primary text-primary-foreground hover:bg-primary/85 transition-colors"
               >
                 <Copy className="h-4 w-4" />
                 Copiar ID
               </Button>
               <Button
                 onClick={() => window.close()}
-                className="flex-1 gap-2 h-12 text-sm font-bold bg-destructive text-destructive-foreground hover:bg-destructive/85 shadow-lg shadow-destructive/20"
+                className="flex-1 gap-2 h-12 text-sm font-bold bg-destructive text-destructive-foreground hover:bg-destructive/85 transition-colors"
               >
                 <X className="h-4 w-4" />
                 Fechar
