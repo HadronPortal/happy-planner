@@ -14,7 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      support_online_clients: {
+        Row: {
+          app_version: string
+          empresa: string
+          hostname: string
+          id: string
+          opened_at: string
+          rustdesk_id: string
+          status: string
+          tecnico_responsavel: string | null
+          updated_at: string
+        }
+        Insert: {
+          app_version?: string
+          empresa: string
+          hostname: string
+          id?: string
+          opened_at?: string
+          rustdesk_id: string
+          status?: string
+          tecnico_responsavel?: string | null
+          updated_at?: string
+        }
+        Update: {
+          app_version?: string
+          empresa?: string
+          hostname?: string
+          id?: string
+          opened_at?: string
+          rustdesk_id?: string
+          status?: string
+          tecnico_responsavel?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
