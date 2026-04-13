@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X, UserCog } from "lucide-react";
 
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
