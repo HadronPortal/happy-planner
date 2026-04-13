@@ -124,60 +124,27 @@ export default function HadronSuporte() {
             </div>
 
             {/* Right panel */}
-            <div className="flex-1 flex flex-col p-5">
-              {/* Remote connect */}
-              <div className="flex flex-col items-center gap-3 mb-6">
-                <h3 className="text-sm font-semibold text-foreground">Controle um Computador Remoto</h3>
-                <Input
-                  placeholder="Informe o ID Remoto"
-                  value={remoteId}
-                  onChange={(e) => setRemoteId(e.target.value)}
-                  className="max-w-xs text-center bg-muted/40 border-border"
-                />
-                <Button
-                  onClick={handleConnect}
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
-                >
-                  Conectar
-                </Button>
-              </div>
-
-              {/* Tabs */}
-              <div className="flex items-center justify-between border-b border-border mb-4">
-                <div className="flex gap-1">
-                  {tabs.map((tab, i) => (
-                    <button
-                      key={tab.label}
-                      onClick={() => setActiveTab(i)}
-                      className={`flex items-center gap-2 p-2.5 rounded-t transition-colors ${
-                        activeTab === i
-                          ? "text-foreground border-b-2 border-secondary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <tab.icon className="h-4 w-4" />
-                      <span className="text-[11px] font-medium hidden lg:inline">{tab.label}</span>
-                    </button>
-                  ))}
+            <div className="flex-1 flex flex-col p-5 bg-muted/10">
+              {/* Client only message */}
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-6 py-8">
+                <div className="rounded-full bg-secondary/10 p-6 text-secondary animate-pulse">
+                  <Monitor className="h-12 w-12" />
                 </div>
-                <div className="flex gap-1">
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Search className="h-4 w-4" />
-                  </button>
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <LayoutGrid className="h-4 w-4" />
-                  </button>
+                <div className="space-y-3">
+                  <h3 className="text-lg font-bold text-foreground">Aguardando Suporte Técnico</h3>
+                  <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+                    Por favor, informe seu <span className="text-foreground font-semibold">ID</span> e <span className="text-foreground font-semibold">Senha</span> para o técnico responsável iniciar a conexão.
+                  </p>
                 </div>
-              </div>
-
-              {/* Empty state */}
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 py-8">
-                <div className="rounded-full bg-muted/50 p-4">
-                  <Frown className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Ops, não há sessões recentes!</p>
-                  <p className="text-xs text-muted-foreground/70">Hora de planejar uma nova.</p>
+                <div className="flex flex-col gap-2 w-full max-w-[240px]">
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-card border border-border shadow-sm">
+                    <Shield className="h-4 w-4 text-secondary" />
+                    <span className="text-xs font-medium">Sessão Criptografada</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 rounded-lg bg-card border border-border shadow-sm">
+                    <Lock className="h-4 w-4 text-secondary" />
+                    <span className="text-xs font-medium">Conexão Segura</span>
+                  </div>
                 </div>
               </div>
             </div>
