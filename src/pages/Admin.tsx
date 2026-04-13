@@ -11,7 +11,7 @@ export default function AdminPanel() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
   const [techFilter, setTechFilter] = useState("all");
-  const [selectedClient, setSelectedClient] = useState<DbClient | null>(null);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
   const { clients, loading, updateClientStatus } = useSupportClients();
@@ -51,9 +51,13 @@ export default function AdminPanel() {
   }), [clients]);
 
   const handleViewDetails = (client: DbClient) => {
-    setSelectedClient(client);
+    setSelectedClientId(client.id);
     setDetailOpen(true);
   };
+
+  const selectedClient = useMemo(() => 
+    clients.find(c => c.id === selectedClientId) || null
+  , [clients, selectedClientId]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -141,6 +145,7 @@ export default function AdminPanel() {
         client={selectedClient}
         open={detailOpen}
         onClose={() => setDetailOpen(false)}
+        onUpdateClient={updateClientStatus}
       />
     </div>
   );
