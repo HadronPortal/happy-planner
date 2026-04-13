@@ -1,23 +1,8 @@
 import { useCallback, useState } from "react";
-import { X, Copy, RotateCcw, Monitor, Shield, Lock, Users, MessageSquare, Download, UserCog, ShieldCheck } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
 
-import logoSrc from "@/assets/logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-
-const NAV_ITEMS = [
-  { title: "Suporte", url: "/suporte", icon: MessageSquare },
-  { title: "Download", url: "/download", icon: Download },
-  { title: "Técnico", url: "/tecnico", icon: UserCog },
-  { title: "Admin", url: "/admin", icon: ShieldCheck },
-];
+import { PageHeader } from "./PageHeader";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
