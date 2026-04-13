@@ -48,8 +48,20 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
   if (!client) return null;
 
   const cfg = STATUS_CONFIG[client.status] || STATUS_CONFIG.offline;
-  // ... (keep time formatting)
-  const handleCopyId = () => {
+  const openedAt = new Date(client.opened_at).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+  const updatedAt = new Date(client.updated_at).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
     navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
     toast.success("ID copiado com sucesso");
     setIsCopied(true);
