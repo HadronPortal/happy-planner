@@ -40,6 +40,7 @@ export default function ClientFilters({
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="active">Clientes ativos</SelectItem>
           <SelectItem value="all">Todos os status</SelectItem>
           <SelectItem value="online">Online</SelectItem>
           <SelectItem value="waiting">Aguardando</SelectItem>
