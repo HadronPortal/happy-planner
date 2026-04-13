@@ -5,6 +5,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import logoSrc from "@/assets/logo.png";
 
