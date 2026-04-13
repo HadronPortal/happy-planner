@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X, UserCog } from "lucide-react";
 
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 export default function HadronSuporte() {
   
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
+  const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
@@ -32,7 +34,10 @@ export default function HadronSuporte() {
     await navigator.clipboard.writeText(cleanId);
     toast.success(`ID ${cleanId} copiado com sucesso.`);
     toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
-  }, [remoteId]);
+    
+    // Navega para a rota de técnico
+    navigate(`/tecnico?id=${cleanId}`);
+  }, [remoteId, navigate]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);
@@ -59,7 +64,14 @@ export default function HadronSuporte() {
             <div className="flex items-center gap-2">
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              <Link
+                to="/tecnico"
+                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+              >
+                <UserCog className="h-3 w-3" />
+                Área do Técnico
+              </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>

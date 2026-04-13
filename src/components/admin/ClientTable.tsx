@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -22,6 +23,7 @@ export default function ClientTable({
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const navigate = useNavigate();
   
 
   const handleCopyId = (rustdesk_id: string, clientId: string) => {
@@ -45,6 +47,9 @@ export default function ClientTable({
 
 
       toast.success("ID copiado. Atendimento iniciado");
+      
+      // 3. Navegar para a rota de técnico
+      navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
       console.error("Connect error:", error);
       toast.error("Erro ao iniciar atendimento");
