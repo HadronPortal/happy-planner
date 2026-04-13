@@ -16,12 +16,14 @@ export default function HadronSuporte() {
   const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
+  const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
   const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
       toast.error("Informe o ID Remoto");
       return;
     }
+    setAttendingTechnician("João Silva");
     toast.info(`Conectando ao ID ${remoteId}...`);
   }, [remoteId]);
 
