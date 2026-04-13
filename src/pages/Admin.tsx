@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
   const [techFilter, setTechFilter] = useState("all");
