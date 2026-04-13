@@ -27,6 +27,8 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 
 export default function HadronSuporte() {
   
+  const navigate = useNavigate();
+  const location = useLocation();
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
@@ -48,23 +50,24 @@ export default function HadronSuporte() {
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
             <div className="flex items-center gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-                    <span className="text-xs">☰</span>
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+              <Select 
+                value={location.pathname === "/" ? "/suporte" : location.pathname} 
+                onValueChange={(value) => navigate(value)}
+              >
+                <SelectTrigger className="h-8 w-8 p-0 border-none bg-transparent hover:bg-muted text-muted-foreground hover:text-foreground shadow-none focus:ring-0">
+                  <span className="text-xs">☰</span>
+                </SelectTrigger>
+                <SelectContent align="end" className="w-48 bg-card border-border">
                   {NAV_ITEMS.map((item) => (
-                    <DropdownMenuItem key={item.title} asChild>
-                      <Link to={item.url} className="flex items-center gap-2 cursor-pointer w-full">
+                    <SelectItem key={item.title} value={item.url} className="cursor-pointer">
+                      <div className="flex items-center gap-2">
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
-                      </Link>
-                    </DropdownMenuItem>
+                      </div>
+                    </SelectItem>
                   ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+                </SelectContent>
+              </Select>
               <button
                 onClick={fechar}
                 className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
