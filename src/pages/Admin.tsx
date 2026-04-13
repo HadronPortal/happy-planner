@@ -6,11 +6,9 @@ import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
 import ClientDetailSheet from "@/components/admin/ClientDetailSheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
-  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
   const [techFilter, setTechFilter] = useState("all");
