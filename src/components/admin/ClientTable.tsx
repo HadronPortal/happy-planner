@@ -1,4 +1,5 @@
-import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
@@ -20,9 +21,13 @@ export default function ClientTable({
   onUpdateClient,
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
-  const handleCopyId = (rustdesk_id: string) => {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyId = (rustdesk_id: string, clientId: string) => {
     navigator.clipboard.writeText(rustdesk_id);
     toast.success("ID copiado com sucesso");
+    setCopiedId(clientId);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const handleConnect = async (client: DbClient) => {
