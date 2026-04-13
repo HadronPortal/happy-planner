@@ -29,19 +29,20 @@ export default function TecnicoPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState<"ready" | "connecting" | "connected">("ready");
 
-  const handleConnect = useCallback(() => {
-    if (!remoteId.trim()) {
+  const handleConnect = useCallback((idToConnect?: string) => {
+    const targetId = idToConnect || remoteId;
+    if (!targetId.trim()) {
       toast.error("Informe o ID Remoto");
       return;
     }
     
     setStatus("connecting");
-    toast.info(`Iniciando conexão com ${remoteId}...`);
+    toast.info(`Iniciando conexão com ${targetId}...`);
     
     // Simulate connection
     setTimeout(() => {
       if (window.hadronTecnicoAPI) {
-        window.hadronTecnicoAPI.openRustDesk(remoteId);
+        window.hadronTecnicoAPI.openRustDesk(targetId);
       }
       setStatus("connected");
       toast.success("Conexão estabelecida via RustDesk");
@@ -53,8 +54,8 @@ export default function TecnicoPage() {
     if (id) {
       setRemoteId(id);
       // Se vier com ID via URL (ex: do Admin ou do Suporte), 
-      // iniciamos a conexão automaticamente
-      setTimeout(() => handleConnect(), 500);
+      // iniciamos a conexão automaticamente chamando com o ID da URL
+      handleConnect(id);
     }
   }, [searchParams, handleConnect]);
 
