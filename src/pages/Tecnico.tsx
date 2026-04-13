@@ -29,16 +29,6 @@ export default function TecnicoPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState<"ready" | "connecting" | "connected">("ready");
 
-  useEffect(() => {
-    const id = searchParams.get("id");
-    if (id) {
-      setRemoteId(id);
-      // Se vier com ID via URL (ex: do Admin ou do Suporte), 
-      // iniciamos a conexão automaticamente
-      handleConnect();
-    }
-  }, [searchParams, handleConnect]);
-
   const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
       toast.error("Informe o ID Remoto");
@@ -57,6 +47,16 @@ export default function TecnicoPage() {
       toast.success("Conexão estabelecida via RustDesk");
     }, 1500);
   }, [remoteId]);
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      setRemoteId(id);
+      // Se vier com ID via URL (ex: do Admin ou do Suporte), 
+      // iniciamos a conexão automaticamente
+      setTimeout(() => handleConnect(), 500);
+    }
+  }, [searchParams, handleConnect]);
 
   const handlePaste = async () => {
     try {
