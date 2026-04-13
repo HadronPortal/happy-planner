@@ -13,7 +13,7 @@ export default function AdminPanel() {
   const [selectedClient, setSelectedClient] = useState<DbClient | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const { clients, loading } = useSupportClients();
+  const { clients, loading, updateClientStatus } = useSupportClients();
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
@@ -74,7 +74,12 @@ export default function AdminPanel() {
           onTechFilterChange={setTechFilter}
         />
 
-        <ClientTable clients={filtered} loading={loading} onViewDetails={handleViewDetails} />
+        <ClientTable 
+          clients={filtered} 
+          loading={loading} 
+          onViewDetails={handleViewDetails} 
+          onUpdateClient={updateClientStatus} 
+        />
 
         <p className="text-center text-[10px] text-muted-foreground/40 pt-4">
           © {new Date().getFullYear()} Hádron Suporte — Painel administrativo

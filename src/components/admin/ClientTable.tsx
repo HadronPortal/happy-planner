@@ -3,25 +3,42 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
+  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
+export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient }: ClientTableProps) {
   const handleCopyId = (id: string) => {
     navigator.clipboard.writeText(id.replace(/\s/g, ""));
     toast.success("ID copiado");
   };
 
-  const handleConnect = (client: DbClient) => {
-    toast.info(`Conectando a ${client.empresa}...`);
+  const handleConnect = async (client: DbClient) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const tech = user?.email || "Atendente Hádron";
+
+      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
+      toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
+
+      await onUpdateClient(client.id, "in_service", tech);
+    } catch (error) {
+      toast.error("Erro ao conectar");
+    }
   };
 
-  const handleEnd = (client: DbClient) => {
-    toast.info(`Atendimento encerrado: ${client.empresa}`);
+  const handleEnd = async (client: DbClient) => {
+    try {
+      await onUpdateClient(client.id, "online", "");
+      toast.info(`Atendimento encerrado: ${client.empresa}`);
+    } catch (error) {
+      toast.error("Erro ao encerrar atendimento");
+    }
   };
 
   if (loading) {
@@ -85,10 +102,10 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
                         </Button>
                       )}
                       <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:text-secondary hover:bg-secondary/10 gap-1">
-                        <Copy className="h-3 w-3" /> ID
+                        <Copy className="h-3 w-3" /> Copiar ID
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
-                        <Eye className="h-3 w-3" /> Detalhes
+                        <Eye className="h-3 w-3" /> Ver detalhes
                       </Button>
                       {client.status === "in_service" && (
                         <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
@@ -132,10 +149,10 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
                   </Button>
                 )}
                 <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:bg-secondary/10 gap-1">
-                  <Copy className="h-3 w-3" /> ID
+                  <Copy className="h-3 w-3" /> Copiar ID
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
-                  <Eye className="h-3 w-3" /> Detalhes
+                  <Eye className="h-3 w-3" /> Ver detalhes
                 </Button>
                 {client.status === "in_service" && (
                   <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
