@@ -88,17 +88,8 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     }
   };
 
-  return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent className="bg-[#0A0A0B] border-l border-border/40 w-full sm:max-w-md p-0 overflow-hidden flex flex-col">
-        <div className="absolute top-4 right-4 z-50">
-          <SheetClose asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white/5 text-muted-foreground">
-              <X className="h-4 w-4" />
-            </Button>
-          </SheetClose>
-        </div>
-
         <div className="relative h-32 w-full overflow-hidden bg-gradient-to-br from-secondary/20 to-transparent">
           <div className="absolute inset-0 opacity-20" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--secondary)) 1px, transparent 0)`,
