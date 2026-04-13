@@ -1,11 +1,7 @@
-import { useState, useCallback } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X, UserCog } from "lucide-react";
+import { useCallback, useState } from "react";
+import { X, Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
 
 import logoSrc from "@/assets/logo.png";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
@@ -17,27 +13,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 export default function HadronSuporte() {
   
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
-  const navigate = useNavigate();
-  const [remoteId, setRemoteId] = useState("");
-  const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
-
-  const handleConnect = useCallback(async () => {
-    if (!remoteId.trim()) {
-      toast.error("Informe o ID Remoto");
-      return;
-    }
-    
-    const cleanId = remoteId.trim().replace(/\s/g, "");
-    
-    // Apenas copia o ID e informa o usuário
-    await navigator.clipboard.writeText(cleanId);
-    toast.success(`ID ${cleanId} copiado com sucesso.`);
-    toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
-    
-    // Navega para a rota de técnico
-    navigate(`/tecnico?id=${cleanId}`);
-  }, [remoteId, navigate]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);
@@ -45,14 +21,6 @@ export default function HadronSuporte() {
   }, [originalReiniciar]);
 
   const { label, dotClass } = STATUS_CONFIG[status];
-
-  const tabs = [
-    { icon: Clock, label: "Recentes" },
-    { icon: Star, label: "Favoritos" },
-    { icon: Link2, label: "Descoberta" },
-    { icon: Users, label: "Catálogo" },
-    { icon: Monitor, label: "Dispositivos" },
-  ];
 
   return (
     <div className="flex h-full items-start justify-center p-2 md:p-4">
