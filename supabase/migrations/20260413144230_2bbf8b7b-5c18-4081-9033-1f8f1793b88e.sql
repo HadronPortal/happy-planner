@@ -1,0 +1,1 @@
+CREATE POLICY "Allow anon update" ON public.support_online_clients FOR UPDATE TO anon USING (true) WITH CHECK (true);
