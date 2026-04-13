@@ -47,9 +47,23 @@ export default function HadronSuporte() {
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
             <div className="flex items-center gap-2">
-              <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-                <span className="text-xs">☰</span>
-              </button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+                    <span className="text-xs">☰</span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-card border-border">
+                  {NAV_ITEMS.map((item) => (
+                    <DropdownMenuItem key={item.title} asChild>
+                      <Link to={item.url} className="flex items-center gap-2 cursor-pointer w-full">
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               <button
                 onClick={fechar}
                 className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
