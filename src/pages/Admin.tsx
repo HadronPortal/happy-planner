@@ -4,6 +4,7 @@ import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
 import ClientDetailSheet from "@/components/admin/ClientDetailSheet";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
