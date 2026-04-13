@@ -34,17 +34,19 @@ export default function ClientTable({
 
   const handleConnect = async (client: DbClient) => {
     try {
-      // 1. Copiar automaticamente o rustdesk_id para a área de transferência
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      
+      // 1. copiar rustdesk_id para a área de transferência
       await navigator.clipboard.writeText(cleanId);
 
-      // 2. Atualizar o registro na tabela support_online_clients
+      // 2. atualizar Supabase
+      // status = "em_atendimento", tecnico_responsavel = "Técnico Atual", updated_at = new Date().toISOString()
+      // updated_at é atualizado automaticamente pelo hook updateClientStatus
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
 
-      // 3. Navegar automaticamente para /tecnico?id=RUSTDESK_ID
+      // 3. navegar na mesma janela para /tecnico?id=RUSTDESK_ID
       navigate(`/tecnico?id=${cleanId}`);
 
-      // 4. Mostrar toast
       toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {
       console.error("Connect error:", error);
