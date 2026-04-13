@@ -8,6 +8,7 @@ import Download from "./pages/Download.tsx";
 import Admin from "./pages/Admin.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import Tecnico from "./pages/Tecnico.tsx";
+import { MainLayout } from "./components/MainLayout.tsx";
 
 const queryClient = new QueryClient();
 
