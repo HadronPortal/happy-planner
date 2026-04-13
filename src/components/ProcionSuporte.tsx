@@ -67,21 +67,21 @@ export default function HadronSuporte() {
             <div className="flex items-center gap-2">
               <Link
                 to="/download"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
                 Download
               </Link>
               <Link
                 to="/admin"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
                 Admin
               </Link>
               <Link
                 to="/tecnico"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
-                <UserCog className="h-3 w-3" />
+                <UserCog className="h-3.5 w-3.5" />
                 Técnico
               </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
