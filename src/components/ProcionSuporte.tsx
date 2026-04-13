@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
-import { X, Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
+import { Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
 
-import logoSrc from "@/assets/logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
+import { PageHeader } from "./PageHeader";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -27,24 +27,8 @@ export default function HadronSuporte() {
       <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          {/* Title bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-            <div className="flex items-center gap-2">
-              <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
-            </div>
-            <div className="flex items-center gap-2">
-              <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-                <span className="text-xs">☰</span>
-              </button>
-              <button
-                onClick={fechar}
-                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
+          <PageHeader onClose={fechar} />
+
 
           {/* Body */}
           <div className="flex flex-col md:flex-row min-h-[420px]">
