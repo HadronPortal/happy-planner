@@ -16,24 +16,37 @@ export default function AdminPanel() {
 
   const { clients, loading, updateClientStatus } = useSupportClients();
 
-  const filtered = useMemo(() => {
-    return clients.filter((c) => {
+  const { activeClients, finishedClients } = useMemo(() => {
+    const baseList = clients.filter((c) => {
       const matchSearch =
         !search ||
         c.empresa.toLowerCase().includes(search.toLowerCase()) ||
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
-      const matchStatus =
-        statusFilter === "all" ||
-        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : (statusFilter === "offline" ? (c.status === "offline" || c.status === "finalizado") : c.status === statusFilter));
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
-      return matchSearch && matchStatus && matchTech;
+      return matchSearch && matchTech;
     });
-  }, [clients, search, statusFilter, techFilter]);
+
+    const active = baseList
+      .filter((c) => c.status === "online" || c.status === "em_atendimento")
+      .sort((a, b) => {
+        // 1. em_atendimento primeiro
+        if (a.status === "em_atendimento" && b.status !== "em_atendimento") return -1;
+        if (a.status !== "em_atendimento" && b.status === "em_atendimento") return 1;
+        // 2. mais recentes primeiro (opened_at)
+        return new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime();
+      });
+
+    const finished = baseList
+      .filter((c) => c.status === "finalizado")
+      .sort((a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime());
+
+    return { activeClients: active, finishedClients: finished };
+  }, [clients, search, techFilter]);
 
   const stats = useMemo(() => ({
     online: clients.filter((c) => c.status === "online").length,
     inService: clients.filter((c) => c.status === "em_atendimento").length,
-    totalToday: clients.length,
+    totalToday: clients.filter((c) => c.status !== "offline").length,
     waiting: clients.filter((c) => c.status === "online" && !c.tecnico_responsavel).length,
   }), [clients]);
 
@@ -72,7 +85,7 @@ export default function AdminPanel() {
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
             <TabsList className="bg-muted/30 border border-border/50 h-9 p-1">
               <TabsTrigger value="active" className="text-xs px-4 h-7">Ativos</TabsTrigger>
-              <TabsTrigger value="offline" className="text-xs px-4 h-7">Offline</TabsTrigger>
+              <TabsTrigger value="finalizado" className="text-xs px-4 h-7">Finalizados</TabsTrigger>
               <TabsTrigger value="all" className="text-xs px-4 h-7">Todos</TabsTrigger>
             </TabsList>
           </Tabs>
@@ -85,12 +98,39 @@ export default function AdminPanel() {
           />
         </div>
 
-        <ClientTable 
-          clients={filtered} 
-          loading={loading} 
-          onViewDetails={handleViewDetails} 
-          onUpdateClient={updateClientStatus} 
-        />
+        <div className="space-y-8">
+          {(statusFilter === "all" || statusFilter === "active") && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 px-1">
+                <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-foreground/70">Atendimentos Ativos</h2>
+              </div>
+              <ClientTable 
+                clients={activeClients} 
+                loading={loading} 
+                onViewDetails={handleViewDetails} 
+                onUpdateClient={updateClientStatus} 
+                emptyMessage="Nenhum atendimento ativo no momento"
+              />
+            </div>
+          )}
+
+          {(statusFilter === "all" || statusFilter === "finalizado") && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-2 px-1">
+                <div className="h-2 w-2 rounded-full bg-blue-500/50" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-foreground/70">Atendimentos Finalizados</h2>
+              </div>
+              <ClientTable 
+                clients={finishedClients} 
+                loading={loading} 
+                onViewDetails={handleViewDetails} 
+                onUpdateClient={updateClientStatus} 
+                emptyMessage="Nenhum atendimento finalizado hoje"
+              />
+            </div>
+          )}
+        </div>
 
         <p className="text-center text-[10px] text-muted-foreground/40 pt-4">
           © {new Date().getFullYear()} Hádron Suporte — Painel administrativo
