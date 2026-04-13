@@ -17,6 +17,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 export default function HadronSuporte() {
   
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
+  const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
@@ -33,7 +34,10 @@ export default function HadronSuporte() {
     await navigator.clipboard.writeText(cleanId);
     toast.success(`ID ${cleanId} copiado com sucesso.`);
     toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
-  }, [remoteId]);
+    
+    // Navega para a rota de técnico
+    navigate(`/tecnico?id=${cleanId}`);
+  }, [remoteId, navigate]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);
