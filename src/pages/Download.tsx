@@ -19,11 +19,7 @@ export default function DownloadPage() {
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
       <div className="relative">
         {/* Header/Hero */}
-        <div className="max-w-7xl mx-auto px-4 pt-4">
-          <div className="rounded-xl border border-border bg-white shadow-sm overflow-hidden mb-8">
-            <PageHeader showClose={false} />
-          </div>
-        </div>
+{/* Header removed, now in MainLayout */}
         
         <section className="px-4 pb-12 text-center">
           <div className="mx-auto max-w-3xl">

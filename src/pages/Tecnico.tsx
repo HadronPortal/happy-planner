@@ -56,14 +56,7 @@ const Tecnico = () => {
       <div className="w-full max-w-xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          <PageHeader 
-            onClose={fechar} 
-            extra={
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold px-2 py-0.5 rounded bg-muted border border-border">
-                Painel do Técnico
-              </span>
-            }
-          />
+{/* Header removed, now in MainLayout */}
 
           {/* Body */}
           <div className="p-8 flex flex-col items-center gap-8 min-h-[400px] justify-center text-center">
