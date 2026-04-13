@@ -28,16 +28,6 @@ const items = [
     url: "/download",
     icon: Download,
   },
-  {
-    title: "Área do Técnico",
-    url: "/tecnico",
-    icon: UserCog,
-  },
-  {
-    title: "Administração",
-    url: "/admin",
-    icon: ShieldCheck,
-  },
 ];
 
 export function AppSidebar() {
