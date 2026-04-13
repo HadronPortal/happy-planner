@@ -1,4 +1,5 @@
-import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
+import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle, UserCog } from "lucide-react";
+import { Link } from "react-router-dom";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
