@@ -64,7 +64,14 @@ export default function HadronSuporte() {
             <div className="flex items-center gap-2">
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              <Link
+                to="/tecnico"
+                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+              >
+                <UserCog className="h-3 w-3" />
+                Área do Técnico
+              </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
