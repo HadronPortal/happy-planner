@@ -1,5 +1,6 @@
 import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
+import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
 const APP_VERSION = "1.0.0";
