@@ -29,31 +29,35 @@ export default function TecnicoPage() {
   const [activeTab, setActiveTab] = useState(0);
   const [status, setStatus] = useState<"ready" | "connecting" | "connected">("ready");
 
-  useEffect(() => {
-    const id = searchParams.get("id");
-    if (id) {
-      setRemoteId(id);
-    }
-  }, [searchParams]);
-
-  const handleConnect = useCallback(() => {
-    if (!remoteId.trim()) {
+  const handleConnect = useCallback((idToConnect?: string) => {
+    const targetId = idToConnect || remoteId;
+    if (!targetId.trim()) {
       toast.error("Informe o ID Remoto");
       return;
     }
     
     setStatus("connecting");
-    toast.info(`Iniciando conexão com ${remoteId}...`);
+    toast.info(`Iniciando conexão com ${targetId}...`);
     
     // Simulate connection
     setTimeout(() => {
       if (window.hadronTecnicoAPI) {
-        window.hadronTecnicoAPI.openRustDesk(remoteId);
+        window.hadronTecnicoAPI.openRustDesk(targetId);
       }
       setStatus("connected");
       toast.success("Conexão estabelecida via RustDesk");
     }, 1500);
   }, [remoteId]);
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      setRemoteId(id);
+      // Se vier com ID via URL (ex: do Admin ou do Suporte), 
+      // iniciamos a conexão automaticamente chamando com o ID da URL
+      handleConnect(id);
+    }
+  }, [searchParams, handleConnect]);
 
   const handlePaste = async () => {
     try {
@@ -162,7 +166,7 @@ export default function TecnicoPage() {
               {/* Action Buttons */}
               <div className="space-y-2 mt-auto">
                 <Button 
-                  onClick={handleConnect}
+                  onClick={() => handleConnect()}
                   disabled={status === "connecting" || !remoteId}
                   className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-11 gap-2 shadow-lg shadow-secondary/10"
                 >
