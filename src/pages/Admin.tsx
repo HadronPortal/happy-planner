@@ -4,11 +4,12 @@ import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
 import ClientDetailSheet from "@/components/admin/ClientDetailSheet";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("active");
   const [techFilter, setTechFilter] = useState("all");
   const [selectedClient, setSelectedClient] = useState<DbClient | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
@@ -21,7 +22,9 @@ export default function AdminPanel() {
         !search ||
         c.empresa.toLowerCase().includes(search.toLowerCase()) ||
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
-      const matchStatus = statusFilter === "all" || c.status === statusFilter;
+      const matchStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active" ? (c.status !== "finished" && c.status !== "offline") : c.status === statusFilter);
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
       return matchSearch && matchStatus && matchTech;
     });
@@ -65,14 +68,22 @@ export default function AdminPanel() {
 
         <StatsBar {...stats} />
 
-        <ClientFilters
-          search={search}
-          onSearchChange={setSearch}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-          techFilter={techFilter}
-          onTechFilterChange={setTechFilter}
-        />
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
+            <TabsList className="bg-muted/30 border border-border/50 h-9 p-1">
+              <TabsTrigger value="active" className="text-xs px-4 h-7">Ativos</TabsTrigger>
+              <TabsTrigger value="finished" className="text-xs px-4 h-7">Finalizados</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs px-4 h-7">Todos</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <ClientFilters
+            search={search}
+            onSearchChange={setSearch}
+            techFilter={techFilter}
+            onTechFilterChange={setTechFilter}
+          />
+        </div>
 
         <ClientTable 
           clients={filtered} 
