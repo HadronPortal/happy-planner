@@ -167,9 +167,19 @@ export default function HadronSuporte() {
           </div>
 
           {/* Status bar */}
-          <div className="flex items-center gap-2 px-4 py-2 border-t border-border bg-muted/20">
-            <span className={`h-2 w-2 rounded-full ${dotClass}`} />
-            <span className="text-xs font-medium text-muted-foreground">{label}</span>
+          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
+            <div className="flex items-center gap-2">
+              <span className={`h-2 w-2 rounded-full ${attendingTechnician ? "bg-[hsl(var(--status-connected))]" : dotClass}`} />
+              <span className="text-xs font-medium text-muted-foreground">
+                {attendingTechnician ? "Em atendimento" : label}
+              </span>
+            </div>
+            {attendingTechnician && (
+              <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1.5">
+                <Users className="h-3 w-3" />
+                Técnico: {attendingTechnician}
+              </span>
+            )}
           </div>
         </div>
       </div>
