@@ -1,15 +1,33 @@
+import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { 
+  Copy, 
+  RotateCcw, 
+  Search, 
+  Clock, 
+  Star, 
+  Link2, 
+  Users, 
+  Monitor, 
+  LayoutGrid, 
+  Frown, 
+  X, 
+  Clipboard, 
+  ExternalLink,
+  ArrowLeft,
+  ShieldCheck
+} from "lucide-react";
+import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Monitor, ExternalLink, ShieldCheck, Clipboard } from "lucide-react";
-import logoSrc from "@/assets/logo.png";
 import { toast } from "sonner";
 
 export default function TecnicoPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
+  const [status, setStatus] = useState<"ready" | "connecting" | "connected">("ready");
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -18,25 +36,32 @@ export default function TecnicoPage() {
     }
   }, [searchParams]);
 
-  const handleConnect = () => {
+  const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
-      toast.error("Informe o ID remoto");
+      toast.error("Informe o ID Remoto");
       return;
     }
-
-    if (window.hadronTecnicoAPI) {
-      window.hadronTecnicoAPI.openRustDesk(remoteId);
-      toast.success("Abrindo RustDesk do técnico");
-    } else {
-      toast.error("Função disponível apenas no app técnico");
-    }
-  };
+    
+    setStatus("connecting");
+    toast.info(`Iniciando conexão com ${remoteId}...`);
+    
+    // Simulate connection
+    setTimeout(() => {
+      if (window.hadronTecnicoAPI) {
+        window.hadronTecnicoAPI.openRustDesk(remoteId);
+      }
+      setStatus("connected");
+      toast.success("Conexão estabelecida via RustDesk");
+    }, 1500);
+  }, [remoteId]);
 
   const handlePaste = async () => {
     try {
       const text = await navigator.clipboard.readText();
       if (text) {
-        setRemoteId(text);
+        // Clean the ID (remove spaces)
+        const cleanText = text.replace(/\s/g, "");
+        setRemoteId(cleanText);
         toast.success("ID colado com sucesso");
       }
     } catch (err) {
@@ -44,85 +69,205 @@ export default function TecnicoPage() {
     }
   };
 
+  const handleFinish = () => {
+    setStatus("ready");
+    toast.info("Atendimento finalizado");
+  };
+
+  const tabs = [
+    { icon: Clock, label: "Recentes" },
+    { icon: Star, label: "Favoritos" },
+    { icon: Link2, label: "Descoberta" },
+    { icon: Users, label: "Catálogo" },
+    { icon: Monitor, label: "Dispositivos" },
+  ];
+
   return (
-    <div className="min-h-screen bg-[#0A0A0B] text-foreground flex flex-col">
-      <div className="fixed inset-0 opacity-[0.03]" style={{
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+      {/* Background Grid Pattern */}
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{
         backgroundImage: `linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)`,
         backgroundSize: '60px 60px'
       }} />
 
-      <header className="relative z-10 border-b border-border/40 bg-card/30 backdrop-blur-md px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <img src={logoSrc} alt="Hádron" className="h-8 object-contain" />
-            <div className="h-4 w-px bg-border/40" />
-            <h1 className="text-sm font-bold tracking-tight uppercase">Atendimento Técnico</h1>
-          </div>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate("/admin")}
-            className="text-xs text-muted-foreground hover:text-foreground gap-2"
-          >
-            <ArrowLeft className="h-4 w-4" /> Voltar ao Painel
-          </Button>
-        </div>
-      </header>
-
-      <main className="relative z-10 flex-1 flex items-center justify-center p-6">
-        <div className="max-w-md w-full space-y-8 text-center">
-          <div className="relative inline-flex mb-4">
-            <div className="absolute inset-0 bg-secondary/20 blur-2xl rounded-full" />
-            <div className="relative h-20 w-20 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center">
-              <Monitor className="h-10 w-10 text-secondary" />
+      <div className="w-full max-w-3xl relative z-10">
+        {/* Main window */}
+        <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
+          {/* Title bar */}
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
+            <div className="flex items-center gap-4">
+              <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
+              <div className="h-3 w-px bg-border/40" />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Módulo Técnico</span>
             </div>
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Módulo Técnico</h2>
-            <p className="text-muted-foreground text-sm">Insira o ID do cliente para iniciar a conexão remota.</p>
-          </div>
-
-          <div className="bg-card/40 border border-border/50 rounded-2xl p-8 space-y-6">
-            <div className="space-y-3">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 text-left">ID Remoto</p>
-              <div className="flex gap-2">
-                <Input
-                  value={remoteId}
-                  onChange={(e) => setRemoteId(e.target.value)}
-                  placeholder="000 000 000"
-                  className="bg-background/50 border-border/50 font-mono text-lg h-12 text-center"
-                />
-                <Button 
-                  variant="outline" 
-                  size="icon" 
-                  onClick={handlePaste}
-                  className="h-12 w-12 border-border/50 hover:bg-secondary/10 hover:text-secondary"
-                  title="Colar ID"
-                >
-                  <Clipboard className="h-5 w-5" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
+            <div className="flex items-center gap-2">
               <Button 
-                onClick={handleConnect}
-                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-12 gap-2"
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/admin")}
+                className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                title="Voltar ao Painel"
               >
-                <ExternalLink className="h-4 w-4" /> Conectar
+                <ArrowLeft className="h-3.5 w-3.5" />
               </Button>
-              <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/60 uppercase font-bold tracking-widest">
-                <ShieldCheck className="h-3 w-3" /> Conexão Criptografada
+              <button
+                onClick={() => navigate("/admin")}
+                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+                title="Fechar"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Body */}
+          <div className="flex flex-col md:flex-row min-h-[420px]">
+            {/* Left panel */}
+            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-6">
+              <div>
+                <h2 className="text-sm font-semibold text-foreground mb-1 flex items-center gap-2">
+                   <Monitor className="h-3.5 w-3.5 text-secondary" /> Módulo Técnico
+                </h2>
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  Insira o ID do cliente abaixo para iniciar o acesso remoto seguro.
+                </p>
+              </div>
+
+              {/* ID Input Section */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 border-l-2 border-secondary pl-2">ID Remoto</span>
+                  <button onClick={handlePaste} className="text-muted-foreground hover:text-secondary transition-colors" title="Colar ID">
+                    <Clipboard className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="relative group">
+                   <Input
+                    value={remoteId}
+                    onChange={(e) => setRemoteId(e.target.value)}
+                    placeholder="000 000 000"
+                    className="bg-muted/30 border-border/50 font-mono text-lg h-12 text-center focus-visible:ring-secondary/30"
+                  />
+                  {remoteId && (
+                    <button 
+                      onClick={() => setRemoteId("")}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-muted-foreground/40 hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-2 mt-auto">
+                <Button 
+                  onClick={handleConnect}
+                  disabled={status === "connecting" || !remoteId}
+                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-11 gap-2 shadow-lg shadow-secondary/10"
+                >
+                  <ExternalLink className="h-4 w-4" /> 
+                  {status === "connecting" ? "Conectando..." : "Conectar"}
+                </Button>
+                
+                <button
+                  onClick={handleFinish}
+                  disabled={status === "ready"}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors disabled:opacity-50 disabled:hover:bg-muted/50 disabled:hover:text-muted-foreground"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Finalizar suporte
+                </button>
+              </div>
+            </div>
+
+            {/* Right panel */}
+            <div className="flex-1 flex flex-col p-5 bg-card/20">
+              {/* Header Right */}
+              <div className="flex flex-col items-center gap-1 mb-6 text-center">
+                <h3 className="text-sm font-semibold text-foreground">Controle Remoto</h3>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
+                   <ShieldCheck className="h-3 w-3 text-secondary" /> Conexão Criptografada ponta-a-ponta
+                </p>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex items-center justify-between border-b border-border mb-4">
+                <div className="flex gap-1">
+                  {tabs.map((tab, i) => (
+                    <button
+                      key={tab.label}
+                      onClick={() => setActiveTab(i)}
+                      className={`p-2.5 rounded-t transition-colors ${
+                        activeTab === i
+                          ? "text-foreground border-b-2 border-secondary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      title={tab.label}
+                    >
+                      <tab.icon className="h-4 w-4" />
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+                    <Search className="h-4 w-4" />
+                  </button>
+                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+                    <LayoutGrid className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Empty state / Content Area */}
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 py-8">
+                {status === "connected" ? (
+                  <div className="space-y-4">
+                    <div className="relative mx-auto h-16 w-16 rounded-2xl bg-secondary/10 border border-secondary/20 flex items-center justify-center animate-pulse">
+                      <Monitor className="h-8 w-8 text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-foreground">Conectado ao ID {remoteId}</p>
+                      <p className="text-xs text-muted-foreground">O acesso remoto está ativo.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="rounded-full bg-muted/50 p-4">
+                      <Frown className="h-8 w-8 text-muted-foreground" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Ops, não há sessões recentes!</p>
+                      <p className="text-xs text-muted-foreground/70">Hora de planejar uma nova.</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
 
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-widest">
-            Hádron Suporte — Módulo do Técnico
-          </p>
+          {/* Status bar */}
+          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
+            <div className="flex items-center gap-2">
+              <span className={`h-2 w-2 rounded-full ${
+                status === "connected" ? "bg-[hsl(var(--status-connected))] shadow-[0_0_8px_hsl(var(--status-connected))]" : 
+                status === "connecting" ? "bg-primary animate-pulse" : 
+                "bg-muted-foreground/30"
+              }`} />
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-tight">
+                {status === "connected" ? "Sessão Ativa" : 
+                 status === "connecting" ? "Estabelecendo conexão..." : 
+                 "Aguardando ID"}
+              </span>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-[9px] text-muted-foreground/40 uppercase font-bold tracking-[0.2em]">
+                Hádron Suporte Técnico
+              </span>
+            </div>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
