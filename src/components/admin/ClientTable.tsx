@@ -41,11 +41,11 @@ export default function ClientTable({
       // 2. Atualizar o registro na tabela support_online_clients
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
 
-      // 4. Mostrar toast
-      toast.success("ID copiado. Atendimento iniciado");
-
       // 3. Navegar automaticamente para /tecnico?id=RUSTDESK_ID
       navigate(`/tecnico?id=${cleanId}`);
+
+      // 4. Mostrar toast
+      toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {
       console.error("Connect error:", error);
       toast.error("Erro ao iniciar atendimento");
