@@ -38,8 +38,8 @@ export function PageHeader({ showClose = true, onClose, extra }: PageHeaderProps
           value={currentValue} 
           onValueChange={(value) => navigate(value)}
         >
-          <SelectTrigger className="h-8 w-8 p-0 border-none bg-transparent hover:bg-muted text-muted-foreground hover:text-foreground shadow-none focus:ring-0 [&>span]:hidden [&>svg]:hidden">
-            <span className="text-xs">☰</span>
+          <SelectTrigger className="h-8 min-w-[120px] px-3 border border-border bg-background/50 hover:bg-muted text-xs text-muted-foreground hover:text-foreground transition-all shadow-none focus:ring-1 focus:ring-secondary/20">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent align="end" className="w-48 bg-card border-border">
             {NAV_ITEMS.map((item) => (
