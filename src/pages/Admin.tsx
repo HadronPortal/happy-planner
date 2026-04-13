@@ -17,16 +17,28 @@ export default function AdminPanel() {
   const { clients, loading, updateClientStatus } = useSupportClients();
 
   const filtered = useMemo(() => {
-    return clients.filter((c) => {
+    const list = clients.filter((c) => {
       const matchSearch =
         !search ||
         c.empresa.toLowerCase().includes(search.toLowerCase()) ||
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
       const matchStatus =
         statusFilter === "all" ||
-        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : (statusFilter === "offline" ? (c.status === "offline" || c.status === "finalizado") : c.status === statusFilter));
+        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : c.status === statusFilter);
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
       return matchSearch && matchStatus && matchTech;
+    });
+
+    // Handle Sorting
+    return [...list].sort((a, b) => {
+      if (statusFilter === "active") {
+        // 1. em_atendimento primeiro
+        if (a.status === "em_atendimento" && b.status !== "em_atendimento") return -1;
+        if (a.status !== "em_atendimento" && b.status === "em_atendimento") return 1;
+        // 2. depois online (implicit if they are both online or both em_atendimento)
+      }
+      // 3. mais recentes primeiro (opened_at)
+      return new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime();
     });
   }, [clients, search, statusFilter, techFilter]);
 
@@ -72,7 +84,7 @@ export default function AdminPanel() {
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
             <TabsList className="bg-muted/30 border border-border/50 h-9 p-1">
               <TabsTrigger value="active" className="text-xs px-4 h-7">Ativos</TabsTrigger>
-              <TabsTrigger value="offline" className="text-xs px-4 h-7">Offline</TabsTrigger>
+              <TabsTrigger value="finalizado" className="text-xs px-4 h-7">Finalizados</TabsTrigger>
               <TabsTrigger value="all" className="text-xs px-4 h-7">Todos</TabsTrigger>
             </TabsList>
           </Tabs>
