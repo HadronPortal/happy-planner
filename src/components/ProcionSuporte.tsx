@@ -29,39 +29,8 @@ export default function HadronSuporte() {
       <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          {/* Title bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-            <div className="flex items-center gap-2">
-              <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
-            </div>
-            <div className="flex items-center gap-2">
-              <Select 
-                value={location.pathname === "/" ? "/suporte" : location.pathname} 
-                onValueChange={(value) => navigate(value)}
-              >
-                <SelectTrigger className="h-8 w-8 p-0 border-none bg-transparent hover:bg-muted text-muted-foreground hover:text-foreground shadow-none focus:ring-0">
-                  <span className="text-xs">☰</span>
-                </SelectTrigger>
-                <SelectContent align="end" className="w-48 bg-card border-border">
-                  {NAV_ITEMS.map((item) => (
-                    <SelectItem key={item.title} value={item.url} className="cursor-pointer">
-                      <div className="flex items-center gap-2">
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <button
-                onClick={fechar}
-                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
+          <PageHeader onClose={fechar} />
+
 
           {/* Body */}
           <div className="flex flex-col md:flex-row min-h-[420px]">
