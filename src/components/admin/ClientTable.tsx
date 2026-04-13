@@ -23,6 +23,7 @@ export default function ClientTable({
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleCopyId = (rustdesk_id: string, clientId: string) => {
     navigator.clipboard.writeText(rustdesk_id);
@@ -33,21 +34,21 @@ export default function ClientTable({
 
   const handleConnect = async (client: DbClient) => {
     try {
-      // Requirements:
-      // 1. Copy rustdesk_id to clipboard
-      // 2. Show toast
-      // 3. Update Supabase with status = "em_atendimento", updated_at = now(), tecnico_responsavel = "Técnico Atual"
-      
-      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
-      toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
+      // 1. Copiar automaticamente o rustdesk_id para a área de transferência
+      const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      await navigator.clipboard.writeText(cleanId);
 
-      setCopiedId(client.id);
-      setTimeout(() => setCopiedId(null), 2000);
-
+      // 2. Atualizar o registro na tabela support_online_clients
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
+
+      // 4. Mostrar toast
+      toast.success("ID copiado. Atendimento iniciado");
+
+      // 3. Navegar automaticamente para /tecnico?id=RUSTDESK_ID
+      navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
       console.error("Connect error:", error);
-      toast.error("Erro ao conectar");
+      toast.error("Erro ao iniciar atendimento");
     }
   };
 
