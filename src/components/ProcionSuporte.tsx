@@ -1,12 +1,13 @@
 import { useCallback, useState } from "react";
 import { X, Copy, RotateCcw, Monitor, Shield, Lock, Users, MessageSquare, Download, UserCog, ShieldCheck } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import logoSrc from "@/assets/logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
