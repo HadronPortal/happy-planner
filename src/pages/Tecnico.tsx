@@ -1,12 +1,48 @@
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Monitor, ExternalLink, ShieldCheck } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ArrowLeft, Monitor, ExternalLink, ShieldCheck, Clipboard } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
+import { toast } from "sonner";
 
 export default function TecnicoPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const id = searchParams.get("id");
+  const [remoteId, setRemoteId] = useState("");
+
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (id) {
+      setRemoteId(id);
+    }
+  }, [searchParams]);
+
+  const handleConnect = () => {
+    if (!remoteId.trim()) {
+      toast.error("Informe o ID remoto");
+      return;
+    }
+
+    if (window.hadronTecnicoAPI) {
+      window.hadronTecnicoAPI.openRustDesk(remoteId);
+      toast.success("Abrindo RustDesk do técnico");
+    } else {
+      toast.error("Função disponível apenas no app técnico");
+    }
+  };
+
+  const handlePaste = async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (text) {
+        setRemoteId(text);
+        toast.success("ID colado com sucesso");
+      }
+    } catch (err) {
+      toast.error("Não foi possível acessar a área de transferência");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0A0A0B] text-foreground flex flex-col">
@@ -43,19 +79,38 @@ export default function TecnicoPage() {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight">Conexão Iniciada</h2>
-            <p className="text-muted-foreground text-sm">O ID do cliente foi copiado para sua área de transferência.</p>
+            <h2 className="text-2xl font-bold tracking-tight">Módulo Técnico</h2>
+            <p className="text-muted-foreground text-sm">Insira o ID do cliente para iniciar a conexão remota.</p>
           </div>
 
           <div className="bg-card/40 border border-border/50 rounded-2xl p-8 space-y-6">
-            <div className="space-y-1">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">ID do RustDesk</p>
-              <p className="text-4xl font-mono font-bold tracking-tighter text-secondary">{id || "--- --- ---"}</p>
+            <div className="space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 text-left">ID Remoto</p>
+              <div className="flex gap-2">
+                <Input
+                  value={remoteId}
+                  onChange={(e) => setRemoteId(e.target.value)}
+                  placeholder="000 000 000"
+                  className="bg-background/50 border-border/50 font-mono text-lg h-12 text-center"
+                />
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={handlePaste}
+                  className="h-12 w-12 border-border/50 hover:bg-secondary/10 hover:text-secondary"
+                  title="Colar ID"
+                >
+                  <Clipboard className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-3">
-              <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-12 gap-2">
-                <ExternalLink className="h-4 w-4" /> Abrir RustDesk Local
+              <Button 
+                onClick={handleConnect}
+                className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-12 gap-2"
+              >
+                <ExternalLink className="h-4 w-4" /> Conectar
               </Button>
               <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/60 uppercase font-bold tracking-widest">
                 <ShieldCheck className="h-3 w-3" /> Conexão Criptografada
