@@ -34,27 +34,38 @@ export function useSupportClients() {
   }, []);
 
   const updateClientStatus = async (id: string, status: string, tecnico?: string) => {
-    const updateData: any = { 
-      status, 
-      updated_at: new Date().toISOString()
-    };
-    
-    if (tecnico !== undefined) {
-      updateData.tecnico_responsavel = tecnico;
-    }
+    // Optimistic update
+    const previousClients = [...clients];
+    setClients((prev) =>
+      prev.map((c) =>
+        c.id === id ? { ...c, status, tecnico_responsavel: tecnico || c.tecnico_responsavel, updated_at: new Date().toISOString() } : c
+      )
+    );
 
-    const { error } = await supabase
-      .from("support_online_clients")
-      .update(updateData)
-      .eq("id", id);
+    try {
+      const updateData: any = { 
+        status, 
+        updated_at: new Date().toISOString()
+      };
+      
+      if (tecnico !== undefined) {
+        updateData.tecnico_responsavel = tecnico;
+      }
 
-    if (error) {
-      console.error("Error updating client status:", error);
-      throw error;
+      const { error } = await supabase
+        .from("support_online_clients")
+        .update(updateData)
+        .eq("id", id);
+
+      if (error) {
+        setClients(previousClients); // Rollback on error
+        console.error("Error updating client status:", error);
+        throw error;
+      }
+    } catch (err) {
+      setClients(previousClients); // Rollback on error
+      throw err;
     }
-    // We don't necessarily need to fetchClients() here as realtime will trigger it,
-    // but doing it for immediate UI response is fine.
-    await fetchClients();
   };
 
   return { clients, loading, updateClientStatus };
