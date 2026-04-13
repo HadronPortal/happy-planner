@@ -1,4 +1,5 @@
-import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2 } from "lucide-react";
+import { useState } from "react";
+import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
@@ -20,9 +21,13 @@ export default function ClientTable({
   onUpdateClient,
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
-  const handleCopyId = (rustdesk_id: string) => {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyId = (rustdesk_id: string, clientId: string) => {
     navigator.clipboard.writeText(rustdesk_id);
     toast.success("ID copiado com sucesso");
+    setCopiedId(clientId);
+    setTimeout(() => setCopiedId(null), 2000);
   };
 
   const handleConnect = async (client: DbClient) => {
@@ -34,6 +39,9 @@ export default function ClientTable({
       
       navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
       toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
+
+      setCopiedId(client.id);
+      setTimeout(() => setCopiedId(null), 2000);
 
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
     } catch (error) {
@@ -101,6 +109,7 @@ export default function ClientTable({
             {clients.map((client) => {
               const cfg = getConfig(client.status);
               const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+              const isCopied = copiedId === client.id;
               return (
                 <tr key={client.id} className="border-b border-border/30 hover:bg-muted/10 transition-colors">
                   <td className="px-4 py-3 font-medium">{client.empresa}</td>
@@ -121,8 +130,14 @@ export default function ClientTable({
                           <Plug className="h-3 w-3" /> Conectar
                         </Button>
                       )}
-                      <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
-                        <Copy className="h-3 w-3" /> Copiar ID
+                      <Button 
+                        size="sm" 
+                        variant="ghost" 
+                        onClick={() => handleCopyId(client.rustdesk_id, client.id)} 
+                        className={`h-7 px-2 text-[11px] transition-all gap-1 ${isCopied ? 'text-emerald-500 bg-emerald-500/10' : 'text-muted-foreground hover:text-foreground'}`}
+                      >
+                        {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                        {isCopied ? 'Copiado' : 'Copiar ID'}
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
                         <Eye className="h-3 w-3" /> Ver detalhes
@@ -151,6 +166,7 @@ export default function ClientTable({
         {clients.map((client) => {
           const cfg = getConfig(client.status);
           const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+          const isCopied = copiedId === client.id;
           return (
             <div key={client.id} className="px-4 py-4 space-y-3">
               <div className="flex items-start justify-between">
@@ -173,8 +189,14 @@ export default function ClientTable({
                     <Plug className="h-3 w-3" /> Conectar
                   </Button>
                 )}
-                <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
-                  <Copy className="h-3 w-3" /> Copiar ID
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={() => handleCopyId(client.rustdesk_id, client.id)} 
+                  className={`h-7 px-2 text-[11px] transition-all gap-1 ${isCopied ? 'text-emerald-500 bg-emerald-500/10' : 'text-muted-foreground'}`}
+                >
+                  {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+                  {isCopied ? 'Copiado' : 'Copiar ID'}
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
                   <Eye className="h-3 w-3" /> Ver detalhes
