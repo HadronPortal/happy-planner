@@ -25,12 +25,14 @@ export default function HadronSuporte() {
       toast.error("Informe o ID Remoto");
       return;
     }
-    toast.info(`Conectando ao ID ${remoteId}...`);
-    setTimeout(() => {
-      setAttendingTechnician("João Silva");
-      toast.success("Conexão estabelecida!");
-    }, 1500);
-  }, [remoteId]);
+    
+    const cleanId = remoteId.trim().replace(/\s/g, "");
+    
+    // Se estiver em ambiente Electron, navegamos para o módulo técnico
+    // com o ID informado para que o técnico possa iniciar a conexão
+    navigate(`/tecnico?id=${cleanId}`);
+    toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
+  }, [remoteId, navigate]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);
