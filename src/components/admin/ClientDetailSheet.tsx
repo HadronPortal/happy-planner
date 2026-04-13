@@ -74,14 +74,20 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
 
   const handleConnect = async () => {
     try {
+      if (!client) return;
+      
+      // 1. Copiar automaticamente o rustdesk_id para a área de transferência
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
       await navigator.clipboard.writeText(cleanId);
       
+      // 2. Atualizar o registro na tabela support_online_clients
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
       
-      toast.success("ID copiado. Atendimento iniciado");
-      
+      // 3. Navegar automaticamente para /tecnico?id=RUSTDESK_ID
       navigate(`/tecnico?id=${cleanId}`);
+      
+      // 4. Mostrar toast
+      toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {
       console.error("Connect error:", error);
       toast.error("Erro ao iniciar atendimento");
