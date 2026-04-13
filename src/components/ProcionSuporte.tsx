@@ -23,8 +23,11 @@ export default function HadronSuporte() {
       toast.error("Informe o ID Remoto");
       return;
     }
-    setAttendingTechnician("João Silva");
     toast.info(`Conectando ao ID ${remoteId}...`);
+    setTimeout(() => {
+      setAttendingTechnician("João Silva");
+      toast.success("Conexão estabelecida!");
+    }, 1500);
   }, [remoteId]);
 
   const reiniciar = useCallback(() => {
