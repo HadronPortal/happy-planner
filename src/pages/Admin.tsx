@@ -80,15 +80,6 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={() => navigate("/tecnico")}
-              className="h-8 gap-2 bg-secondary/10 border-secondary/30 text-secondary hover:bg-secondary/20 hover:text-secondary-foreground"
-            >
-              <ShieldCheck className="h-3.5 w-3.5" />
-              <span className="text-[11px] font-bold uppercase tracking-wider">Módulo Técnico</span>
-            </Button>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">
               <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
               Sistema ativo
