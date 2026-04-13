@@ -149,10 +149,10 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   </Button>
                 )}
                 <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:bg-secondary/10 gap-1">
-                  <Copy className="h-3 w-3" /> ID
+                  <Copy className="h-3 w-3" /> Copiar ID
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
-                  <Eye className="h-3 w-3" /> Detalhes
+                  <Eye className="h-3 w-3" /> Ver detalhes
                 </Button>
                 {client.status === "in_service" && (
                   <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
