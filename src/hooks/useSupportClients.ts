@@ -34,20 +34,34 @@ export function useSupportClients() {
   }, []);
 
   const updateClientStatus = async (id: string, status: string, tecnico?: string) => {
-    // Optimistic update
+    // Store previous state for rollback
     const previousClients = [...clients];
+    
+    // Rule 5: Update interface immediately (Optimistic Update)
     setClients((prev) =>
       prev.map((c) =>
-        c.id === id ? { ...c, status, tecnico_responsavel: tecnico || c.tecnico_responsavel, updated_at: new Date().toISOString() } : c
+        c.id === id 
+          ? { 
+              ...c, 
+              status, 
+              // Rule 3: Maintain current value if tecnico is undefined
+              tecnico_responsavel: tecnico !== undefined ? tecnico : c.tecnico_responsavel, 
+              // Rule 2: Update timestamp
+              updated_at: new Date().toISOString() 
+            } 
+          : c
       )
     );
 
     try {
+      // Rule 1: Update support_online_clients table
+      // Rule 2: Set status and updated_at
       const updateData: any = { 
         status, 
         updated_at: new Date().toISOString()
       };
       
+      // Rule 3: Only update tecnico_responsavel if explicitly provided (maintains current value otherwise)
       if (tecnico !== undefined) {
         updateData.tecnico_responsavel = tecnico;
       }
@@ -58,12 +72,12 @@ export function useSupportClients() {
         .eq("id", id);
 
       if (error) {
-        setClients(previousClients); // Rollback on error
+        setClients(previousClients);
         console.error("Error updating client status:", error);
         throw error;
       }
     } catch (err) {
-      setClients(previousClients); // Rollback on error
+      setClients(previousClients);
       throw err;
     }
   };
