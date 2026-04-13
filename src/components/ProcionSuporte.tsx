@@ -12,8 +12,6 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 
 export default function HadronSuporte() {
   
-  const navigate = useNavigate();
-  const location = useLocation();
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
