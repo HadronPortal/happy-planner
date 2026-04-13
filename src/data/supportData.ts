@@ -1,4 +1,4 @@
-export type ClientStatus = "online" | "waiting" | "in_service" | "offline";
+export type ClientStatus = "online" | "waiting" | "in_service" | "offline" | "finished";
 
 export const STATUS_CONFIG: Record<string, { label: string; dotClass: string; badgeClass: string }> = {
   online: {
@@ -15,6 +15,11 @@ export const STATUS_CONFIG: Record<string, { label: string; dotClass: string; ba
     label: "Em atendimento",
     dotClass: "bg-secondary",
     badgeClass: "bg-secondary/15 text-secondary border-secondary/30",
+  },
+  finished: {
+    label: "Finalizado",
+    dotClass: "bg-emerald-500",
+    badgeClass: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
   },
   offline: {
     label: "Offline",

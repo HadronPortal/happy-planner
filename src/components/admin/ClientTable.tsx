@@ -1,4 +1,4 @@
-import { Copy, Eye, Plug, XCircle, WifiOff } from "lucide-react";
+import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
@@ -38,6 +38,15 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
       toast.info(`Atendimento encerrado: ${client.empresa}`);
     } catch (error) {
       toast.error("Erro ao encerrar atendimento");
+    }
+  };
+
+  const handleFinish = async (client: DbClient) => {
+    try {
+      await onUpdateClient(client.id, "finished");
+      toast.success(`Atendimento finalizado: ${client.empresa}`);
+    } catch (error) {
+      toast.error("Erro ao finalizar atendimento");
     }
   };
 
@@ -96,7 +105,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   <td className="px-4 py-3 text-xs">{client.tecnico_responsavel || <span className="text-muted-foreground/50">—</span>}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
-                      {client.status !== "offline" && client.status !== "in_service" && (
+                      {client.status !== "offline" && client.status !== "in_service" && client.status !== "finished" && (
                         <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
                           <Plug className="h-3 w-3" /> Conectar
                         </Button>
@@ -108,9 +117,14 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                         <Eye className="h-3 w-3" /> Ver detalhes
                       </Button>
                       {client.status === "in_service" && (
-                        <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
-                          <XCircle className="h-3 w-3" /> Encerrar
-                        </Button>
+                        <>
+                          <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
+                            <XCircle className="h-3 w-3" /> Encerrar
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:text-emerald-500 hover:bg-emerald-500/10 gap-1">
+                            <CheckCircle2 className="h-3 w-3" /> Finalizar
+                          </Button>
+                        </>
                       )}
                     </div>
                   </td>
@@ -143,7 +157,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                 <span className="text-muted-foreground">{time}</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {client.status !== "offline" && client.status !== "in_service" && (
+                {client.status !== "offline" && client.status !== "in_service" && client.status !== "finished" && (
                   <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
                     <Plug className="h-3 w-3" /> Conectar
                   </Button>
@@ -155,9 +169,14 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   <Eye className="h-3 w-3" /> Ver detalhes
                 </Button>
                 {client.status === "in_service" && (
-                  <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
-                    <XCircle className="h-3 w-3" /> Encerrar
-                  </Button>
+                  <>
+                    <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
+                      <XCircle className="h-3 w-3" /> Encerrar
+                    </Button>
+                    <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:bg-emerald-500/10 gap-1">
+                      <CheckCircle2 className="h-3 w-3" /> Finalizar
+                    </Button>
+                  </>
                 )}
               </div>
             </div>
