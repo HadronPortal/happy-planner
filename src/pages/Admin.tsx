@@ -68,14 +68,22 @@ export default function AdminPanel() {
 
         <StatsBar {...stats} />
 
-        <ClientFilters
-          search={search}
-          onSearchChange={setSearch}
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-          techFilter={techFilter}
-          onTechFilterChange={setTechFilter}
-        />
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
+            <TabsList className="bg-muted/30 border border-border/50">
+              <TabsTrigger value="active" className="text-xs px-4">Ativos</TabsTrigger>
+              <TabsTrigger value="finished" className="text-xs px-4 font-semibold">Finalizados</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs px-4">Todos</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <ClientFilters
+            search={search}
+            onSearchChange={setSearch}
+            techFilter={techFilter}
+            onTechFilterChange={setTechFilter}
+          />
+        </div>
 
         <ClientTable 
           clients={filtered} 
