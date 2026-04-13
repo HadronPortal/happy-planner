@@ -44,6 +44,7 @@ export default function ClientFilters({
           <SelectItem value="online">Online</SelectItem>
           <SelectItem value="waiting">Aguardando</SelectItem>
           <SelectItem value="in_service">Em atendimento</SelectItem>
+          <SelectItem value="finished">Finalizados</SelectItem>
           <SelectItem value="offline">Offline</SelectItem>
         </SelectContent>
       </Select>
