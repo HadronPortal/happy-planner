@@ -141,6 +141,10 @@ export default function DownloadPage() {
               <a href="#" className="hover:text-white transition-colors">Termos</a>
               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
               <a href="#" className="hover:text-white transition-colors">Suporte</a>
+              <Link to="/tecnico" className="hover:text-white transition-colors flex items-center gap-1">
+                <UserCog className="h-3 w-3" />
+                Área do Técnico
+              </Link>
             </div>
           </div>
         </footer>
