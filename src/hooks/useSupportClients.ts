@@ -33,5 +33,19 @@ export function useSupportClients() {
     return () => { supabase.removeChannel(channel); };
   }, []);
 
-  return { clients, loading };
+  const updateClientStatus = async (id: string, status: string, tecnico?: string) => {
+    const { error } = await supabase
+      .from("support_online_clients")
+      .update({ 
+        status, 
+        tecnico_responsavel: tecnico,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", id);
+
+    if (error) throw error;
+    await fetchClients();
+  };
+
+  return { clients, loading, updateClientStatus };
 }
