@@ -30,6 +30,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
 
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
     } catch (error) {
+      console.error("Connect error:", error);
       toast.error("Erro ao conectar");
     }
   };
@@ -39,6 +40,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
       await onUpdateClient(client.id, "online", "");
       toast.info(`Atendimento encerrado: ${client.empresa}`);
     } catch (error) {
+      console.error("End service error:", error);
       toast.error("Erro ao encerrar atendimento");
     }
   };
@@ -48,6 +50,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
       await onUpdateClient(client.id, "offline");
       toast.success(`Atendimento finalizado: ${client.empresa}`);
     } catch (error) {
+      console.error("Finish service error:", error);
       toast.error("Erro ao finalizar atendimento");
     }
   };
