@@ -34,13 +34,18 @@ export function useSupportClients() {
   }, []);
 
   const updateClientStatus = async (id: string, status: string, tecnico?: string) => {
+    const updateData: any = { 
+      status, 
+      updated_at: new Date().toISOString()
+    };
+    
+    if (tecnico !== undefined) {
+      updateData.tecnico_responsavel = tecnico;
+    }
+
     const { error } = await supabase
       .from("support_online_clients")
-      .update({ 
-        status, 
-        tecnico_responsavel: tecnico,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq("id", id);
 
     if (error) throw error;
