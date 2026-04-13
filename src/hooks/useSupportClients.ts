@@ -48,7 +48,12 @@ export function useSupportClients() {
       .update(updateData)
       .eq("id", id);
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error updating client status:", error);
+      throw error;
+    }
+    // We don't necessarily need to fetchClients() here as realtime will trigger it,
+    // but doing it for immediate UI response is fine.
     await fetchClients();
   };
 

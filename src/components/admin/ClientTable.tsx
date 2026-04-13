@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
-import { supabase } from "@/integrations/supabase/client";
+
 
 interface ClientTableProps {
   clients: DbClient[];
@@ -13,21 +13,24 @@ interface ClientTableProps {
 }
 
 export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient }: ClientTableProps) {
-  const handleCopyId = (id: string) => {
-    navigator.clipboard.writeText(id.replace(/\s/g, ""));
-    toast.success("ID copiado");
+  const handleCopyId = (rustdesk_id: string) => {
+    navigator.clipboard.writeText(rustdesk_id.replace(/\s/g, ""));
+    toast.success("ID copiado com sucesso");
   };
 
   const handleConnect = async (client: DbClient) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      const tech = user?.email || "Atendente Hádron";
-
+      // Requirements:
+      // 1. Copy rustdesk_id to clipboard
+      // 2. Show toast
+      // 3. Update Supabase with status = "em_atendimento", updated_at = now(), tecnico_responsavel = "Técnico Atual"
+      
       navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
       toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
 
-      await onUpdateClient(client.id, "in_service", tech);
+      await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
     } catch (error) {
+      console.error("Connect error:", error);
       toast.error("Erro ao conectar");
     }
   };
@@ -37,15 +40,17 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
       await onUpdateClient(client.id, "online", "");
       toast.info(`Atendimento encerrado: ${client.empresa}`);
     } catch (error) {
+      console.error("End service error:", error);
       toast.error("Erro ao encerrar atendimento");
     }
   };
 
   const handleFinish = async (client: DbClient) => {
     try {
-      await onUpdateClient(client.id, "finished");
+      await onUpdateClient(client.id, "offline");
       toast.success(`Atendimento finalizado: ${client.empresa}`);
     } catch (error) {
+      console.error("Finish service error:", error);
       toast.error("Erro ao finalizar atendimento");
     }
   };
@@ -105,25 +110,25 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   <td className="px-4 py-3 text-xs">{client.tecnico_responsavel || <span className="text-muted-foreground/50">—</span>}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
-                      {client.status !== "offline" && client.status !== "in_service" && client.status !== "finished" && (
-                        <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
+                      {client.status === "online" && (
+                        <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1 shadow-sm">
                           <Plug className="h-3 w-3" /> Conectar
                         </Button>
                       )}
-                      <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:text-secondary hover:bg-secondary/10 gap-1">
+                      <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
                         <Copy className="h-3 w-3" /> Copiar ID
                       </Button>
                       <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
                         <Eye className="h-3 w-3" /> Ver detalhes
                       </Button>
-                      {client.status === "in_service" && (
+                      {client.status === "em_atendimento" && (
                         <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
                           <XCircle className="h-3 w-3" /> Encerrar
                         </Button>
                       )}
-                      {(client.status === "in_service" || client.status === "online" || client.status === "waiting") && (
+                      {client.status !== "offline" && (
                         <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:text-emerald-500 hover:bg-emerald-500/10 gap-1">
-                          <CheckCircle2 className="h-3 w-3" /> Finalizar atendimento
+                          <CheckCircle2 className="h-3 w-3" /> Finalizar
                         </Button>
                       )}
                     </div>
@@ -157,25 +162,25 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                 <span className="text-muted-foreground">{time}</span>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {client.status !== "offline" && client.status !== "in_service" && client.status !== "finished" && (
+                {client.status === "online" && (
                   <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
                     <Plug className="h-3 w-3" /> Conectar
                   </Button>
                 )}
-                <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:bg-secondary/10 gap-1">
+                <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
                   <Copy className="h-3 w-3" /> Copiar ID
                 </Button>
                 <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
                   <Eye className="h-3 w-3" /> Ver detalhes
                 </Button>
-                {client.status === "in_service" && (
+                {client.status === "em_atendimento" && (
                   <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
                     <XCircle className="h-3 w-3" /> Encerrar
                   </Button>
                 )}
-                {(client.status === "in_service" || client.status === "online" || client.status === "waiting") && (
+                {client.status !== "offline" && (
                   <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:bg-emerald-500/10 gap-1">
-                    <CheckCircle2 className="h-3 w-3" /> Finalizar atendimento
+                    <CheckCircle2 className="h-3 w-3" /> Finalizar
                   </Button>
                 )}
               </div>

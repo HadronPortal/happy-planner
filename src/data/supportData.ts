@@ -1,30 +1,20 @@
-export type ClientStatus = "online" | "waiting" | "in_service" | "offline" | "finished";
+export type ClientStatus = "online" | "em_atendimento" | "offline";
 
 export const STATUS_CONFIG: Record<string, { label: string; dotClass: string; badgeClass: string }> = {
   online: {
     label: "Online",
-    dotClass: "bg-[hsl(var(--status-connected))]",
-    badgeClass: "bg-[hsl(var(--status-connected))]/15 text-[hsl(var(--status-connected))] border-[hsl(var(--status-connected))]/30",
-  },
-  waiting: {
-    label: "Aguardando",
-    dotClass: "bg-primary animate-pulse-dot",
-    badgeClass: "bg-primary/15 text-primary border-primary/30",
-  },
-  in_service: {
-    label: "Em atendimento",
-    dotClass: "bg-secondary",
-    badgeClass: "bg-secondary/15 text-secondary border-secondary/30",
-  },
-  finished: {
-    label: "Finalizado",
     dotClass: "bg-emerald-500",
-    badgeClass: "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
+    badgeClass: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+  },
+  em_atendimento: {
+    label: "Em atendimento",
+    dotClass: "bg-blue-500",
+    badgeClass: "bg-blue-500/10 text-blue-500 border-blue-500/20",
   },
   offline: {
     label: "Offline",
     dotClass: "bg-muted-foreground/50",
-    badgeClass: "bg-muted/30 text-muted-foreground border-border",
+    badgeClass: "bg-muted/10 text-muted-foreground border-border",
   },
 };
 

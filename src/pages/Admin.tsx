@@ -24,17 +24,17 @@ export default function AdminPanel() {
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
       const matchStatus =
         statusFilter === "all" ||
-        (statusFilter === "active" ? (c.status !== "finished" && c.status !== "offline") : c.status === statusFilter);
+        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : c.status === statusFilter);
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
       return matchSearch && matchStatus && matchTech;
     });
   }, [clients, search, statusFilter, techFilter]);
 
   const stats = useMemo(() => ({
-    online: clients.filter((c) => c.status === "online" || c.status === "waiting" || c.status === "in_service").length,
-    inService: clients.filter((c) => c.status === "in_service").length,
+    online: clients.filter((c) => c.status === "online").length,
+    inService: clients.filter((c) => c.status === "em_atendimento").length,
     totalToday: clients.length,
-    waiting: clients.filter((c) => c.status === "waiting").length,
+    waiting: clients.filter((c) => c.status === "online" && !c.tecnico_responsavel).length,
   }), [clients]);
 
   const handleViewDetails = (client: DbClient) => {
@@ -72,7 +72,7 @@ export default function AdminPanel() {
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
             <TabsList className="bg-muted/30 border border-border/50 h-9 p-1">
               <TabsTrigger value="active" className="text-xs px-4 h-7">Ativos</TabsTrigger>
-              <TabsTrigger value="finished" className="text-xs px-4 h-7">Finalizados</TabsTrigger>
+              <TabsTrigger value="offline" className="text-xs px-4 h-7">Offline</TabsTrigger>
               <TabsTrigger value="all" className="text-xs px-4 h-7">Todos</TabsTrigger>
             </TabsList>
           </Tabs>

@@ -1,4 +1,4 @@
-import { X, Monitor, Building2, Hash, Clock, Shield, FileText } from "lucide-react";
+import { Monitor, Building2, Hash, Clock, Shield, FileText } from "lucide-react";
 import { STATUS_CONFIG } from "@/data/supportData";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import type { DbClient } from "@/hooks/useSupportClients";
@@ -24,7 +24,8 @@ function DetailRow({ icon: Icon, label, value }: { icon: React.ElementType; labe
 export default function ClientDetailSheet({ client, open, onClose }: ClientDetailSheetProps) {
   if (!client) return null;
   const cfg = STATUS_CONFIG[client.status] || STATUS_CONFIG.offline;
-  const time = new Date(client.opened_at).toLocaleString("pt-BR");
+  const openedAt = new Date(client.opened_at).toLocaleString("pt-BR");
+  const updatedAt = new Date(client.updated_at).toLocaleString("pt-BR");
 
   return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
@@ -38,7 +39,8 @@ export default function ClientDetailSheet({ client, open, onClose }: ClientDetai
           <DetailRow icon={Monitor} label="Computador" value={client.hostname} />
           <DetailRow icon={Hash} label="RustDesk ID" value={client.rustdesk_id} />
           <DetailRow icon={Shield} label="Versão do app" value={client.app_version} />
-          <DetailRow icon={Clock} label="Horário de abertura" value={time} />
+          <DetailRow icon={Clock} label="Horário de abertura" value={openedAt} />
+          <DetailRow icon={Clock} label="Última atualização" value={updatedAt} />
 
           <div className="flex items-start gap-3 py-2.5 border-b border-border/30">
             <div className="h-4 w-4 flex items-center justify-center mt-0.5">
