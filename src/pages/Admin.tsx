@@ -70,10 +70,10 @@ export default function AdminPanel() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <Tabs value={statusFilter} onValueChange={setStatusFilter} className="w-full sm:w-auto shrink-0">
-            <TabsList className="bg-muted/30 border border-border/50">
-              <TabsTrigger value="active" className="text-xs px-4">Ativos</TabsTrigger>
-              <TabsTrigger value="finished" className="text-xs px-4 font-semibold">Finalizados</TabsTrigger>
-              <TabsTrigger value="all" className="text-xs px-4">Todos</TabsTrigger>
+            <TabsList className="bg-muted/30 border border-border/50 h-9 p-1">
+              <TabsTrigger value="active" className="text-xs px-4 h-7">Ativos</TabsTrigger>
+              <TabsTrigger value="finished" className="text-xs px-4 h-7">Finalizados</TabsTrigger>
+              <TabsTrigger value="all" className="text-xs px-4 h-7">Todos</TabsTrigger>
             </TabsList>
           </Tabs>
 
