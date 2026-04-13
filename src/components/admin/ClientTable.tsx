@@ -21,7 +21,7 @@ export default function ClientTable({
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
   const handleCopyId = (rustdesk_id: string) => {
-    navigator.clipboard.writeText(rustdesk_id.replace(/\s/g, ""));
+    navigator.clipboard.writeText(rustdesk_id);
     toast.success("ID copiado com sucesso");
   };
 
