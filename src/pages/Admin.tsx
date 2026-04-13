@@ -100,31 +100,33 @@ export default function AdminPanel() {
 
         <div className="space-y-8">
           {(statusFilter === "all" || statusFilter === "active") && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center gap-2 px-1">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">Atendimentos Ativos</h2>
+                <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-foreground/70">Atendimentos Ativos</h2>
               </div>
               <ClientTable 
                 clients={activeClients} 
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
+                emptyMessage="Nenhum atendimento ativo no momento"
               />
             </div>
           )}
 
           {(statusFilter === "all" || statusFilter === "finalizado") && (
-            <div className="space-y-3">
+            <div className="space-y-4">
               <div className="flex items-center gap-2 px-1">
-                <span className="h-2 w-2 rounded-full bg-blue-500/50" />
-                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">Atendimentos Finalizados</h2>
+                <div className="h-2 w-2 rounded-full bg-blue-500/50" />
+                <h2 className="text-xs font-bold uppercase tracking-widest text-foreground/70">Atendimentos Finalizados</h2>
               </div>
               <ClientTable 
                 clients={finishedClients} 
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
+                emptyMessage="Nenhum atendimento finalizado hoje"
               />
             </div>
           )}
