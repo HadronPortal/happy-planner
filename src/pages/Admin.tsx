@@ -118,7 +118,7 @@ export default function AdminPanel() {
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
-                emptyMessage="Nenhum atendimento ativo no momento"
+                emptyMessage="Ainda não apareceu nenhum atendimento ativo"
               />
             </div>
           )}
@@ -134,7 +134,7 @@ export default function AdminPanel() {
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
-                emptyMessage="Nenhum atendimento finalizado hoje"
+                emptyMessage="Ainda não apareceu nenhum atendimento finalizado hoje"
               />
             </div>
           )}

@@ -20,7 +20,7 @@ export default function ClientTable({
   loading, 
   onViewDetails, 
   onUpdateClient,
-  emptyMessage = "Nenhum cliente no momento"
+  emptyMessage = "Ainda não apareceu nenhum cliente"
 }: ClientTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const navigate = useNavigate();
