@@ -1,10 +1,13 @@
 import { useState, useMemo } from "react";
+import { ShieldCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import logoSrc from "@/assets/logo.png";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
 import ClientDetailSheet from "@/components/admin/ClientDetailSheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 
 export default function AdminPanel() {
