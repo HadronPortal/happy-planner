@@ -60,14 +60,6 @@ export default function HadronSuporte() {
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
             <div className="flex items-center gap-1">
-              <button 
-                onClick={() => navigate("/tecnico")}
-                className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors mr-2"
-                title="Acessar Módulo Técnico"
-              >
-                <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Técnico</span>
-              </button>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
