@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X, ShieldCheck } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +14,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function HadronSuporte() {
+  const navigate = useNavigate();
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
@@ -56,6 +58,14 @@ export default function HadronSuporte() {
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
             </div>
             <div className="flex items-center gap-1">
+              <button 
+                onClick={() => navigate("/tecnico")}
+                className="flex items-center gap-1.5 px-2 py-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors mr-2"
+                title="Acessar Módulo Técnico"
+              >
+                <ShieldCheck className="h-3.5 w-3.5 text-secondary" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">Técnico</span>
+              </button>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
