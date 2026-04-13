@@ -1,4 +1,4 @@
-import { X, Monitor, Building2, Hash, Clock, Shield, FileText } from "lucide-react";
+import { Monitor, Building2, Hash, Clock, Shield, FileText } from "lucide-react";
 import { STATUS_CONFIG } from "@/data/supportData";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import type { DbClient } from "@/hooks/useSupportClients";

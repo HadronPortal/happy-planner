@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
-import { supabase } from "@/integrations/supabase/client";
+
 
 interface ClientTableProps {
   clients: DbClient[];
