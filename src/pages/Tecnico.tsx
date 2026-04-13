@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Clipboard, Play, Power, X } from "lucide-react";
+import { Copy, Play, Power, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -94,9 +94,9 @@ const Tecnico = () => {
                   <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">ID Remoto</span>
                   <button 
                     onClick={handlePasteId}
-                    className="flex items-center gap-1.5 text-xs text-secondary hover:text-secondary/80 transition-colors font-medium"
+                    className="flex items-center gap-1.5 text-xs text-secondary hover:text-secondary/80 transition-colors font-semibold"
                   >
-                    <Clipboard className="h-3 w-3" />
+                    <Copy className="h-3.5 w-3.5" />
                     Colar ID
                   </button>
                 </div>
@@ -127,7 +127,7 @@ const Tecnico = () => {
                   onClick={handleFinish}
                   variant="outline"
                   size="lg"
-                  className="h-12 border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive transition-colors font-semibold"
+                  className="h-12 border-red-500/30 text-red-500 hover:bg-red-500/10 hover:border-red-500 transition-colors font-bold uppercase tracking-wider text-xs"
                 >
                   <Power className="mr-2 h-4 w-4" />
                   Finalizar Atendimento
