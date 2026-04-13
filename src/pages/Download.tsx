@@ -1,5 +1,4 @@
-import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle, UserCog } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
@@ -140,15 +139,6 @@ export default function DownloadPage() {
             <div className="flex gap-6 text-xs font-medium">
               <a href="#" className="hover:text-white transition-colors">Termos</a>
               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-              <Link to="/suporte" className="hover:text-white transition-colors">Suporte</Link>
-              <Link to="/admin" className="hover:text-white transition-colors flex items-center gap-1">
-                <Shield className="h-3 w-3" />
-                Admin
-              </Link>
-              <Link to="/tecnico" className="hover:text-white transition-colors flex items-center gap-1">
-                <UserCog className="h-3 w-3" />
-                Área do Técnico
-              </Link>
             </div>
           </div>
         </footer>
