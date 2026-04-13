@@ -140,15 +140,6 @@ export default function DownloadPage() {
             <div className="flex gap-6 text-xs font-medium">
               <a href="#" className="hover:text-white transition-colors">Termos</a>
               <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-              <Link to="/suporte" className="hover:text-white transition-colors">Suporte</Link>
-              <Link to="/admin" className="hover:text-white transition-colors flex items-center gap-1">
-                <Shield className="h-3 w-3" />
-                Admin
-              </Link>
-              <Link to="/tecnico" className="hover:text-white transition-colors flex items-center gap-1">
-                <UserCog className="h-3 w-3" />
-                Área do Técnico
-              </Link>
             </div>
           </div>
         </footer>
