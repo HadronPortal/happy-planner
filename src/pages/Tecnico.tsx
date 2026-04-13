@@ -93,56 +93,43 @@ export default function Tecnico() {
   ];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Background Decorativo */}
       <div className="fixed inset-0 opacity-[0.03] pointer-events-none" style={{
         backgroundImage: `linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)`,
         backgroundSize: '60px 60px'
       }} />
-      <div className="fixed -top-[10%] -left-[10%] w-[40%] h-[40%] bg-secondary/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="fixed -bottom-[10%] -right-[10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="w-full max-w-4xl relative z-10">
-        {/* Main window container */}
-        <div className="rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl shadow-black/50 overflow-hidden flex flex-col">
-          
-          {/* Header Bar */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-border/40 bg-muted/20">
-            <div className="flex items-center gap-4">
-              <img src={logoSrc} alt="Hádron" className="h-6 object-contain" />
-              <div className="h-4 w-px bg-border/40" />
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-secondary shadow-[0_0_8px_hsl(var(--secondary))]" />
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-foreground/80">Módulo Técnico Premium</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => navigate("/admin")}
-                className="h-8 gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all border border-transparent hover:border-border/30"
-              >
-                <ArrowLeft className="h-3.5 w-3.5" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Voltar ao Painel</span>
-              </Button>
-              <button
-                onClick={() => navigate("/admin")}
-                className="group p-1.5 rounded-lg hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-all"
-                title="Fechar Módulo"
-              >
-                <X className="h-4 w-4" />
-              </button>
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
+        {/* Page Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <img src={logoSrc} alt="Hádron" className="h-10 object-contain" />
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight">Módulo Técnico Premium</h1>
+              <p className="text-xs text-muted-foreground">Controle remoto e gerenciamento de sessões</p>
             </div>
           </div>
+          <div className="flex items-center gap-3">
+            <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium ${
+              status === "connected" 
+                ? "border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 text-[hsl(var(--status-connected))]" 
+                : "border-border/30 bg-muted/30 text-muted-foreground"
+            }`}>
+              <span className={`h-1.5 w-1.5 rounded-full ${
+                status === "connected" ? "bg-[hsl(var(--status-connected))]" : "bg-muted-foreground/50"
+              }`} />
+              {status === "connected" ? "Sessão Ativa" : "Sistema Pronto"}
+            </div>
+          </div>
+        </div>
 
-          {/* Main Layout */}
-          <div className="flex flex-col lg:flex-row min-h-[480px]">
-            
-            {/* Control Sidebar */}
-            <div className="w-full lg:w-[320px] border-b lg:border-b-0 lg:border-r border-border/40 p-6 flex flex-col gap-8 bg-muted/10">
-              
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          
+          {/* Left Column: Control Panel */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl p-6 shadow-sm space-y-8">
               <div className="space-y-2">
                 <h2 className="text-base font-bold text-foreground flex items-center gap-2">
                   <Monitor className="h-4 w-4 text-secondary" /> Controle Remoto
@@ -186,7 +173,7 @@ export default function Tecnico() {
               </div>
 
               {/* Action Buttons */}
-              <div className="space-y-3 mt-auto">
+              <div className="space-y-3 pt-4">
                 <Button 
                   onClick={() => handleConnect()}
                   disabled={status === "connecting" || !remoteId}
@@ -216,8 +203,23 @@ export default function Tecnico() {
               </div>
             </div>
 
-            {/* Workspace Area */}
-            <div className="flex-1 flex flex-col p-6 bg-card/40">
+            {/* Connection Info Card */}
+            <div className="rounded-xl border border-border/40 bg-muted/10 p-4">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-lg bg-secondary/10 flex items-center justify-center">
+                  <ShieldCheck className="h-4 w-4 text-secondary" />
+                </div>
+                <div>
+                  <h4 className="text-[11px] font-bold uppercase tracking-wider">Conexão Segura</h4>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Criptografia ponta-a-ponta ativa para todas as sessões.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Workspace */}
+          <div className="lg:col-span-8 space-y-6">
+            <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl p-6 shadow-sm min-h-[500px] flex flex-col">
               
               {/* Header Info */}
               <div className="flex justify-between items-start mb-8">
@@ -225,15 +227,11 @@ export default function Tecnico() {
                   <h3 className="text-sm font-bold text-foreground">Sessões Recentes</h3>
                   <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest mt-1">Histórico de acessos do técnico</p>
                 </div>
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 border border-secondary/20">
-                  <ShieldCheck className="h-3 w-3 text-secondary" />
-                  <span className="text-[9px] font-bold text-secondary uppercase tracking-tight">Criptografia Ativa</span>
-                </div>
               </div>
 
               {/* Tabs Navigation */}
-              <div className="flex items-center justify-between border-b border-border/40 mb-6">
-                <div className="flex gap-2">
+              <div className="flex items-center justify-between border-b border-border/40 mb-6 overflow-x-auto">
+                <div className="flex gap-2 min-w-max">
                   {tabs.map((tab, i) => (
                     <button
                       key={tab.label}
@@ -254,7 +252,7 @@ export default function Tecnico() {
                     </button>
                   ))}
                 </div>
-                <div className="flex gap-2 pb-3">
+                <div className="flex gap-2 pb-3 ml-4">
                   <button className="p-2 rounded-lg hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-all">
                     <Search className="h-4 w-4" />
                   </button>
@@ -294,29 +292,11 @@ export default function Tecnico() {
               </div>
             </div>
           </div>
-
-          {/* Bottom Bar */}
-          <div className="px-5 py-3 border-t border-border/40 bg-muted/30 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`h-2 w-2 rounded-full ${
-                status === "connected" ? "bg-[hsl(var(--status-connected))] shadow-[0_0_10px_hsl(var(--status-connected))]" : 
-                status === "connecting" ? "bg-primary animate-pulse" : 
-                "bg-muted-foreground/30"
-              }`} />
-              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-                {status === "connected" ? "Sessão Ativa" : 
-                 status === "connecting" ? "Conectando..." : 
-                 "Status: Pronto para conexão"}
-              </span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-               <span className="text-[9px] text-muted-foreground/40 font-bold uppercase tracking-[0.2em]">
-                Hádron Control Panel v2.0
-              </span>
-            </div>
-          </div>
         </div>
+
+        <p className="text-center text-[10px] text-muted-foreground/40 pt-4">
+          © {new Date().getFullYear()} Hádron Suporte — Painel do Técnico v2.0
+        </p>
       </div>
     </div>
   );
