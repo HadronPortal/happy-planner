@@ -84,6 +84,16 @@ export default function AdminPanel() {
               <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
               Sistema ativo
             </span>
+            <Button 
+              onClick={() => navigate("/tecnico")}
+              variant="outline"
+              size="sm"
+              className="h-8 gap-2 text-[11px] font-bold uppercase tracking-wider border-secondary/30 hover:bg-secondary/10 hover:text-secondary transition-all"
+            >
+              <Monitor className="h-3.5 w-3.5" />
+              Módulo Técnico
+              <ExternalLink className="h-3 w-3 opacity-50" />
+            </Button>
           </div>
         </div>
 
