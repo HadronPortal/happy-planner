@@ -61,7 +61,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     year: "2-digit",
     hour: "2-digit",
     minute: "2-digit"
-  });
+  const handleCopyId = () => {
     navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
     toast.success("ID copiado com sucesso");
     setIsCopied(true);
