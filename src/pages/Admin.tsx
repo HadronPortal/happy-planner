@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-import logoSrc from "@/assets/logo.png";
+import { PageHeader } from "@/components/PageHeader";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
