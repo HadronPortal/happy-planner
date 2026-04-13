@@ -1,9 +1,9 @@
 import { Monitor, Building2, Hash, Clock, Shield, FileText, Copy, Plug, CheckCircle2, X, Check } from "lucide-react";
 import { STATUS_CONFIG } from "@/data/supportData";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet";
 import type { DbClient } from "@/hooks/useSupportClients";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface ClientDetailSheetProps {
@@ -65,7 +65,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
     toast.success("ID copiado com sucesso");
     setIsCopied(true);
-    setTimeout(() => setIsCopied(null), 2000);
+    setTimeout(() => setIsCopied(false), 2000);
   };
 
   const handleConnect = async () => {
