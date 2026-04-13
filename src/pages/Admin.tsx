@@ -13,7 +13,7 @@ export default function AdminPanel() {
   const [selectedClient, setSelectedClient] = useState<DbClient | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
-  const { clients, loading } = useSupportClients();
+  const { clients, loading, updateClientStatus } = useSupportClients();
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
