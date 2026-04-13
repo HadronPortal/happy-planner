@@ -98,12 +98,37 @@ export default function AdminPanel() {
           />
         </div>
 
-        <ClientTable 
-          clients={filtered} 
-          loading={loading} 
-          onViewDetails={handleViewDetails} 
-          onUpdateClient={updateClientStatus} 
-        />
+        <div className="space-y-8">
+          {(statusFilter === "all" || statusFilter === "active") && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 px-1">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">Atendimentos Ativos</h2>
+              </div>
+              <ClientTable 
+                clients={activeClients} 
+                loading={loading} 
+                onViewDetails={handleViewDetails} 
+                onUpdateClient={updateClientStatus} 
+              />
+            </div>
+          )}
+
+          {(statusFilter === "all" || statusFilter === "finalizado") && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 px-1">
+                <span className="h-2 w-2 rounded-full bg-blue-500/50" />
+                <h2 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground/80">Atendimentos Finalizados</h2>
+              </div>
+              <ClientTable 
+                clients={finishedClients} 
+                loading={loading} 
+                onViewDetails={handleViewDetails} 
+                onUpdateClient={updateClientStatus} 
+              />
+            </div>
+          )}
+        </div>
 
         <p className="text-center text-[10px] text-muted-foreground/40 pt-4">
           © {new Date().getFullYear()} Hádron Suporte — Painel administrativo
