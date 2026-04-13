@@ -5,6 +5,7 @@ import type { DbClient } from "@/hooks/useSupportClients";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface ClientDetailSheetProps {
   client: DbClient | null;
@@ -42,10 +43,12 @@ function DetailItem({ icon: Icon, label, value, mono = false }: { icon: any; lab
 
 export default function ClientDetailSheet({ client, open, onClose, onUpdateClient }: ClientDetailSheetProps) {
   const [isCopied, setIsCopied] = useState(false);
+  const navigate = useNavigate();
   
   if (!client) return null;
 
   const cfg = STATUS_CONFIG[client.status] || STATUS_CONFIG.offline;
+  
   const openedAt = new Date(client.opened_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -53,6 +56,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     hour: "2-digit",
     minute: "2-digit"
   });
+
   const updatedAt = new Date(client.updated_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -70,11 +74,17 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
 
   const handleConnect = async () => {
     try {
-      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
-      toast.success("ID copiado. Conectando...");
+      const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      await navigator.clipboard.writeText(cleanId);
+      
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
+      
+      toast.success("ID copiado. Atendimento iniciado");
+      
+      navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
-      toast.error("Erro ao conectar");
+      console.error("Connect error:", error);
+      toast.error("Erro ao iniciar atendimento");
     }
   };
 
@@ -84,6 +94,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
       toast.success("Atendimento finalizado");
       onClose();
     } catch (error) {
+      console.error("Finish error:", error);
       toast.error("Erro ao finalizar");
     }
   };
