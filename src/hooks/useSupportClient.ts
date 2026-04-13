@@ -39,7 +39,7 @@ export function useSupportClient() {
     setStatus("initializing");
     setSupportId(generateSupportId());
     setPassword(generatePassword());
-    toast.info("Reiniciando suporte...");
+    toast.info("Finalizando suporte...");
   }, []);
 
   const fechar = useCallback(() => {

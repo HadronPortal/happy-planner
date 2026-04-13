@@ -100,7 +100,7 @@ export default function HadronSuporte() {
                 className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
-                Reiniciar suporte
+                Finalizar suporte
               </button>
             </div>
 
