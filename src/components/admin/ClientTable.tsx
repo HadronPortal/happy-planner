@@ -10,9 +10,16 @@ interface ClientTableProps {
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
   onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
+  emptyMessage?: string;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient }: ClientTableProps) {
+export default function ClientTable({ 
+  clients, 
+  loading, 
+  onViewDetails, 
+  onUpdateClient,
+  emptyMessage = "Nenhum cliente no momento"
+}: ClientTableProps) {
   const handleCopyId = (rustdesk_id: string) => {
     navigator.clipboard.writeText(rustdesk_id.replace(/\s/g, ""));
     toast.success("ID copiado com sucesso");
@@ -65,10 +72,9 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
 
   if (clients.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-card/60 px-6 py-16 text-center space-y-3">
-        <WifiOff className="mx-auto h-10 w-10 text-muted-foreground/30" />
-        <p className="text-sm font-medium text-muted-foreground">Nenhum cliente online no momento</p>
-        <p className="text-xs text-muted-foreground/50">Os clientes aparecerão aqui automaticamente ao se conectarem</p>
+      <div className="rounded-xl border border-border bg-card/60 px-6 py-12 text-center space-y-2">
+        <WifiOff className="mx-auto h-8 w-8 text-muted-foreground/30" />
+        <p className="text-sm font-medium text-muted-foreground">{emptyMessage}</p>
       </div>
     );
   }
