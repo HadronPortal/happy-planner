@@ -24,7 +24,7 @@ export default function AdminPanel() {
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
       const matchStatus =
         statusFilter === "all" ||
-        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : c.status === statusFilter);
+        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : (statusFilter === "offline" ? (c.status === "offline" || c.status === "finalizado") : c.status === statusFilter));
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
       return matchSearch && matchStatus && matchTech;
     });
