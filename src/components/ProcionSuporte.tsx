@@ -13,7 +13,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function HadronSuporte() {
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
@@ -26,6 +26,11 @@ export default function HadronSuporte() {
     setAttendingTechnician("João Silva");
     toast.info(`Conectando ao ID ${remoteId}...`);
   }, [remoteId]);
+
+  const reiniciar = useCallback(() => {
+    setAttendingTechnician(null);
+    originalReiniciar();
+  }, [originalReiniciar]);
 
   const { label, dotClass } = STATUS_CONFIG[status];
 
