@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "react-router-dom";
-import { Copy, Play, Power, X } from "lucide-react";
+import { useSearchParams, Link } from "react-router-dom";
+import { Copy, Play, Power, X, Shield, Home } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -65,6 +65,20 @@ const Tecnico = () => {
               </span>
             </div>
             <div className="flex items-center gap-1">
+              <Link
+                to="/"
+                className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                title="Suporte"
+              >
+                <Home className="h-3.5 w-3.5" />
+              </Link>
+              <Link
+                to="/admin"
+                className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
+                title="Admin"
+              >
+                <Shield className="h-3.5 w-3.5" />
+              </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>

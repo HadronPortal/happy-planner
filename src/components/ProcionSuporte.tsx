@@ -66,11 +66,23 @@ export default function HadronSuporte() {
             </div>
             <div className="flex items-center gap-2">
               <Link
+                to="/download"
+                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+              >
+                Download
+              </Link>
+              <Link
+                to="/admin"
+                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+              >
+                Admin
+              </Link>
+              <Link
                 to="/tecnico"
                 className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
               >
                 <UserCog className="h-3 w-3" />
-                Área do Técnico
+                Técnico
               </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>

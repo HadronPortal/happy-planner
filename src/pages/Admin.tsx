@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import logoSrc from "@/assets/logo.png";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
@@ -76,6 +77,9 @@ export default function AdminPanel() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Link to="/" className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4">
+              Voltar ao Suporte
+            </Link>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">
               <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
               Sistema ativo
