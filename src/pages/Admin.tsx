@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-import { PageHeader } from "@/components/PageHeader";
+// PageHeader removed to use layout header
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Copy, Play, Power } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/PageHeader";
+// PageHeader removed to use layout header
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 

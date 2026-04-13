@@ -1,5 +1,5 @@
 import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
-import { PageHeader } from "@/components/PageHeader";
+// PageHeader removed to use layout header
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 

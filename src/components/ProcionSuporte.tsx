@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
 
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-import { PageHeader } from "./PageHeader";
+// PageHeader removed to use layout header
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
