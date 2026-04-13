@@ -3,25 +3,42 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
+  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
+export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient }: ClientTableProps) {
   const handleCopyId = (id: string) => {
     navigator.clipboard.writeText(id.replace(/\s/g, ""));
     toast.success("ID copiado");
   };
 
-  const handleConnect = (client: DbClient) => {
-    toast.info(`Conectando a ${client.empresa}...`);
+  const handleConnect = async (client: DbClient) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const tech = user?.email || "Atendente Hádron";
+
+      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
+      toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
+
+      await onUpdateClient(client.id, "in_service", tech);
+    } catch (error) {
+      toast.error("Erro ao conectar");
+    }
   };
 
-  const handleEnd = (client: DbClient) => {
-    toast.info(`Atendimento encerrado: ${client.empresa}`);
+  const handleEnd = async (client: DbClient) => {
+    try {
+      await onUpdateClient(client.id, "online", "");
+      toast.info(`Atendimento encerrado: ${client.empresa}`);
+    } catch (error) {
+      toast.error("Erro ao encerrar atendimento");
+    }
   };
 
   if (loading) {
