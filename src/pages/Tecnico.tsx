@@ -111,6 +111,15 @@ export default function Tecnico() {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate("/admin")}
+              className="h-8 gap-2 text-[10px] font-bold uppercase tracking-wider border-border/40 hover:bg-muted/50 transition-all"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Painel Admin
+            </Button>
             <div className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium ${
               status === "connected" 
                 ? "border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 text-[hsl(var(--status-connected))]" 
