@@ -1,6 +1,6 @@
-import { Monitor, Building2, Hash, Clock, Shield, FileText, Copy, Plug, CheckCircle2, X, Check } from "lucide-react";
+import { Monitor, Building2, Hash, Clock, Shield, FileText, Copy, Plug, CheckCircle2, Check } from "lucide-react";
 import { STATUS_CONFIG } from "@/data/supportData";
-import { Sheet, SheetContent, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import type { DbClient } from "@/hooks/useSupportClients";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -88,9 +88,10 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     }
   };
 
+  return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent className="bg-[#0A0A0B] border-l border-border/40 w-full sm:max-w-md p-0 overflow-hidden flex flex-col">
-        <div className="relative h-32 w-full overflow-hidden bg-gradient-to-br from-secondary/20 to-transparent">
+        <div className="relative h-32 w-full overflow-hidden bg-gradient-to-br from-secondary/20 to-transparent shrink-0">
           <div className="absolute inset-0 opacity-20" style={{
             backgroundImage: `radial-gradient(circle at 2px 2px, hsl(var(--secondary)) 1px, transparent 0)`,
             backgroundSize: '24px 24px'
@@ -104,7 +105,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
                 <h2 className="text-lg font-bold tracking-tight leading-none">{client.empresa}</h2>
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className={`inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${cfg.badgeClass}`}>
-                    <span className={`h-1.5 w-1.5 rounded-full ${cfg.dotClass} shadow-[0_0_8px_rgba(var(--status-color),0.5)]`} />
+                    <span className={`h-1.5 w-1.5 rounded-full ${cfg.dotClass}`} />
                     {cfg.label}
                   </span>
                 </div>
@@ -134,7 +135,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
           </DetailBlock>
         </div>
 
-        <div className="p-6 bg-muted/10 border-t border-border/40 grid grid-cols-2 gap-3">
+        <div className="p-6 bg-muted/10 border-t border-border/40 grid grid-cols-2 gap-3 shrink-0">
           <Button 
             variant="outline" 
             onClick={handleCopyId} 
