@@ -16,36 +16,37 @@ export default function AdminPanel() {
 
   const { clients, loading, updateClientStatus } = useSupportClients();
 
-  const filtered = useMemo(() => {
-    const list = clients.filter((c) => {
+  const { activeClients, finishedClients } = useMemo(() => {
+    const baseList = clients.filter((c) => {
       const matchSearch =
         !search ||
         c.empresa.toLowerCase().includes(search.toLowerCase()) ||
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
-      const matchStatus =
-        statusFilter === "all" ||
-        (statusFilter === "active" ? (c.status === "online" || c.status === "em_atendimento") : c.status === statusFilter);
       const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
-      return matchSearch && matchStatus && matchTech;
+      return matchSearch && matchTech;
     });
 
-    // Handle Sorting
-    return [...list].sort((a, b) => {
-      if (statusFilter === "active") {
+    const active = baseList
+      .filter((c) => c.status === "online" || c.status === "em_atendimento")
+      .sort((a, b) => {
         // 1. em_atendimento primeiro
         if (a.status === "em_atendimento" && b.status !== "em_atendimento") return -1;
         if (a.status !== "em_atendimento" && b.status === "em_atendimento") return 1;
-        // 2. depois online (implicit if they are both online or both em_atendimento)
-      }
-      // 3. mais recentes primeiro (opened_at)
-      return new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime();
-    });
-  }, [clients, search, statusFilter, techFilter]);
+        // 2. mais recentes primeiro (opened_at)
+        return new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime();
+      });
+
+    const finished = baseList
+      .filter((c) => c.status === "finalizado")
+      .sort((a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime());
+
+    return { activeClients: active, finishedClients: finished };
+  }, [clients, search, techFilter]);
 
   const stats = useMemo(() => ({
     online: clients.filter((c) => c.status === "online").length,
     inService: clients.filter((c) => c.status === "em_atendimento").length,
-    totalToday: clients.length,
+    totalToday: clients.filter((c) => c.status !== "offline").length,
     waiting: clients.filter((c) => c.status === "online" && !c.tecnico_responsavel).length,
   }), [clients]);
 
