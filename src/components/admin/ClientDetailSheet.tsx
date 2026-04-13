@@ -5,6 +5,7 @@ import type { DbClient } from "@/hooks/useSupportClients";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 interface ClientDetailSheetProps {
   client: DbClient | null;
