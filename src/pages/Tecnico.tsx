@@ -33,8 +33,11 @@ export default function TecnicoPage() {
     const id = searchParams.get("id");
     if (id) {
       setRemoteId(id);
+      // Se vier com ID via URL (ex: do Admin ou do Suporte), 
+      // iniciamos a conexão automaticamente
+      handleConnect();
     }
-  }, [searchParams]);
+  }, [searchParams, handleConnect]);
 
   const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
