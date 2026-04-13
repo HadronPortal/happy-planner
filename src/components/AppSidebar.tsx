@@ -20,23 +20,13 @@ import { Link, useLocation } from "react-router-dom";
 const items = [
   {
     title: "Suporte",
-    url: "/",
+    url: "/suporte",
     icon: MessageSquare,
   },
   {
     title: "Download",
     url: "/download",
     icon: Download,
-  },
-  {
-    title: "Área do Técnico",
-    url: "/tecnico",
-    icon: UserCog,
-  },
-  {
-    title: "Administração",
-    url: "/admin",
-    icon: ShieldCheck,
   },
 ];
 
