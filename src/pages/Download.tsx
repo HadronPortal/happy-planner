@@ -1,4 +1,4 @@
-import { Download, Shield, Lock, UserCheck, Headphones, Monitor, ArrowDown, CheckCircle2, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
+import { Shield, Lock, UserCheck, Monitor, Apple, Cpu, Smartphone, AlertTriangle } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 
