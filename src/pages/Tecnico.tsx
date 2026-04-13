@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Copy, Play, Power, X } from "lucide-react";
-import logoSrc from "@/assets/logo.png";
+import { Copy, Play, Power } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/PageHeader";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
