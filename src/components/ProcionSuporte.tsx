@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function HadronSuporte() {
-  const navigate = useNavigate();
+  
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
@@ -32,7 +32,7 @@ export default function HadronSuporte() {
     await navigator.clipboard.writeText(cleanId);
     toast.success(`ID ${cleanId} copiado com sucesso.`);
     toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
-  }, [remoteId, navigate]);
+  }, [remoteId]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);
