@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,13 +14,13 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function HadronSuporte() {
-  const navigate = useNavigate();
+  
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
-  const handleConnect = useCallback(() => {
+  const handleConnect = useCallback(async () => {
     if (!remoteId.trim()) {
       toast.error("Informe o ID Remoto");
       return;
@@ -28,11 +28,11 @@ export default function HadronSuporte() {
     
     const cleanId = remoteId.trim().replace(/\s/g, "");
     
-    // Se estiver em ambiente Electron, navegamos para o módulo técnico
-    // com o ID informado para que o técnico possa iniciar a conexão
-    navigate(`/tecnico?id=${cleanId}`);
+    // Apenas copia o ID e informa o usuário
+    await navigator.clipboard.writeText(cleanId);
+    toast.success(`ID ${cleanId} copiado com sucesso.`);
     toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
-  }, [remoteId, navigate]);
+  }, [remoteId]);
 
   const reiniciar = useCallback(() => {
     setAttendingTechnician(null);

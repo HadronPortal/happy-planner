@@ -5,7 +5,7 @@ import type { DbClient } from "@/hooks/useSupportClients";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+
 
 interface ClientDetailSheetProps {
   client: DbClient | null;
@@ -43,7 +43,7 @@ function DetailItem({ icon: Icon, label, value, mono = false }: { icon: any; lab
 
 export default function ClientDetailSheet({ client, open, onClose, onUpdateClient }: ClientDetailSheetProps) {
   const [isCopied, setIsCopied] = useState(false);
-  const navigate = useNavigate();
+  
   
   if (!client) return null;
 
@@ -85,8 +85,6 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
       // updated_at é atualizado automaticamente pelo hook updateClientStatus
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
       
-      // 3. navegar na mesma janela para /tecnico?id=RUSTDESK_ID
-      navigate(`/tecnico?id=${cleanId}`);
       
       toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {
