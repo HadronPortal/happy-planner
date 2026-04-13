@@ -56,27 +56,14 @@ const Tecnico = () => {
       <div className="w-full max-w-xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          {/* Title bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-            <div className="flex items-center gap-2">
-              <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
+          <PageHeader 
+            onClose={fechar} 
+            extra={
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold px-2 py-0.5 rounded bg-muted border border-border">
                 Painel do Técnico
               </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-                <span className="text-xs">☰</span>
-              </button>
-              <button
-                onClick={fechar}
-                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
+            }
+          />
 
           {/* Body */}
           <div className="p-8 flex flex-col items-center gap-8 min-h-[400px] justify-center text-center">
