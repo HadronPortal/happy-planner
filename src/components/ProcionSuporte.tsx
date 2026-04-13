@@ -168,14 +168,14 @@ export default function HadronSuporte() {
                     <button
                       key={tab.label}
                       onClick={() => setActiveTab(i)}
-                      className={`p-2.5 rounded-t transition-colors ${
+                      className={`flex items-center gap-2 p-2.5 rounded-t transition-colors ${
                         activeTab === i
                           ? "text-foreground border-b-2 border-secondary"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
-                      title={tab.label}
                     >
                       <tab.icon className="h-4 w-4" />
+                      <span className="text-[11px] font-medium hidden lg:inline">{tab.label}</span>
                     </button>
                   ))}
                 </div>
