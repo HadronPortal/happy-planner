@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
 
@@ -23,7 +22,7 @@ export default function ClientTable({
   emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const navigate = useNavigate();
+  
 
   const handleCopyId = (rustdesk_id: string, clientId: string) => {
     navigator.clipboard.writeText(rustdesk_id);

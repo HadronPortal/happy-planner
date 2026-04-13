@@ -20,7 +20,7 @@ export default function HadronSuporte() {
   const [activeTab, setActiveTab] = useState(0);
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
-  const handleConnect = useCallback(() => {
+  const handleConnect = useCallback(async () => {
     if (!remoteId.trim()) {
       toast.error("Informe o ID Remoto");
       return;
