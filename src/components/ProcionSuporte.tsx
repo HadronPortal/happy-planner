@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
 
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-import { PageHeader } from "./PageHeader";
+// PageHeader removed to use layout header
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -12,7 +12,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 
 export default function HadronSuporte() {
   
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar } = useSupportClient();
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
   const reiniciar = useCallback(() => {
@@ -27,7 +27,7 @@ export default function HadronSuporte() {
       <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          <PageHeader onClose={fechar} />
+          {/* No header here anymore */}
 
 
           {/* Body */}

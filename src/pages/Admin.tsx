@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-import { PageHeader } from "@/components/PageHeader";
+// PageHeader removed to use layout header
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
@@ -68,17 +68,7 @@ export default function AdminPanel() {
       }} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-        <div className="rounded-xl border border-border bg-card shadow-lg overflow-hidden">
-          <PageHeader 
-            showClose={false}
-            extra={
-              <div>
-                <h1 className="text-sm font-bold tracking-tight">Painel de suporte técnico</h1>
-                <p className="text-[10px] text-muted-foreground">Clientes online e atendimentos remotos</p>
-              </div>
-            }
-          />
-        </div>
+{/* Header removed, now in MainLayout */}
         
         <div className="flex items-center justify-end">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">

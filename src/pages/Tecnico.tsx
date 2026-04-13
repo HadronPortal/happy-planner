@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Copy, Play, Power } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { PageHeader } from "@/components/PageHeader";
+// PageHeader removed to use layout header
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
@@ -47,23 +47,14 @@ const Tecnico = () => {
     });
   }, []);
 
-  const fechar = () => {
-    window.close();
-  };
+  // fechar removed since it was in PageHeader which is now in layout
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          <PageHeader 
-            onClose={fechar} 
-            extra={
-              <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-semibold px-2 py-0.5 rounded bg-muted border border-border">
-                Painel do Técnico
-              </span>
-            }
-          />
+{/* Header removed, now in MainLayout */}
 
           {/* Body */}
           <div className="p-8 flex flex-col items-center gap-8 min-h-[400px] justify-center text-center">
