@@ -7,7 +7,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background/95 backdrop-blur-3xl">
+      <div className="flex min-h-screen w-full bg-background border-r border-border/10">
         <AppSidebar />
         <main className="flex-1 overflow-auto relative">
           <div className="p-4 md:p-8">

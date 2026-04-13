@@ -55,7 +55,7 @@ export default function HadronSuporte() {
   ];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex h-full items-start justify-center p-2 md:p-4">
       <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
@@ -67,21 +67,21 @@ export default function HadronSuporte() {
             <div className="flex items-center gap-2">
               <Link
                 to="/download"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
                 Download
               </Link>
               <Link
                 to="/admin"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
                 Admin
               </Link>
               <Link
                 to="/tecnico"
-                className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground font-semibold px-2 py-0.5 rounded bg-muted/50 border border-border transition-colors"
+                className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground font-bold px-3 py-1.5 rounded-md bg-muted/80 border border-border/50 hover:bg-muted transition-all"
               >
-                <UserCog className="h-3 w-3" />
+                <UserCog className="h-3.5 w-3.5" />
                 Técnico
               </Link>
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
@@ -168,14 +168,14 @@ export default function HadronSuporte() {
                     <button
                       key={tab.label}
                       onClick={() => setActiveTab(i)}
-                      className={`p-2.5 rounded-t transition-colors ${
+                      className={`flex items-center gap-2 p-2.5 rounded-t transition-colors ${
                         activeTab === i
                           ? "text-foreground border-b-2 border-secondary"
                           : "text-muted-foreground hover:text-foreground"
                       }`}
-                      title={tab.label}
                     >
                       <tab.icon className="h-4 w-4" />
+                      <span className="text-[11px] font-medium hidden lg:inline">{tab.label}</span>
                     </button>
                   ))}
                 </div>

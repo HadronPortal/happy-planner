@@ -44,7 +44,7 @@ export function AppSidebar() {
   const location = useLocation();
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="none">
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
