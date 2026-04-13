@@ -44,8 +44,6 @@ export default function ClientTable({
       // updated_at é atualizado automaticamente pelo hook updateClientStatus
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
 
-      // 3. navegar na mesma janela para /tecnico?id=RUSTDESK_ID
-      navigate(`/tecnico?id=${cleanId}`);
 
       toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {

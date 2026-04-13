@@ -28,9 +28,9 @@ export default function HadronSuporte() {
     
     const cleanId = remoteId.trim().replace(/\s/g, "");
     
-    // Se estiver em ambiente Electron, navegamos para o módulo técnico
-    // com o ID informado para que o técnico possa iniciar a conexão
-    navigate(`/tecnico?id=${cleanId}`);
+    // Apenas copia o ID e informa o usuário
+    await navigator.clipboard.writeText(cleanId);
+    toast.success(`ID ${cleanId} copiado com sucesso.`);
     toast.info(`Abrindo módulo técnico para o ID ${cleanId}...`);
   }, [remoteId, navigate]);
 
