@@ -166,7 +166,7 @@ export default function TecnicoPage() {
               {/* Action Buttons */}
               <div className="space-y-2 mt-auto">
                 <Button 
-                  onClick={handleConnect}
+                  onClick={() => handleConnect()}
                   disabled={status === "connecting" || !remoteId}
                   className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold h-11 gap-2 shadow-lg shadow-secondary/10"
                 >
