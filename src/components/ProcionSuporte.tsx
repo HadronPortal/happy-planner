@@ -12,7 +12,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 
 export default function HadronSuporte() {
   
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar } = useSupportClient();
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
   const reiniciar = useCallback(() => {
