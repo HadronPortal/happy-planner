@@ -47,8 +47,8 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
 
   const handleFinish = async (client: DbClient) => {
     try {
-      await onUpdateClient(client.id, "offline");
-      toast.success(`Atendimento finalizado: ${client.empresa}`);
+      await onUpdateClient(client.id, "finalizado");
+      toast.success("Atendimento finalizado com sucesso");
     } catch (error) {
       console.error("Finish service error:", error);
       toast.error("Erro ao finalizar atendimento");
