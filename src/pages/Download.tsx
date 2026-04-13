@@ -18,9 +18,14 @@ export default function DownloadPage() {
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
       <div className="relative">
         {/* Header/Hero */}
-        <section className="px-4 pt-16 pb-12 text-center">
+        <div className="max-w-7xl mx-auto px-4 pt-4">
+          <div className="rounded-xl border border-border bg-white shadow-sm overflow-hidden mb-8">
+            <PageHeader showClose={false} />
+          </div>
+        </div>
+        
+        <section className="px-4 pb-12 text-center">
           <div className="mx-auto max-w-3xl">
-            <img src={logoSrc} alt="Hádron Suporte" className="mx-auto h-16 mb-8" />
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
               Download do Hádron Suporte
             </h1>
