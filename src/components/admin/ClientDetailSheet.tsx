@@ -48,6 +48,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
   if (!client) return null;
 
   const cfg = STATUS_CONFIG[client.status] || STATUS_CONFIG.offline;
+  
   const openedAt = new Date(client.opened_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -55,12 +56,15 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     hour: "2-digit",
     minute: "2-digit"
   });
+
   const updatedAt = new Date(client.updated_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "2-digit",
     hour: "2-digit",
     minute: "2-digit"
+  });
+
   const handleCopyId = () => {
     navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
     toast.success("ID copiado com sucesso");
@@ -90,6 +94,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
       toast.success("Atendimento finalizado");
       onClose();
     } catch (error) {
+      console.error("Finish error:", error);
       toast.error("Erro ao finalizar");
     }
   };
