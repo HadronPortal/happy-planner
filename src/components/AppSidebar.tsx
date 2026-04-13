@@ -20,7 +20,7 @@ import { Link, useLocation } from "react-router-dom";
 const items = [
   {
     title: "Suporte",
-    url: "/",
+    url: "/suporte",
     icon: MessageSquare,
   },
   {
