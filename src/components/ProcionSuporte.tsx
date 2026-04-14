@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { Copy, RotateCcw, X, ShieldCheck, HelpCircle, Activity } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
+import iconeSrc from "@/assets/icone.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
@@ -73,14 +74,10 @@ export default function HadronSuporte() {
                 </div>
               </div>
 
-              {/* Restart */}
-              <button
-                onClick={reiniciar}
-                className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Finalizar suporte
-              </button>
+              {/* Logo replacement */}
+              <div className="mt-auto flex justify-center pb-2 opacity-30 grayscale transition-all hover:opacity-100 hover:grayscale-0 duration-300">
+                <img src={iconeSrc} alt="Logo" className="h-10 object-contain" />
+              </div>
             </div>
 
             {/* Right panel */}
@@ -120,7 +117,7 @@ export default function HadronSuporte() {
                     <div>
                       <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Privacidade</h4>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Você tem controle total. A conexão pode ser encerrada a qualquer momento clicando em "Finalizar suporte".
+                        Você tem controle total. A conexão pode ser encerrada a qualquer momento fechando este aplicativo.
                       </p>
                     </div>
                   </div>
