@@ -71,6 +71,9 @@ export default function HadronSuporte() {
                   </button>
                 </div>
               </div>
+              <div className="mt-auto flex justify-center pb-2">
+                <img src={logoSrc} alt="Hádron" className="h-6 object-contain opacity-40 grayscale hover:opacity-80 transition-opacity" />
+              </div>
             </div>
 
             {/* Right panel */}
