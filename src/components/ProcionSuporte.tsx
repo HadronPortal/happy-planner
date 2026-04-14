@@ -92,13 +92,9 @@ export default function HadronSuporte() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-4">
-                  <button
-                    onClick={fechar}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-xs font-semibold text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all duration-200"
-                  >
-                    <X className="h-4 w-4" />
-                    Finalizar Suporte
-                  </button>
+                  <div className="flex items-center justify-center py-4">
+                    <img src={logoSrc} alt="Logo" className="h-16 w-auto object-contain" />
+                  </div>
                   
                   <button
                     onClick={reiniciar}
