@@ -66,7 +66,7 @@ export default function Tecnico() {
             </div>
 
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/admin")}
               variant="ghost"
               size="sm"
               className="gap-2 text-muted-foreground hover:text-foreground transition-colors"
