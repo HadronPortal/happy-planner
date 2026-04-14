@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -20,11 +19,9 @@ export default function ClientTable({
   loading, 
   onViewDetails, 
   onUpdateClient,
-  emptyMessage = "Ainda não apareceu nenhum cliente"
+  emptyMessage = "Nenhum cliente no momento"
 }: ClientTableProps) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const navigate = useNavigate();
-  
 
   const handleCopyId = (rustdesk_id: string, clientId: string) => {
     navigator.clipboard.writeText(rustdesk_id);
@@ -35,24 +32,21 @@ export default function ClientTable({
 
   const handleConnect = async (client: DbClient) => {
     try {
-      const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      // Requirements:
+      // 1. Copy rustdesk_id to clipboard
+      // 2. Show toast
+      // 3. Update Supabase with status = "em_atendimento", updated_at = now(), tecnico_responsavel = "Técnico Atual"
       
-      // 1. copiar rustdesk_id para a área de transferência
-      await navigator.clipboard.writeText(cleanId);
+      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
+      toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
 
-      // 2. atualizar Supabase
-      // status = "em_atendimento", tecnico_responsavel = "Técnico Atual", updated_at = new Date().toISOString()
-      // updated_at é atualizado automaticamente pelo hook updateClientStatus
+      setCopiedId(client.id);
+      setTimeout(() => setCopiedId(null), 2000);
+
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
-
-
-      toast.success("ID copiado. Atendimento iniciado");
-      
-      // 3. Navegar para a rota de técnico
-      navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
       console.error("Connect error:", error);
-      toast.error("Erro ao iniciar atendimento");
+      toast.error("Erro ao conectar");
     }
   };
 

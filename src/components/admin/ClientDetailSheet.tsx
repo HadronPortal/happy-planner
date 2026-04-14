@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 
-
 interface ClientDetailSheetProps {
   client: DbClient | null;
   open: boolean;
@@ -44,11 +43,9 @@ function DetailItem({ icon: Icon, label, value, mono = false }: { icon: any; lab
 export default function ClientDetailSheet({ client, open, onClose, onUpdateClient }: ClientDetailSheetProps) {
   const [isCopied, setIsCopied] = useState(false);
   
-  
   if (!client) return null;
 
   const cfg = STATUS_CONFIG[client.status] || STATUS_CONFIG.offline;
-  
   const openedAt = new Date(client.opened_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -56,7 +53,6 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
     hour: "2-digit",
     minute: "2-digit"
   });
-
   const updatedAt = new Date(client.updated_at).toLocaleString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
@@ -74,22 +70,11 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
 
   const handleConnect = async () => {
     try {
-      if (!client) return;
-      const cleanId = client.rustdesk_id.replace(/\s/g, "");
-      
-      // 1. copiar rustdesk_id para a área de transferência
-      await navigator.clipboard.writeText(cleanId);
-      
-      // 2. atualizar Supabase
-      // status = "em_atendimento", tecnico_responsavel = "Técnico Atual", updated_at = new Date().toISOString()
-      // updated_at é atualizado automaticamente pelo hook updateClientStatus
+      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
+      toast.success("ID copiado. Conectando...");
       await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
-      
-      
-      toast.success("ID copiado. Atendimento iniciado");
     } catch (error) {
-      console.error("Connect error:", error);
-      toast.error("Erro ao iniciar atendimento");
+      toast.error("Erro ao conectar");
     }
   };
 
@@ -99,7 +84,6 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
       toast.success("Atendimento finalizado");
       onClose();
     } catch (error) {
-      console.error("Finish error:", error);
       toast.error("Erro ao finalizar");
     }
   };

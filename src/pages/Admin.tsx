@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
-
-// PageHeader removed to use layout header
+import logoSrc from "@/assets/logo.png";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
@@ -68,13 +67,20 @@ export default function AdminPanel() {
       }} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
-{/* Header removed, now in MainLayout */}
-        
-        <div className="flex items-center justify-end">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
-            Sistema ativo
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <img src={logoSrc} alt="Hádron" className="h-10 object-contain" />
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight">Painel de suporte técnico</h1>
+              <p className="text-xs text-muted-foreground">Clientes online e atendimentos remotos</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
+              Sistema ativo
+            </span>
+          </div>
         </div>
 
         <StatsBar {...stats} />
@@ -108,7 +114,7 @@ export default function AdminPanel() {
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
-                emptyMessage="Ainda não apareceu nenhum atendimento ativo"
+                emptyMessage="Nenhum atendimento ativo no momento"
               />
             </div>
           )}
@@ -124,7 +130,7 @@ export default function AdminPanel() {
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
                 onUpdateClient={updateClientStatus} 
-                emptyMessage="Ainda não apareceu nenhum atendimento finalizado hoje"
+                emptyMessage="Nenhum atendimento finalizado hoje"
               />
             </div>
           )}
