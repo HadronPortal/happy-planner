@@ -13,7 +13,7 @@ interface ClientTableProps {
   emptyMessage?: string;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails, emptyMessage }: ClientTableProps) {
+export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient, emptyMessage }: ClientTableProps) {
   const navigate = useNavigate();
 
   const handleCopyId = (id: string) => {
@@ -24,6 +24,12 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
   const handleConnect = async (client: DbClient) => {
     try {
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      
+      // Update status to em_atendimento if it's currently online
+      if (client.status === "online" && onUpdateClient) {
+        await onUpdateClient(client.id, "em_atendimento");
+      }
+      
       await navigator.clipboard.writeText(cleanId);
       toast.success(`ID copiado. Atendimento iniciado para ${client.empresa}`);
       navigate(`/tecnico?id=${cleanId}`);
@@ -33,8 +39,16 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
     }
   };
 
-  const handleEnd = (client: DbClient) => {
-    toast.info(`Atendimento encerrado: ${client.empresa}`);
+  const handleEnd = async (client: DbClient) => {
+    try {
+      if (onUpdateClient) {
+        await onUpdateClient(client.id, "finalizado");
+        toast.info(`Atendimento encerrado: ${client.empresa}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao encerrar atendimento");
+    }
   };
 
   if (loading) {
