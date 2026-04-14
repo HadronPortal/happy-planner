@@ -118,7 +118,7 @@ export default function HadronSuporte() {
             <img src={logoSrc} alt="Hádron" className="h-10 object-contain mb-1 opacity-90" />
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${dotClass}`} />
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider tracking-widest text-[10px]">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-widest text-[10px]">
                 {label}
               </span>
             </div>
