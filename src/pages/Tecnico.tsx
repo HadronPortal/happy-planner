@@ -119,12 +119,12 @@ export default function Tecnico() {
   ];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-4xl">
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Main window */}
-        <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
+        <div className="flex-1 flex flex-col bg-card overflow-hidden relative">
           {/* Title bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30 shrink-0">
             <div className="flex items-center gap-3">
               <img src={logoSrc} alt="Hádron" className="h-7 object-contain" />
               <div className="h-4 w-px bg-border mx-1" />
@@ -147,9 +147,9 @@ export default function Tecnico() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row h-auto">
+          <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
             {/* Left panel - User Info (The "Technician" module) */}
-            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5">
+            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 shrink-0">
               <div>
                 <h2 className="text-sm font-semibold text-foreground mb-0.5">Modulo tecnico</h2>
                 <p className="text-[11px] text-muted-foreground leading-snug">
@@ -194,73 +194,39 @@ export default function Tecnico() {
             </div>
 
             {/* Right panel - Remote Connection Target */}
-            <div className="flex-1 flex flex-col p-5">
+            <div className="flex-1 flex flex-col p-8 items-center justify-center text-center">
               {/* Remote connection display (Pre-filled) */}
-              <div className="flex flex-col items-center gap-3 mb-6">
-                <h3 className="text-sm font-semibold text-foreground">Conexão com Cliente Remoto</h3>
+              <div className="flex flex-col items-center gap-6 w-full max-w-md">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-foreground">Conexão com Cliente Remoto</h3>
+                  <p className="text-sm text-muted-foreground">Estabeleça a conexão com o dispositivo do cliente selecionado.</p>
+                </div>
                 
                 {/* Fixed ID display instead of input */}
-                <div className="w-full max-w-xs p-2.5 rounded-lg border border-border bg-muted/40 flex items-center justify-center">
-                  <p className="text-xl font-bold text-secondary tracking-[0.15em] font-mono">
+                <div className="w-full p-6 rounded-xl border border-border bg-muted/40 flex items-center justify-center shadow-inner">
+                  <p className="text-3xl font-bold text-secondary tracking-[0.15em] font-mono">
                     {remoteId || "--- --- ---"}
                   </p>
                 </div>
 
-                <div className="flex gap-2">
+                <div className="flex gap-4 w-full">
                   <Button
                     onClick={handleConnect}
                     disabled={!remoteId}
-                    className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
+                    size="lg"
+                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold transition-colors"
                   >
-                    Conectar
+                    Conectar agora
                   </Button>
                   <Button
                     onClick={handleFinish}
                     disabled={!remoteId}
                     variant="outline"
-                    className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive font-semibold px-8 transition-colors"
+                    size="lg"
+                    className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive font-semibold transition-colors"
                   >
                     Finalizar
                   </Button>
-                </div>
-              </div>
-
-              {/* Tabs UI - Matches Index/Home exactly */}
-              <div className="flex items-center justify-between border-b border-border mb-4">
-                <div className="flex gap-1">
-                  {tabs.map((tab, i) => (
-                    <button
-                      key={tab.label}
-                      onClick={() => setActiveTab(i)}
-                      className={`p-2.5 rounded-t transition-colors ${
-                        activeTab === i
-                          ? "text-foreground border-b-2 border-secondary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                      title={tab.label}
-                    >
-                      <tab.icon className="h-4 w-4" />
-                    </button>
-                  ))}
-                </div>
-                <div className="flex gap-1">
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Search className="h-4 w-4" />
-                  </button>
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <LayoutGrid className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Empty state or Logs */}
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 py-6 px-4">
-                <div className="rounded-full bg-muted/50 p-4">
-                  <Clock className="h-8 w-8 text-muted-foreground/60" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Histórico de Sessões</p>
-                  <p className="text-[11px] text-muted-foreground/60">As sessões recentes com este cliente aparecerão aqui.</p>
                 </div>
               </div>
             </div>
