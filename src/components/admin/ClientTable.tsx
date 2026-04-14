@@ -13,7 +13,7 @@ interface ClientTableProps {
   emptyMessage?: string;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails, emptyMessage }: ClientTableProps) {
+export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient, emptyMessage }: ClientTableProps) {
   const navigate = useNavigate();
 
   const handleCopyId = (id: string) => {
@@ -24,6 +24,12 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
   const handleConnect = async (client: DbClient) => {
     try {
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
+      
+      // Update status to em_atendimento if it's currently online
+      if (client.status === "online" && onUpdateClient) {
+        await onUpdateClient(client.id, "em_atendimento");
+      }
+      
       await navigator.clipboard.writeText(cleanId);
       toast.success(`ID copiado. Atendimento iniciado para ${client.empresa}`);
       navigate(`/tecnico?id=${cleanId}`);
@@ -33,8 +39,16 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
     }
   };
 
-  const handleEnd = (client: DbClient) => {
-    toast.info(`Atendimento encerrado: ${client.empresa}`);
+  const handleEnd = async (client: DbClient) => {
+    try {
+      if (onUpdateClient) {
+        await onUpdateClient(client.id, "finalizado");
+        toast.info(`Atendimento encerrado: ${client.empresa}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao encerrar atendimento");
+    }
   };
 
   if (loading) {
@@ -123,14 +137,14 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
                         <Eye className="h-3 w-3" /> Detalhes
                       </Button>
 
-                      {(client.status === "in_service" || client.status === "em_atendimento") && (
+                      {client.status === "em_atendimento" && (
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => handleEnd(client)}
                           className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1"
                         >
-                          <XCircle className="h-3 w-3" /> Encerrar
+                          <XCircle className="h-3 w-3" /> Finalizar
                         </Button>
                       )}
                     </div>
@@ -195,14 +209,14 @@ export default function ClientTable({ clients, loading, onViewDetails, emptyMess
                   <Eye className="h-3 w-3" /> Detalhes
                 </Button>
 
-                {(client.status === "in_service" || client.status === "em_atendimento") && (
+                {client.status === "em_atendimento" && (
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => handleEnd(client)}
                     className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1"
                   >
-                    <XCircle className="h-3 w-3" /> Encerrar
+                    <XCircle className="h-3 w-3" /> Finalizar
                   </Button>
                 )}
               </div>

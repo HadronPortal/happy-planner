@@ -38,11 +38,29 @@ export default function Tecnico() {
     }
   }, [searchParams]);
 
-  const handleConnect = useCallback(() => {
+  const handleConnect = useCallback(async () => {
     const cleanId = remoteId.replace(/\s/g, "");
     if (!cleanId) {
       toast.error("Informe o ID remoto");
       return;
+    }
+
+    // Atualiza status para "em_atendimento" no banco
+    try {
+      const { error } = await supabase
+        .from("support_online_clients")
+        .update({ 
+          status: "em_atendimento", 
+          updated_at: new Date().toISOString() 
+        })
+        .eq("rustdesk_id", cleanId)
+        .in("status", ["online", "em_atendimento"]);
+
+      if (error) {
+        console.error("Erro ao atualizar status para em_atendimento:", error);
+      }
+    } catch (err) {
+      console.error("Erro inesperado ao conectar:", err);
     }
 
     if (window.hadronTecnicoAPI) {
@@ -67,7 +85,7 @@ export default function Tecnico() {
             updated_at: new Date().toISOString() 
           })
           .eq("rustdesk_id", cleanId)
-          .eq("status", "em_atendimento");
+          .in("status", ["online", "em_atendimento"]);
 
         if (error) {
           console.error("Erro ao finalizar suporte no banco:", error);
@@ -188,13 +206,23 @@ export default function Tecnico() {
                   </p>
                 </div>
 
-                <Button
-                  onClick={handleConnect}
-                  disabled={!remoteId}
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
-                >
-                  Conectar
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleConnect}
+                    disabled={!remoteId}
+                    className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
+                  >
+                    Conectar
+                  </Button>
+                  <Button
+                    onClick={handleFinish}
+                    disabled={!remoteId}
+                    variant="outline"
+                    className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive font-semibold px-8 transition-colors"
+                  >
+                    Finalizar
+                  </Button>
+                </div>
               </div>
 
               {/* Tabs UI - Matches Index/Home exactly */}

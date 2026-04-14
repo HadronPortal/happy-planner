@@ -113,7 +113,12 @@ export default function AdminPanel() {
                 clients={activeClients} 
                 loading={loading} 
                 onViewDetails={handleViewDetails} 
-                onUpdateClient={updateClientStatus} 
+                onUpdateClient={async (id, status, tecnico) => {
+                  await updateClientStatus(id, status, tecnico);
+                  if (status === "finalizado") {
+                    setStatusFilter("finalizado");
+                  }
+                }} 
                 emptyMessage="Nenhum atendimento ativo no momento"
               />
             </div>
