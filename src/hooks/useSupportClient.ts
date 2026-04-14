@@ -6,6 +6,7 @@ declare global {
     procionAPI?: {
       startSupport: () => Promise<{ ok: boolean }>;
       getSupportId: () => Promise<string>;
+      getHostname?: () => string;
     };
   }
 }
