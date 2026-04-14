@@ -17,6 +17,10 @@ export default function DownloadPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
       <div className="relative">
+        <header className="absolute top-0 right-0 p-4 flex gap-4 text-sm font-medium">
+          <a href="/suporte" className="text-slate-500 hover:text-slate-900 transition-colors">Suporte</a>
+          <a href="/tecnico" className="text-slate-500 hover:text-slate-900 transition-colors">Área Técnica</a>
+        </header>
         {/* Header/Hero */}
         <section className="px-4 pt-16 pb-12 text-center">
           <div className="mx-auto max-w-3xl">
