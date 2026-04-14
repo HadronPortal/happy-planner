@@ -60,7 +60,7 @@ export default function AdminPanel() {
   , [clients, selectedClientId]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="h-screen bg-background text-foreground overflow-hidden">
       <div className="fixed inset-0 opacity-[0.03]" style={{
         backgroundImage: `linear-gradient(hsl(var(--secondary)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--secondary)) 1px, transparent 1px)`,
         backgroundSize: '60px 60px'
