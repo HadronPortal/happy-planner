@@ -119,10 +119,10 @@ export default function Tecnico() {
   ];
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      <div className="flex-1 flex flex-col overflow-hidden">
+    <div className="h-screen w-screen bg-background flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Main window */}
-        <div className="flex-1 flex flex-col bg-card overflow-hidden relative">
+        <div className="flex-1 flex flex-col bg-card overflow-hidden relative shadow-none border-0">
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30 shrink-0">
             <div className="flex items-center gap-3">
