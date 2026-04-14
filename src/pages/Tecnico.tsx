@@ -185,7 +185,8 @@ export default function Tecnico() {
               <div className="mt-auto flex flex-col gap-2">
                 <button
                   onClick={handleFinish}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+                  disabled={!remoteId}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <X className="h-3.5 w-3.5" />
                   Finalizar suporte
@@ -216,14 +217,6 @@ export default function Tecnico() {
                     className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
                   >
                     Conectar agora
-                  </Button>
-                  <Button
-                    onClick={handleFinish}
-                    disabled={!remoteId}
-                    variant="destructive"
-                    className="flex-1 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
-                  >
-                    Finalizar
                   </Button>
                 </div>
               </div>
