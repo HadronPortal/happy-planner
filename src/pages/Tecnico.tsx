@@ -57,7 +57,7 @@ export default function Tecnico() {
   ];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4 font-sans selection:bg-primary/20">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-4xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
@@ -87,7 +87,7 @@ export default function Tecnico() {
           {/* Body */}
           <div className="flex flex-col md:flex-row min-h-[400px]">
             {/* Left panel - User Info (The "Technician" module) */}
-            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 bg-muted/5">
+            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5">
               <div>
                 <h2 className="text-sm font-semibold text-foreground mb-0.5">Modulo tecnico</h2>
                 <p className="text-[11px] text-muted-foreground leading-snug">
@@ -132,38 +132,29 @@ export default function Tecnico() {
             </div>
 
             {/* Right panel - Remote Connection Target */}
-            <div className="flex-1 flex flex-col p-5 bg-background/50">
+            <div className="flex-1 flex flex-col p-5">
               {/* Remote connection display (Pre-filled) */}
-              <div className="flex flex-col items-center gap-3 mb-6 pt-0">
-                <div className="p-4 rounded-2xl bg-secondary/5 ring-1 ring-secondary/10 mb-2">
-                  <Monitor className="h-10 w-10 text-secondary" />
-                </div>
+              <div className="flex flex-col items-center gap-3 mb-6">
                 <h3 className="text-sm font-semibold text-foreground">Conexão com Cliente Remoto</h3>
                 
                 {/* Fixed ID display instead of input */}
-                <div className="w-full max-w-[280px] p-4 rounded-xl border border-border/60 bg-muted/20 flex flex-col items-center justify-center gap-1 group transition-all hover:border-secondary/30">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">ID do Cliente Carregado</span>
-                  <p className="text-2xl font-extrabold text-secondary tracking-[0.15em] font-mono">
+                <div className="w-full max-w-xs p-2.5 rounded-lg border border-border bg-muted/40 flex items-center justify-center">
+                  <p className="text-xl font-bold text-secondary tracking-[0.15em] font-mono">
                     {remoteId || "--- --- ---"}
                   </p>
-                  <div className="flex items-center gap-1.5 mt-1">
-                    <Shield className="h-3 w-3 text-emerald-500/70" />
-                    <span className="text-[9px] font-medium text-muted-foreground/70 uppercase">Conexão Criptografada</span>
-                  </div>
                 </div>
 
                 <Button
                   onClick={handleConnect}
                   disabled={!remoteId}
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 py-2.5 text-sm rounded-xl transition-all shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-[0.98]"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
                 >
-                  <Plug className="mr-2 h-5 w-5" />
-                  Conectar Agora
+                  Conectar
                 </Button>
               </div>
 
               {/* Tabs UI - Matches Index/Home exactly */}
-              <div className="flex items-center justify-between border-b border-border mb-4 px-2">
+              <div className="flex items-center justify-between border-b border-border mb-4">
                 <div className="flex gap-1">
                   {tabs.map((tab, i) => (
                     <button
