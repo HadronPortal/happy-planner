@@ -1,73 +1,41 @@
-import { useState } from "react";
-import { Copy, Eye, Plug, XCircle, WifiOff, CheckCircle2, Check } from "lucide-react";
+import { Copy, Eye, Plug, XCircle, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { STATUS_CONFIG } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
-
+import { useNavigate } from "react-router-dom";
 
 interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
-  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
-  emptyMessage?: string;
 }
 
-export default function ClientTable({ 
-  clients, 
-  loading, 
-  onViewDetails, 
-  onUpdateClient,
-  emptyMessage = "Nenhum cliente no momento"
-}: ClientTableProps) {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
+  const navigate = useNavigate();
 
-  const handleCopyId = (rustdesk_id: string, clientId: string) => {
-    navigator.clipboard.writeText(rustdesk_id);
-    toast.success("ID copiado com sucesso");
-    setCopiedId(clientId);
-    setTimeout(() => setCopiedId(null), 2000);
+  const handleCopyId = (id: string) => {
+    navigator.clipboard.writeText(id.replace(/\s/g, ""));
+    toast.success("ID copiado");
   };
 
   const handleConnect = async (client: DbClient) => {
     try {
-      // Requirements:
-      // 1. Copy rustdesk_id to clipboard
-      // 2. Show toast
-      // 3. Update Supabase with status = "em_atendimento", updated_at = now(), tecnico_responsavel = "Técnico Atual"
-      
-      navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
-      toast.success("ID copiado. Abra o RustDesk do técnico para conectar");
+      const cleanId = client.rustdesk_id.replace(/\s/g, "");
 
-      setCopiedId(client.id);
-      setTimeout(() => setCopiedId(null), 2000);
+      await navigator.clipboard.writeText(cleanId);
 
-      await onUpdateClient(client.id, "em_atendimento", "Técnico Atual");
+      toast.success(`ID copiado. Atendimento iniciado para ${client.empresa}`);
+
+      navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
-      console.error("Connect error:", error);
-      toast.error("Erro ao conectar");
+      console.error(error);
+      toast.error("Erro ao iniciar conexão");
     }
   };
 
-  const handleEnd = async (client: DbClient) => {
-    try {
-      await onUpdateClient(client.id, "online", "");
-      toast.info(`Atendimento encerrado: ${client.empresa}`);
-    } catch (error) {
-      console.error("End service error:", error);
-      toast.error("Erro ao encerrar atendimento");
-    }
-  };
-
-  const handleFinish = async (client: DbClient) => {
-    try {
-      await onUpdateClient(client.id, "finalizado");
-      toast.success("Atendimento finalizado com sucesso");
-    } catch (error) {
-      console.error("Finish service error:", error);
-      toast.error("Erro ao finalizar atendimento");
-    }
+  const handleEnd = (client: DbClient) => {
+    toast.info(`Atendimento encerrado: ${client.empresa}`);
   };
 
   if (loading) {
@@ -80,9 +48,10 @@ export default function ClientTable({
 
   if (clients.length === 0) {
     return (
-      <div className="rounded-xl border border-border bg-card/60 px-6 py-12 text-center space-y-2">
-        <WifiOff className="mx-auto h-8 w-8 text-muted-foreground/30" />
-        <p className="text-sm font-medium text-muted-foreground">{emptyMessage}</p>
+      <div className="rounded-xl border border-border bg-card/60 px-6 py-16 text-center space-y-3">
+        <WifiOff className="mx-auto h-10 w-10 text-muted-foreground/30" />
+        <p className="text-sm font-medium text-muted-foreground">Nenhum cliente online no momento</p>
+        <p className="text-xs text-muted-foreground/50">Os clientes aparecerão aqui automaticamente ao se conectarem</p>
       </div>
     );
   }
@@ -91,7 +60,6 @@ export default function ClientTable({
 
   return (
     <div className="rounded-xl border border-border bg-card/60 overflow-hidden">
-      {/* Desktop table */}
       <div className="hidden lg:block overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -108,8 +76,11 @@ export default function ClientTable({
           <tbody>
             {clients.map((client) => {
               const cfg = getConfig(client.status);
-              const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-              const isCopied = copiedId === client.id;
+              const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+
               return (
                 <tr key={client.id} className="border-b border-border/30 hover:bg-muted/10 transition-colors">
                   <td className="px-4 py-3 font-medium">{client.empresa}</td>
@@ -122,34 +93,45 @@ export default function ClientTable({
                     </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground text-xs">{time}</td>
-                  <td className="px-4 py-3 text-xs">{client.tecnico_responsavel || <span className="text-muted-foreground/50">—</span>}</td>
+                  <td className="px-4 py-3 text-xs">
+                    {client.tecnico_responsavel || <span className="text-muted-foreground/50">—</span>}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
-                      {client.status === "online" && (
-                        <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1 shadow-sm">
-                          <Plug className="h-3 w-3" /> Conectar
-                        </Button>
-                      )}
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        onClick={() => handleCopyId(client.rustdesk_id, client.id)} 
-                        className={`h-7 px-2 text-[11px] transition-all gap-1 ${isCopied ? 'text-emerald-500 bg-emerald-500/10' : 'text-muted-foreground hover:text-foreground'}`}
+                      <Button
+                        size="sm"
+                        onClick={() => handleConnect(client)}
+                        className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
                       >
-                        {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                        {isCopied ? 'Copiado' : 'Copiar ID'}
+                        <Plug className="h-3 w-3" /> Conectar
                       </Button>
-                      <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
-                        <Eye className="h-3 w-3" /> Ver detalhes
+
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleCopyId(client.rustdesk_id)}
+                        className="h-7 px-2 text-[11px] text-secondary hover:text-secondary hover:bg-secondary/10 gap-1"
+                      >
+                        <Copy className="h-3 w-3" /> ID
                       </Button>
-                      {client.status === "em_atendimento" && (
-                        <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
+
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => onViewDetails(client)}
+                        className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1"
+                      >
+                        <Eye className="h-3 w-3" /> Detalhes
+                      </Button>
+
+                      {(client.status === "in_service" || client.status === "em_atendimento") && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEnd(client)}
+                          className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1"
+                        >
                           <XCircle className="h-3 w-3" /> Encerrar
-                        </Button>
-                      )}
-                      {client.status !== "offline" && (
-                        <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:text-emerald-500 hover:bg-emerald-500/10 gap-1">
-                          <CheckCircle2 className="h-3 w-3" /> Finalizar
                         </Button>
                       )}
                     </div>
@@ -161,12 +143,14 @@ export default function ClientTable({
         </table>
       </div>
 
-      {/* Mobile cards */}
       <div className="lg:hidden divide-y divide-border/30">
         {clients.map((client) => {
           const cfg = getConfig(client.status);
-          const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
-          const isCopied = copiedId === client.id;
+          const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
           return (
             <div key={client.id} className="px-4 py-4 space-y-3">
               <div className="flex items-start justify-between">
@@ -179,36 +163,47 @@ export default function ClientTable({
                   {cfg.label}
                 </span>
               </div>
+
               <div className="flex items-center justify-between text-xs">
                 <span className="font-mono tracking-wider">{client.rustdesk_id}</span>
                 <span className="text-muted-foreground">{time}</span>
               </div>
+
               <div className="flex flex-wrap gap-1.5">
-                {client.status === "online" && (
-                  <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
-                    <Plug className="h-3 w-3" /> Conectar
-                  </Button>
-                )}
-                <Button 
-                  size="sm" 
-                  variant="ghost" 
-                  onClick={() => handleCopyId(client.rustdesk_id, client.id)} 
-                  className={`h-7 px-2 text-[11px] transition-all gap-1 ${isCopied ? 'text-emerald-500 bg-emerald-500/10' : 'text-muted-foreground'}`}
+                <Button
+                  size="sm"
+                  onClick={() => handleConnect(client)}
+                  className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
                 >
-                  {isCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                  {isCopied ? 'Copiado' : 'Copiar ID'}
+                  <Plug className="h-3 w-3" /> Conectar
                 </Button>
-                <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground gap-1">
-                  <Eye className="h-3 w-3" /> Ver detalhes
+
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => handleCopyId(client.rustdesk_id)}
+                  className="h-7 px-2 text-[11px] text-secondary hover:bg-secondary/10 gap-1"
+                >
+                  <Copy className="h-3 w-3" /> ID
                 </Button>
-                {client.status === "em_atendimento" && (
-                  <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1">
+
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => onViewDetails(client)}
+                  className="h-7 px-2 text-[11px] text-muted-foreground gap-1"
+                >
+                  <Eye className="h-3 w-3" /> Detalhes
+                </Button>
+
+                {(client.status === "in_service" || client.status === "em_atendimento") && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleEnd(client)}
+                    className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1"
+                  >
                     <XCircle className="h-3 w-3" /> Encerrar
-                  </Button>
-                )}
-                {client.status !== "offline" && (
-                  <Button size="sm" variant="ghost" onClick={() => handleFinish(client)} className="h-7 px-2 text-[11px] text-emerald-500 hover:bg-emerald-500/10 gap-1">
-                    <CheckCircle2 className="h-3 w-3" /> Finalizar
                   </Button>
                 )}
               </div>
