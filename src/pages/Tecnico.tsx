@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X, Shield, Plug, ArrowLeft } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, Shield, Plug, ArrowLeft } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function Tecnico() {
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
+  const { status, supportId, password, copiarId, refreshPassword } = useSupportClient();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
