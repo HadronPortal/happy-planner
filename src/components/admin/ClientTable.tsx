@@ -137,14 +137,14 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                         <Eye className="h-3 w-3" /> Detalhes
                       </Button>
 
-                      {(client.status === "in_service" || client.status === "em_atendimento") && (
+                      {client.status === "em_atendimento" && (
                         <Button
                           size="sm"
                           variant="ghost"
                           onClick={() => handleEnd(client)}
                           className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1"
                         >
-                          <XCircle className="h-3 w-3" /> Encerrar
+                          <XCircle className="h-3 w-3" /> Finalizar
                         </Button>
                       )}
                     </div>
@@ -209,14 +209,14 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   <Eye className="h-3 w-3" /> Detalhes
                 </Button>
 
-                {(client.status === "in_service" || client.status === "em_atendimento") && (
+                {client.status === "em_atendimento" && (
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => handleEnd(client)}
                     className="h-7 px-2 text-[11px] text-destructive hover:bg-destructive/10 gap-1"
                   >
-                    <XCircle className="h-3 w-3" /> Encerrar
+                    <XCircle className="h-3 w-3" /> Finalizar
                   </Button>
                 )}
               </div>
