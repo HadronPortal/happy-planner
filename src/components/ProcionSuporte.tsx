@@ -1,49 +1,18 @@
-import { useState, useCallback } from "react";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
+import { useCallback } from "react";
+import { Copy, RotateCcw, X, ShieldCheck, HelpCircle, Activity } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
   connecting: { label: "Conectando...", dotClass: "bg-primary animate-pulse-dot" },
-  connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
+  connected: { label: "Pronto para conexão", dotClass: "bg-[hsl(var(--status-connected))]" },
 };
 
 export default function HadronSuporte() {
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
-  const [remoteId, setRemoteId] = useState("");
-  const [activeTab, setActiveTab] = useState(0);
-  const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
-
-  const handleConnect = useCallback(() => {
-    if (!remoteId.trim()) {
-      toast.error("Informe o ID Remoto");
-      return;
-    }
-    toast.info(`Conectando ao ID ${remoteId}...`);
-    setTimeout(() => {
-      setAttendingTechnician("João Silva");
-      toast.success("Conexão estabelecida!");
-    }, 1500);
-  }, [remoteId]);
-
-  const reiniciar = useCallback(() => {
-    setAttendingTechnician(null);
-    originalReiniciar();
-  }, [originalReiniciar]);
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
 
   const { label, dotClass } = STATUS_CONFIG[status];
-
-  const tabs = [
-    { icon: Clock, label: "Recentes" },
-    { icon: Star, label: "Favoritos" },
-    { icon: Link2, label: "Descoberta" },
-    { icon: Users, label: "Catálogo" },
-    { icon: Monitor, label: "Dispositivos" },
-  ];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
