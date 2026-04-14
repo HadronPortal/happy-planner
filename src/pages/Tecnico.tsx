@@ -183,13 +183,15 @@ export default function Tecnico() {
 
               {/* Action Buttons - Bottom of panel */}
               <div className="mt-auto flex flex-col gap-2">
-                <button
+                <Button
                   onClick={handleFinish}
+                  disabled={!remoteId}
+                  variant="outline"
                   className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
                 >
                   <X className="h-3.5 w-3.5" />
                   Finalizar suporte
-                </button>
+                </Button>
               </div>
             </div>
 
