@@ -137,9 +137,9 @@ export default function DownloadPage() {
               © {new Date().getFullYear()} Hádron Suporte — Soluções em Tecnologia. Todos os direitos reservados.
             </p>
             <div className="flex gap-6 text-xs font-medium">
-              <a href="#" className="hover:text-white transition-colors">Termos</a>
-              <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-              <a href="#" className="hover:text-white transition-colors">Suporte</a>
+              <a href="/" className="hover:text-white transition-colors">Home</a>
+              <a href="/suporte" className="hover:text-white transition-colors">Suporte</a>
+              <a href="/tecnico" className="hover:text-white transition-colors">Área Técnica</a>
             </div>
           </div>
         </footer>
