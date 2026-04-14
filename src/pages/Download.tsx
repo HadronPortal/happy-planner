@@ -26,7 +26,7 @@ export default function DownloadPage() {
           <div className="mx-auto max-w-3xl">
             <img src={logoSrc} alt="Hádron Suporte" className="mx-auto h-16 mb-8" />
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
-              Download do Hádron Suporte
+              Crie uma página
             </h1>
             
             {/* Warning Banner - RustDesk style */}
