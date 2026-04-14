@@ -58,7 +58,7 @@ export default function Tecnico() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4 font-sans selection:bg-primary/20">
-      <div className="w-full max-w-xl">
+      <div className="w-full max-w-4xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
           {/* Title bar */}
@@ -85,7 +85,7 @@ export default function Tecnico() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row min-h-[420px]">
+          <div className="flex flex-col md:flex-row min-h-[400px]">
             {/* Left panel - User Info (The "Technician" module) */}
             <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 bg-muted/5">
               <div>
