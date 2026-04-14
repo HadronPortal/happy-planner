@@ -1,6 +1,15 @@
-import { useState, useCallback, useEffect } from "react";
-import { toast } from "sonner";
+import { useCallback, useEffect, useState } from "react";
 
+declare global {
+  interface Window {
+    procionAPI?: {
+      startSupport: () => Promise<{ ok: boolean }>;
+      getSupportId: () => Promise<string>;
+    };
+  }
+}
+
+<<<<<<< Updated upstream
 declare global {
   interface Window {
     procionAPI?: {
@@ -19,6 +28,24 @@ function generatePassword(): string {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
   return result;
+=======
+export type ConnectionStatus = "initializing" | "connecting" | "connected";
+
+function formatSupportId(value: string) {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 9) {
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)}`;
+  }
+  return value || "--";
+}
+
+function generatePassword() {
+  return Math.random().toString(36).slice(-6).toUpperCase();
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+>>>>>>> Stashed changes
 }
 
 function formatSupportId(value: string): string {
@@ -36,7 +63,11 @@ function sleep(ms: number) {
 export function useSupportClient() {
   const [status, setStatus] = useState<ConnectionStatus>("initializing");
   const [supportId, setSupportId] = useState("--");
+<<<<<<< Updated upstream
   const [password, setPassword] = useState(() => generatePassword());
+=======
+  const [password, setPassword] = useState(generatePassword());
+>>>>>>> Stashed changes
 
   useEffect(() => {
     let mounted = true;
@@ -47,7 +78,13 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de iniciar suporte ${attempt}/${maxAttempts}`);
+<<<<<<< Updated upstream
           await window.procionAPI!.startSupport();
+=======
+
+          await window.procionAPI!.startSupport();
+
+>>>>>>> Stashed changes
           console.log("Support iniciado com sucesso.");
           return true;
         } catch (error) {
@@ -68,6 +105,10 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de obter ID ${attempt}/${maxAttempts}`);
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
           const id = await window.procionAPI!.getSupportId();
 
           if (id) {
@@ -134,14 +175,46 @@ export function useSupportClient() {
       mounted = false;
     };
   }, []);
+<<<<<<< Updated upstream
+=======
 
-  const copiarId = useCallback(() => {
-    navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
-    toast.success("ID copiado para a área de transferência");
+  const copiarId = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
+    } catch (error) {
+      console.error("Erro ao copiar ID:", error);
+    }
   }, [supportId]);
+>>>>>>> Stashed changes
+
+  const fechar = useCallback(() => {
+    window.close();
+  }, []);
+
+  const reiniciar = useCallback(async () => {
+    try {
+      if (!window.procionAPI) return;
+
+      setStatus("connecting");
+      setSupportId("--");
+
+      await sleep(800);
+      await window.procionAPI.startSupport();
+      await sleep(1200);
+
+      const id = await window.procionAPI.getSupportId();
+
+      setSupportId(formatSupportId(id || "--"));
+      setStatus("connected");
+    } catch (error) {
+      console.error("Erro ao reiniciar suporte:", error);
+      setStatus("connected");
+    }
+  }, []);
 
   const refreshPassword = useCallback(() => {
     setPassword(generatePassword());
+<<<<<<< Updated upstream
     toast.info("Senha atualizada");
   }, []);
 
@@ -174,6 +247,8 @@ export function useSupportClient() {
       window.close();
     }
     toast.info("Fechando suporte...");
+=======
+>>>>>>> Stashed changes
   }, []);
 
   return {
@@ -181,8 +256,8 @@ export function useSupportClient() {
     supportId,
     password,
     copiarId,
-    refreshPassword,
-    reiniciar,
     fechar,
+    reiniciar,
+    refreshPassword,
   };
 }
