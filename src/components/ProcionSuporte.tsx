@@ -15,7 +15,7 @@ export default function HadronSuporte() {
   const { label, dotClass } = STATUS_CONFIG[status];
 
   return (
-    <div className="flex h-screen items-center justify-center p-4">
+    <div className="flex h-[100dvh] items-center justify-center p-4">
       <div className="w-full max-w-4xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
