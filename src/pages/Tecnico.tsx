@@ -214,7 +214,7 @@ export default function Tecnico() {
                   <Button
                     onClick={handleConnect}
                     disabled={!remoteId}
-                    className="px-6 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
+                    className="px-6 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-9 text-xs uppercase tracking-wide transition-all shadow-sm"
                   >
                     Conectar agora
                   </Button>
