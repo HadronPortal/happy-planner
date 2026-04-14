@@ -1,11 +1,21 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, ArrowLeft } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
+import { supabase } from "@/integrations/supabase/client";
+
+declare global {
+  interface Window {
+    hadronTecnicoAPI?: {
+      openRustDesk: (id: string) => void;
+      closeWindow: () => void;
+    };
+  }
+}
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -43,10 +53,42 @@ export default function Tecnico() {
     }
   }, [remoteId]);
 
-  const handleFinish = useCallback(() => {
-    toast.success("Atendimento finalizado com sucesso");
-    navigate("/admin");
-  }, [navigate]);
+  const handleFinish = useCallback(async () => {
+    try {
+      const rawId = searchParams.get("id");
+      if (rawId) {
+        const cleanId = rawId.replace(/\s/g, "");
+        
+        // Finaliza o atendimento no banco de dados
+        const { error } = await supabase
+          .from("support_online_clients")
+          .update({ 
+            status: "finalizado", 
+            updated_at: new Date().toISOString() 
+          })
+          .eq("rustdesk_id", cleanId)
+          .eq("status", "em_atendimento");
+
+        if (error) {
+          console.error("Erro ao finalizar suporte no banco:", error);
+          toast.error("Erro ao finalizar no sistema");
+        }
+      }
+
+      toast.success("Atendimento finalizado com sucesso");
+      
+      // Fecha a janela se estiver no Electron
+      if (window.hadronTecnicoAPI) {
+        window.hadronTecnicoAPI.closeWindow();
+      }
+      
+      // Navega para o admin se o app continuar aberto
+      navigate("/admin");
+    } catch (err) {
+      console.error("Erro inesperado:", err);
+      toast.error("Ocorreu um erro ao finalizar");
+    }
+  }, [navigate, searchParams]);
 
   const { label, dotClass } = STATUS_CONFIG[status];
 
@@ -127,8 +169,8 @@ export default function Tecnico() {
                   onClick={handleFinish}
                   className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
                 >
-                  <ArrowLeft className="h-3.5 w-3.5" />
-                  Voltar ao painel
+                  <X className="h-3.5 w-3.5" />
+                  Finalizar suporte
                 </button>
               </div>
             </div>
