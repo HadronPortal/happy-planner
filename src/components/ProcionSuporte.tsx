@@ -74,8 +74,8 @@ export default function HadronSuporte() {
               </div>
 
               {/* Restart */}
-              <div className="mt-auto flex items-center justify-center p-2 opacity-80">
-                <img src={logoSrc} alt="Hádron" className="h-9 object-contain grayscale" />
+              <div className="mt-auto flex items-center justify-center p-4">
+                <img src={logoSrc} alt="Hádron" className="h-10 object-contain" />
               </div>
             </div>
 
