@@ -190,6 +190,9 @@ export default function Tecnico() {
                   <X className="h-3.5 w-3.5" />
                   Finalizar suporte
                 </button>
+                <div className="flex justify-center pt-8 mt-auto">
+                  <img src={logoSrc} alt="Hádron" className="h-6 object-contain opacity-40 grayscale hover:opacity-80 transition-opacity" />
+                </div>
               </div>
             </div>
 
