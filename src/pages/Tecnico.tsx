@@ -219,14 +219,6 @@ export default function Tecnico() {
                   >
                     Conectar agora
                   </Button>
-                  <Button
-                    onClick={handleFinish}
-                    disabled={!remoteId}
-                    variant="destructive"
-                    className="flex-1 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
-                  >
-                    Finalizar
-                  </Button>
                 </div>
               </div>
             </div>
