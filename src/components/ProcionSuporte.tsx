@@ -114,10 +114,11 @@ export default function HadronSuporte() {
           </div>
 
           {/* Status bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
+          <div className="flex flex-col items-center justify-center gap-3 px-4 py-6 border-t border-border bg-muted/20">
+            <img src={logoSrc} alt="Hádron" className="h-10 object-contain mb-1 opacity-90" />
             <div className="flex items-center gap-2">
               <span className={`h-2 w-2 rounded-full ${dotClass}`} />
-              <span className="text-xs font-medium text-muted-foreground">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider tracking-widest text-[10px]">
                 {label}
               </span>
             </div>
