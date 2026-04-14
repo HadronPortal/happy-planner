@@ -73,14 +73,10 @@ export default function HadronSuporte() {
                 </div>
               </div>
 
-              {/* Restart */}
-              <button
-                onClick={reiniciar}
-                className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Finalizar suporte
-              </button>
+              {/* Logo replacement */}
+              <div className="mt-auto flex justify-center pb-2 opacity-30 grayscale transition-all hover:opacity-100 hover:grayscale-0 duration-300">
+                <img src={logoSrc} alt="Logo" className="h-10 object-contain" />
+              </div>
             </div>
 
             {/* Right panel */}
