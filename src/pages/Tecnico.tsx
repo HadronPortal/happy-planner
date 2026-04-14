@@ -58,7 +58,7 @@ export default function Tecnico() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4 font-sans selection:bg-primary/20">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
           {/* Title bar */}
