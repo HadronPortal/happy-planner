@@ -196,7 +196,7 @@ export default function Tecnico() {
             {/* Right panel - Remote Connection Target */}
             <div className="flex-1 flex flex-col p-8 items-center justify-center text-center">
               {/* Remote connection display (Pre-filled) */}
-              <div className="flex flex-col items-center gap-6 w-full max-w-md">
+              <div className="flex flex-col items-center gap-4 w-full max-w-md">
                 <div className="space-y-2">
                   <h3 className="text-lg font-semibold text-foreground">Conexão com Cliente Remoto</h3>
                   <p className="text-sm text-muted-foreground">Estabeleça a conexão com o dispositivo do cliente selecionado.</p>
