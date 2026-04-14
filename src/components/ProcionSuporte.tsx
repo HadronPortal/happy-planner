@@ -11,7 +11,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 };
 
 export default function HadronSuporte() {
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
+  const { status, supportId, password, hostname, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
 
   const { label, dotClass } = STATUS_CONFIG[status];
 
@@ -44,7 +44,7 @@ export default function HadronSuporte() {
             {/* Left panel */}
             <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5">
               <div>
-                <h2 className="text-sm font-semibold text-foreground mb-0.5">Seu Computador</h2>
+                <h2 className="text-sm font-semibold text-foreground mb-0.5">{hostname}</h2>
                 <p className="text-[11px] text-muted-foreground leading-snug">
                   Seu computador pode ser acessado com este ID e senha.
                 </p>
