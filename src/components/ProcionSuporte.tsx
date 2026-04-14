@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { Copy, RotateCcw, X, ShieldCheck, HelpCircle, Activity } from "lucide-react";
+import { Copy, RotateCcw, X, HelpCircle, Activity } from "lucide-react";
+import techAvatarSrc from "@/assets/technician-avatar.png";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/security-check.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
@@ -84,8 +85,8 @@ export default function HadronSuporte() {
               <div className="max-w-sm w-full text-center space-y-8">
                 <div className="relative inline-block">
                   <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl animate-pulse" />
-                  <div className="relative rounded-full bg-card border border-border p-6 shadow-xl">
-                    <ShieldCheck className="h-12 w-12 text-primary" />
+                  <div className="relative rounded-full bg-card border border-border p-3 shadow-xl overflow-hidden">
+                    <img src={techAvatarSrc} alt="Técnico" className="h-20 w-20 object-contain" loading="lazy" width={512} height={512} />
                   </div>
                 </div>
 
