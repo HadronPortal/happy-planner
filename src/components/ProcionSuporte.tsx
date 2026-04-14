@@ -22,6 +22,8 @@ export default function HadronSuporte() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
             <div className="flex items-center gap-2">
+              <img src={logoSrc} alt="Hádron" className="h-4 object-contain" />
+              <span className="text-[11px] font-semibold text-foreground tracking-tight uppercase">Hádron Suporte</span>
             </div>
             <div className="flex items-center gap-1">
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
