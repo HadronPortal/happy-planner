@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useCallback, useEffect, useState } from "react";
-=======
-import { useState, useCallback, useEffect } from "react";
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
 import { toast } from "sonner";
 
 declare global {
@@ -22,11 +18,7 @@ function generatePassword(): string {
   for (let i = 0; i < 6; i++) {
     result += chars[Math.floor(Math.random() * chars.length)];
   }
-<<<<<<< HEAD
   return result.toUpperCase();
-=======
-  return result;
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
 }
 
 function formatSupportId(value: string): string {
@@ -55,18 +47,12 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de iniciar suporte ${attempt}/${maxAttempts}`);
-<<<<<<< HEAD
           if (window.procionAPI) {
             await window.procionAPI.startSupport();
             console.log("Support iniciado com sucesso.");
             return true;
           }
           return false;
-=======
-          await window.procionAPI!.startSupport();
-          console.log("Support iniciado com sucesso.");
-          return true;
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
         } catch (error) {
           console.error(`Falha ao iniciar suporte na tentativa ${attempt}`, error);
           if (attempt < maxAttempts) {
@@ -83,18 +69,11 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de obter ID ${attempt}/${maxAttempts}`);
-<<<<<<< HEAD
           if (window.procionAPI) {
             const id = await window.procionAPI.getSupportId();
             if (id) {
               return id;
             }
-=======
-          const id = await window.procionAPI!.getSupportId();
-
-          if (id) {
-            return id;
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
           }
         } catch (error) {
           console.error(`Falha ao obter ID na tentativa ${attempt}`, error);
@@ -155,7 +134,6 @@ export function useSupportClient() {
     };
   }, []);
 
-<<<<<<< HEAD
   const copiarId = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
@@ -171,16 +149,6 @@ export function useSupportClient() {
       window.close();
     }
     toast.info("Fechando suporte...");
-=======
-  const copiarId = useCallback(() => {
-    navigator.clipboard.writeText(supportId.replace(/\s/g, ""));
-    toast.success("ID copiado para a área de transferência");
-  }, [supportId]);
-
-  const refreshPassword = useCallback(() => {
-    setPassword(generatePassword());
-    toast.info("Senha atualizada");
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
   }, []);
 
   const reiniciar = useCallback(async () => {
@@ -210,17 +178,9 @@ export function useSupportClient() {
     }
   }, []);
 
-<<<<<<< HEAD
   const refreshPassword = useCallback(() => {
     setPassword(generatePassword());
     toast.info("Senha atualizada");
-=======
-  const fechar = useCallback(() => {
-    if (window.close) {
-      window.close();
-    }
-    toast.info("Fechando suporte...");
->>>>>>> 85ef68b (Ajusta conexao tecnica e prepara beta)
   }, []);
 
   return {
@@ -228,8 +188,8 @@ export function useSupportClient() {
     supportId,
     password,
     copiarId,
-    refreshPassword,
-    reiniciar,
     fechar,
+    reiniciar,
+    refreshPassword,
   };
 }
