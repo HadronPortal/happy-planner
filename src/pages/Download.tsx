@@ -15,7 +15,7 @@ const platforms = [
 
 export default function DownloadPage() {
   return (
-    <div className="h-full bg-[#f8fafc] text-slate-900 font-sans">
+    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
       <div className="relative">
         {/* Header/Hero */}
         <section className="px-4 pt-16 pb-12 text-center">
