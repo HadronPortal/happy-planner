@@ -203,8 +203,8 @@ export default function Tecnico() {
                 </div>
                 
                 {/* Fixed ID display instead of input */}
-                <div className="w-full p-6 rounded-xl border border-border bg-muted/40 flex items-center justify-center shadow-inner">
-                  <p className="text-3xl font-bold text-secondary tracking-[0.15em] font-mono">
+                <div className="w-full p-4 rounded-xl border border-border bg-muted/40 flex items-center justify-center shadow-inner">
+                  <p className="text-2xl font-bold text-secondary tracking-[0.15em] font-mono">
                     {remoteId || "--- --- ---"}
                   </p>
                 </div>
@@ -213,7 +213,7 @@ export default function Tecnico() {
                   <Button
                     onClick={handleConnect}
                     disabled={!remoteId}
-                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-12 text-sm uppercase tracking-wide transition-all shadow-sm"
+                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
                   >
                     Conectar agora
                   </Button>
@@ -221,7 +221,7 @@ export default function Tecnico() {
                     onClick={handleFinish}
                     disabled={!remoteId}
                     variant="destructive"
-                    className="flex-1 font-bold h-12 text-sm uppercase tracking-wide transition-all shadow-sm"
+                    className="flex-1 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
                   >
                     Finalizar
                   </Button>
