@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, Shield, Plug, ArrowLeft } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, ArrowLeft } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ export default function Tecnico() {
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [activeTab, setActiveTab] = useState(0);
-  const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnecting] = useState(false);
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -29,16 +29,18 @@ export default function Tecnico() {
   }, [searchParams]);
 
   const handleConnect = useCallback(() => {
-    if (!remoteId.trim()) {
-      toast.error("Nenhum ID remoto detectado");
+    const cleanId = remoteId.replace(/\s/g, "");
+    if (!cleanId) {
+      toast.error("Informe o ID remoto");
       return;
     }
-    setIsConnecting(true);
-    toast.info(`Iniciando conexão com ID ${remoteId}...`);
-    setTimeout(() => {
-      setIsConnecting(false);
-      toast.success("Conexão estabelecida!");
-    }, 1500);
+
+    if (window.hadronTecnicoAPI) {
+      window.hadronTecnicoAPI.openRustDesk(cleanId);
+      toast.success("Abrindo RustDesk do técnico");
+    } else {
+      toast.error("Função disponível apenas no app técnico");
+    }
   }, [remoteId]);
 
   const handleFinish = useCallback(() => {
