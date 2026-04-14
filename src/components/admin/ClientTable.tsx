@@ -13,11 +13,7 @@ interface ClientTableProps {
   emptyMessage?: string;
 }
 
-<<<<<<< Updated upstream
 export default function ClientTable({ clients, loading, onViewDetails, onUpdateClient, emptyMessage }: ClientTableProps) {
-=======
-export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
->>>>>>> Stashed changes
   const navigate = useNavigate();
 
   const handleCopyId = (id: string) => {
@@ -27,7 +23,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
 
   const handleConnect = async (client: DbClient) => {
     try {
-<<<<<<< Updated upstream
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
       
       // Update status to em_atendimento if it's currently online
@@ -41,15 +36,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
     } catch (error) {
       console.error(error);
       toast.error("Erro ao iniciar conexão");
-=======
-      await navigator.clipboard.writeText(client.rustdesk_id.replace(/\s/g, ""));
-      toast.success(`ID copiado. Conectando a ${client.empresa}...`);
-
-      navigate(`/tecnico?id=${client.rustdesk_id.replace(/\s/g, "")}`);
-    } catch (error) {
-      toast.error("Erro ao iniciar conexão");
-      console.error(error);
->>>>>>> Stashed changes
     }
   };
 
@@ -103,14 +89,10 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
           <tbody>
             {clients.map((client) => {
               const cfg = getConfig(client.status);
-<<<<<<< Updated upstream
               const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", {
                 hour: "2-digit",
                 minute: "2-digit",
               });
-=======
-              const time = new Date(client.opened_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
->>>>>>> Stashed changes
 
               return (
                 <tr key={client.id} className="border-b border-border/30 hover:bg-muted/10 transition-colors">
@@ -129,7 +111,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
-<<<<<<< Updated upstream
                       <Button
                         size="sm"
                         onClick={() => handleConnect(client)}
@@ -164,23 +145,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
                           className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1"
                         >
                           <XCircle className="h-3 w-3" /> Finalizar
-=======
-                      <Button size="sm" onClick={() => handleConnect(client)} className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1">
-                        <Plug className="h-3 w-3" /> Conectar
-                      </Button>
-
-                      <Button size="sm" variant="ghost" onClick={() => handleCopyId(client.rustdesk_id)} className="h-7 px-2 text-[11px] text-secondary hover:text-secondary hover:bg-secondary/10 gap-1">
-                        <Copy className="h-3 w-3" /> ID
-                      </Button>
-
-                      <Button size="sm" variant="ghost" onClick={() => onViewDetails(client)} className="h-7 px-2 text-[11px] text-muted-foreground hover:text-foreground gap-1">
-                        <Eye className="h-3 w-3" /> Detalhes
-                      </Button>
-
-                      {client.status === "in_service" && (
-                        <Button size="sm" variant="ghost" onClick={() => handleEnd(client)} className="h-7 px-2 text-[11px] text-destructive hover:text-destructive hover:bg-destructive/10 gap-1">
-                          <XCircle className="h-3 w-3" /> Encerrar
->>>>>>> Stashed changes
                         </Button>
                       )}
                     </div>
@@ -191,7 +155,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
           </tbody>
         </table>
       </div>
-<<<<<<< Updated upstream
 
       <div className="lg:hidden divide-y divide-border/30">
         {clients.map((client) => {
@@ -261,8 +224,6 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
           );
         })}
       </div>
-=======
->>>>>>> Stashed changes
     </div>
   );
 }
