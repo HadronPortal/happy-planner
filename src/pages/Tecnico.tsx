@@ -119,7 +119,7 @@ export default function Tecnico() {
   ];
 
   return (
-    <div className="flex h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-4xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
