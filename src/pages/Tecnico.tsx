@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X } from "lucide-react";
-import logoSrc from "@/assets/logo.png";
+import logoSrc from "@/assets/icone.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
