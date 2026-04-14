@@ -1,8 +1,6 @@
 import { useCallback, useState } from "react";
 import { Copy, RotateCcw, Monitor, Shield, Lock, Users } from "lucide-react";
-
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-// PageHeader removed to use layout header
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -10,8 +8,7 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
   connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
 };
 
-export default function HadronSuporte() {
-  
+export default function Suporte() {
   const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar } = useSupportClient();
   const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
 
@@ -27,9 +24,6 @@ export default function HadronSuporte() {
       <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          {/* No header here anymore */}
-
-
           {/* Body */}
           <div className="flex flex-col min-h-[420px]">
             {/* Top Bar (ID and Password) */}
@@ -69,7 +63,6 @@ export default function HadronSuporte() {
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col p-8 bg-muted/5">
-              {/* Client only message */}
               <div className="flex-1 flex flex-col items-center justify-center text-center gap-8 py-4">
                 <div className="rounded-full bg-secondary/10 p-8 text-secondary animate-pulse-subtle">
                   <Monitor className="h-16 w-16" />
