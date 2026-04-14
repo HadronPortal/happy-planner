@@ -73,8 +73,13 @@ export default function HadronSuporte() {
                   </button>
                 </div>
               </div>
-            </div>
 
+              {/* Security check */}
+              <div className="mt-auto flex items-center gap-2">
+                <img src={securityLogo} alt="Segurança" className="h-8 w-8 rounded object-contain" />
+                <span className="text-[11px] font-medium text-muted-foreground">Checkar Segurança do App</span>
+              </div>
+            </div>
             {/* Right panel */}
             <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
               <div className="max-w-sm w-full text-center space-y-8">
