@@ -84,10 +84,7 @@ export default function HadronSuporte() {
             <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
               <div className="max-w-sm w-full text-center space-y-8">
                 <div className="relative inline-block">
-                  <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl animate-pulse" />
-                  <div className="relative rounded-full bg-card border border-border p-3 shadow-xl overflow-hidden">
-                    <img src={techAvatarSrc} alt="Técnico" className="h-20 w-20 object-contain" loading="lazy" width={512} height={512} />
-                  </div>
+                  <img src={techAvatarSrc} alt="Técnico" className="h-24 w-24 object-contain" loading="lazy" width={512} height={512} />
                 </div>
 
                 <div className="space-y-2">
