@@ -210,11 +210,11 @@ export default function Tecnico() {
                   </p>
                 </div>
 
-                <div className="flex gap-4 w-full">
+                <div className="flex justify-center w-full">
                   <Button
                     onClick={handleConnect}
                     disabled={!remoteId}
-                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
+                    className="px-8 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-xs uppercase tracking-wide transition-all shadow-sm"
                   >
                     Conectar agora
                   </Button>
