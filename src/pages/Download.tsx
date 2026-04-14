@@ -16,66 +16,83 @@ const platforms = [
 
 export default function DownloadPage() {
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-slate-900 font-sans">
+    <div className="h-full flex flex-col bg-background text-foreground font-sans overflow-auto custom-scrollbar">
       <div className="relative">
-        {/* Header/Hero */}
-{/* Header removed, now in MainLayout */}
-        
-        <section className="px-4 pb-12 text-center">
-          <div className="mx-auto max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
-              Download do Hádron Suporte
-            </h1>
+        {/* Hero Section */}
+        <section className="px-8 py-16 text-center bg-gradient-to-b from-muted/20 to-transparent">
+          <div className="mx-auto max-w-3xl space-y-8">
+            <div className="relative inline-block">
+              <div className="absolute inset-0 bg-secondary/20 blur-3xl rounded-full scale-150 animate-pulse-subtle" />
+              <h1 className="relative text-5xl md:text-6xl font-black tracking-tight text-foreground uppercase">
+                Downloads <span className="text-secondary tracking-widest block text-2xl mt-2 drop-shadow-[0_0_10px_hsl(var(--secondary)/0.3)]">Hádron Suporte</span>
+              </h1>
+            </div>
             
-            {/* Warning Banner - RustDesk style */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8 max-w-2xl mx-auto flex gap-3 text-left">
-              <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0" />
-              <p className="text-sm text-amber-800">
-                Atenção ao aspecto de segurança ao baixar software de assistência remota. 
-                Há um aumento no número de <strong>golpes</strong> e <strong>casos de fraude</strong> online. 
-                Por favor, seja particularmente cuidadoso e forneça acesso apenas a técnicos autorizados da Hádron.
-              </p>
+            <p className="text-xl text-muted-foreground/80 font-medium leading-relaxed max-w-2xl mx-auto">
+              Baixe a versão mais recente da nossa ferramenta de acesso remoto seguro para o seu sistema operacional.
+            </p>
+
+            {/* Warning Banner */}
+            <div className="bg-destructive/5 border border-destructive/20 rounded-3xl p-6 max-w-2xl mx-auto flex gap-4 text-left shadow-2xl shadow-destructive/5 backdrop-blur-sm animate-in slide-in-from-bottom-4 duration-500">
+              <div className="bg-destructive/10 p-2 rounded-xl h-fit">
+                <AlertTriangle className="h-6 w-6 text-destructive" />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-black text-destructive uppercase tracking-widest">Aviso de Segurança</h4>
+                <p className="text-sm text-muted-foreground/90 leading-relaxed">
+                  Forneça acesso apenas a técnicos autorizados da <span className="text-foreground font-bold">Hádron</span>. 
+                  Nunca compartilhe seu ID e senha com estranhos ou ligações não solicitadas.
+                </p>
+              </div>
             </div>
 
-            <div className="inline-block bg-slate-100 rounded-full px-4 py-1.5 text-sm font-medium text-slate-600 mb-10">
-              Versão atual: <span className="text-slate-900 font-bold">{APP_VERSION}</span> (atualizado em: {RELEASE_DATE})
+            <div className="inline-flex items-center gap-3 bg-muted/30 border border-border/50 rounded-full px-6 py-2.5 text-xs font-bold text-muted-foreground uppercase tracking-widest">
+              Versão Estável: <span className="text-secondary font-black">{APP_VERSION}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-border" />
+              Build: {RELEASE_DATE}
             </div>
           </div>
         </section>
 
         {/* Platform Grid */}
-        <section className="px-4 pb-20">
-          <div className="mx-auto max-w-5xl">
-            <h2 className="text-xl font-bold mb-8 text-center text-slate-800">Selecione o arquivo para download:</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <section className="px-8 pb-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
               {platforms.map((platform) => (
                 <div 
                   key={platform.label}
-                  className={`group relative rounded-xl border-2 transition-all p-6 text-center flex flex-col items-center gap-4 ${
+                  className={`group relative rounded-3xl border-2 transition-all duration-300 p-8 text-center flex flex-col items-center gap-6 overflow-hidden ${
                     platform.active 
-                    ? "border-secondary bg-white shadow-lg hover:shadow-xl cursor-pointer" 
-                    : "border-slate-200 bg-slate-50 opacity-60 grayscale cursor-not-allowed"
+                    ? "border-secondary/30 bg-card hover:border-secondary hover:shadow-2xl hover:shadow-secondary/10 cursor-pointer" 
+                    : "border-border/30 bg-muted/5 opacity-40 grayscale cursor-not-allowed"
                   }`}
                   onClick={() => {
                     if (platform.active) {
-                      // Real download logic here
                       console.log(`Downloading for ${platform.label}`);
                     }
                   }}
                 >
-                  <div className={`p-4 rounded-2xl ${platform.active ? "bg-secondary/10 text-secondary" : "bg-slate-200 text-slate-400"}`}>
-                    <platform.icon className="h-8 w-8" />
+                  {platform.active && (
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-secondary/5 blur-2xl -mr-12 -mt-12 group-hover:bg-secondary/10 transition-all" />
+                  )}
+                  
+                  <div className={`p-5 rounded-2xl transition-all duration-300 ${platform.active ? "bg-secondary/10 text-secondary group-hover:scale-110 group-hover:bg-secondary/20" : "bg-muted/20 text-muted-foreground"}`}>
+                    <platform.icon className="h-10 w-10" />
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg text-slate-900">{platform.label}</h3>
-                    <p className="text-xs text-slate-500 font-medium">{platform.version}</p>
+                  
+                  <div className="space-y-1">
+                    <h3 className="font-black text-xl text-foreground uppercase tracking-tight">{platform.label}</h3>
+                    <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest opacity-60">{platform.version}</p>
                   </div>
+                  
                   {platform.active ? (
-                    <Button variant="outline" className="mt-2 w-full border-secondary text-secondary hover:bg-secondary hover:text-white font-bold">
+                    <Button className="mt-4 w-full h-12 bg-secondary hover:bg-secondary/90 text-secondary-foreground font-black uppercase tracking-widest text-[10px] rounded-xl shadow-lg shadow-secondary/20">
                       Baixar Agora
                     </Button>
                   ) : (
-                    <span className="mt-2 text-[10px] uppercase tracking-wider font-bold text-slate-400">Em Breve</span>
+                    <div className="mt-4 w-full h-12 flex items-center justify-center border border-border/50 rounded-xl">
+                       <span className="text-[10px] uppercase tracking-[0.2em] font-black text-muted-foreground/30">Em Breve</span>
+                    </div>
                   )}
                 </div>
               ))}
@@ -83,67 +100,31 @@ export default function DownloadPage() {
           </div>
         </section>
 
-        {/* Quick Instructions */}
-        <section className="bg-white border-y border-slate-200 py-20 px-4">
-          <div className="mx-auto max-w-4xl">
-            <h3 className="text-2xl font-bold text-center mb-12">Como iniciar o suporte</h3>
-            <div className="grid md:grid-cols-3 gap-12">
-              <div className="text-center space-y-4">
-                <div className="mx-auto w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl italic">1</div>
-                <h4 className="font-bold">Baixe o Executável</h4>
-                <p className="text-sm text-slate-600 leading-relaxed">Clique no botão de download para a sua plataforma e salve o arquivo.</p>
-              </div>
-              <div className="text-center space-y-4">
-                <div className="mx-auto w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl italic">2</div>
-                <h4 className="font-bold">Abra o Aplicativo</h4>
-                <p className="text-sm text-slate-600 leading-relaxed">Não precisa instalar. Basta abrir e ele gerará um ID de atendimento único.</p>
-              </div>
-              <div className="text-center space-y-4">
-                <div className="mx-auto w-12 h-12 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xl italic">3</div>
-                <h4 className="font-bold">Informe seu ID</h4>
-                <p className="text-sm text-slate-600 leading-relaxed">Passe o ID ao nosso técnico e aguarde o início da conexão segura.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Security Features */}
-        <section className="py-20 px-4">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="flex flex-wrap justify-center gap-8 mb-12">
-              <div className="flex items-center gap-2 text-slate-600">
-                <Shield className="h-5 w-5 text-secondary" />
-                <span className="font-semibold">Criptografia Ponta-a-Ponta</span>
+        <section className="py-20 px-8 border-t border-border/20 bg-muted/5">
+          <div className="mx-auto max-w-5xl text-center space-y-12">
+            <h3 className="text-2xl font-black uppercase tracking-tight">Segurança Hádron</h3>
+            <div className="flex flex-wrap justify-center gap-10">
+              <div className="flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-border/50 w-full md:w-64">
+                <Shield className="h-8 w-8 text-secondary" />
+                <span className="font-black uppercase tracking-widest text-[10px]">Criptografia Militar</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
-                <Lock className="h-5 w-5 text-secondary" />
-                <span className="font-semibold">Acesso via Senha/ID</span>
+              <div className="flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-border/50 w-full md:w-64">
+                <Lock className="h-8 w-8 text-secondary" />
+                <span className="font-black uppercase tracking-widest text-[10px]">Controle de Acesso</span>
               </div>
-              <div className="flex items-center gap-2 text-slate-600">
-                <UserCheck className="h-5 w-5 text-secondary" />
-                <span className="font-semibold">Sempre Autorizado</span>
+              <div className="flex flex-col items-center gap-4 p-6 rounded-3xl bg-card border border-border/50 w-full md:w-64">
+                <UserCheck className="h-8 w-8 text-secondary" />
+                <span className="font-black uppercase tracking-widest text-[10px]">Autorização Local</span>
               </div>
             </div>
-            <p className="text-sm text-slate-500 max-w-2xl mx-auto">
-              Nossa ferramenta é baseada em protocolos de segurança avançados para garantir que sua privacidade 
-              seja mantida durante todo o processo de suporte técnico.
-            </p>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-slate-900 text-slate-400 py-12 px-4">
-          <div className="mx-auto max-w-5xl flex flex-col md:flex-row justify-between items-center gap-6">
-            <img src={logoSrc} alt="Hádron Suporte" className="h-8 grayscale brightness-200" />
-            <p className="text-xs">
-              © {new Date().getFullYear()} Hádron Suporte — Soluções em Tecnologia. Todos os direitos reservados.
-            </p>
-            <div className="flex gap-6 text-xs font-medium">
-              <a href="#" className="hover:text-white transition-colors">Termos</a>
-              <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-            </div>
-          </div>
-        </footer>
+        {/* Footer info */}
+        <div className="p-8 flex items-center justify-center border-t border-border/20 text-[10px] font-black text-muted-foreground/30 uppercase tracking-widest">
+          © {new Date().getFullYear()} Hádron Suporte — Corporativo
+        </div>
       </div>
     </div>
   );
