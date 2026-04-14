@@ -85,7 +85,7 @@ export default function HadronSuporte() {
 
             {/* Right panel */}
             <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
-              <div className="max-w-md w-full text-center space-y-8">
+              <div className="max-w-sm w-full text-center space-y-8">
                 <div className="relative inline-block">
                   <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl animate-pulse" />
                   <div className="relative rounded-full bg-card border border-border p-6 shadow-xl">
