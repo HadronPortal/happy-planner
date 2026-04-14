@@ -9,7 +9,7 @@ interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
-  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<boolean>;
+  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
   emptyMessage?: string;
 }
 
@@ -33,8 +33,8 @@ export default function ClientTable({
 
       await navigator.clipboard.writeText(cleanId);
 
+      await onUpdateClient(client.id, "em_atendimento", "Técnico");
       toast.success(`ID copiado. Atendimento iniciado para ${client.empresa}`);
-
       navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
       console.error(error);
