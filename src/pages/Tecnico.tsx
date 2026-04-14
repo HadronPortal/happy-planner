@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, Plug, XCircle } from "lucide-react";
+import { Copy, Plug, XCircle, ArrowLeft } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export default function Tecnico() {
@@ -49,21 +50,29 @@ export default function Tecnico() {
     <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
       <div className="w-full max-w-5xl">
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
-            <div className="flex items-center gap-3">
-              <img src={logoSrc} alt="Hádron" className="h-6 object-contain" />
-              <span className="text-sm font-semibold tracking-[0.2em] uppercase text-muted-foreground">
-                Módulo Técnico
-              </span>
+          <div className="flex flex-wrap items-center justify-between px-6 py-4 border-b border-border bg-muted/30 gap-4">
+            <div className="flex items-center gap-4">
+              <img src={logoSrc} alt="Hádron" className="h-8 object-contain" />
+              <div className="h-6 w-px bg-border hidden sm:block" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                <span className="text-sm font-bold tracking-[0.2em] uppercase text-foreground">
+                  HÁDRON SUPORTE TÉCNICO
+                </span>
+                <Badge variant="outline" className="w-fit border-primary/50 text-primary bg-primary/10 font-bold uppercase tracking-wider text-[10px]">
+                  Ambiente Técnico
+                </Badge>
+              </div>
             </div>
 
-            <button
-              onClick={() => navigate("/admin")}
-              className="p-2 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors"
-              title="Voltar"
+            <Button
+              onClick={() => navigate("/")}
+              variant="ghost"
+              size="sm"
+              className="gap-2 text-muted-foreground hover:text-foreground transition-colors"
             >
-              ←
-            </button>
+              <ArrowLeft className="h-4 w-4" />
+              Voltar ao painel
+            </Button>
           </div>
 
           <div className="flex flex-col md:flex-row min-h-[520px]">
