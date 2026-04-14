@@ -194,7 +194,7 @@ export default function Tecnico() {
             </div>
 
             {/* Right panel - Remote Connection Target */}
-            <div className="flex-1 flex flex-col p-8 items-center justify-center text-center">
+            <div className="flex-1 flex flex-col p-6 items-center justify-center text-center">
               {/* Remote connection display (Pre-filled) */}
               <div className="flex flex-col items-center gap-4 w-full max-w-md">
                 <div className="space-y-2">
