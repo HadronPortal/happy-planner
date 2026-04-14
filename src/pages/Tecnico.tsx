@@ -213,17 +213,15 @@ export default function Tecnico() {
                   <Button
                     onClick={handleConnect}
                     disabled={!remoteId}
-                    size="lg"
-                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold transition-colors"
+                    className="flex-1 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-12 text-sm uppercase tracking-wide transition-all shadow-sm"
                   >
                     Conectar agora
                   </Button>
                   <Button
                     onClick={handleFinish}
                     disabled={!remoteId}
-                    variant="outline"
-                    size="lg"
-                    className="flex-1 border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive font-semibold transition-colors"
+                    variant="destructive"
+                    className="flex-1 font-bold h-12 text-sm uppercase tracking-wide transition-all shadow-sm"
                   >
                     Finalizar
                   </Button>
