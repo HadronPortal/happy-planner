@@ -9,9 +9,17 @@ interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
+  onUpdateClient: (id: string, status: string, tecnico?: string) => Promise<void>;
+  emptyMessage?: string;
 }
 
-export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
+export default function ClientTable({ 
+  clients, 
+  loading, 
+  onViewDetails, 
+  onUpdateClient,
+  emptyMessage = "Nenhum cliente online no momento"
+}: ClientTableProps) {
   const navigate = useNavigate();
 
   const handleCopyId = (id: string) => {
@@ -25,8 +33,8 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
 
       await navigator.clipboard.writeText(cleanId);
 
+      await onUpdateClient(client.id, "em_atendimento", "Técnico");
       toast.success(`ID copiado. Atendimento iniciado para ${client.empresa}`);
-
       navigate(`/tecnico?id=${cleanId}`);
     } catch (error) {
       console.error(error);
@@ -50,7 +58,7 @@ export default function ClientTable({ clients, loading, onViewDetails }: ClientT
     return (
       <div className="rounded-xl border border-border bg-card/60 px-6 py-16 text-center space-y-3">
         <WifiOff className="mx-auto h-10 w-10 text-muted-foreground/30" />
-        <p className="text-sm font-medium text-muted-foreground">Nenhum cliente online no momento</p>
+        <p className="text-sm font-medium text-muted-foreground">{emptyMessage}</p>
         <p className="text-xs text-muted-foreground/50">Os clientes aparecerão aqui automaticamente ao se conectarem</p>
       </div>
     );

@@ -1,49 +1,66 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Plug, XCircle, ArrowLeft, Shield, Monitor, X } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, Shield, Plug, ArrowLeft } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
+
+const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
+  initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
+  connecting: { label: "Conectando...", dotClass: "bg-primary animate-pulse-dot" },
+  connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
+};
 
 export default function Tecnico() {
+  const { status, supportId, password, copiarId, refreshPassword } = useSupportClient();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
+  const [activeTab, setActiveTab] = useState(0);
+  const [isConnecting, setIsConnecting] = useState(false);
 
   useEffect(() => {
     const id = searchParams.get("id");
     if (id) {
-      // Remove any non-digits if present to ensure clean state
-      setRemoteId(id.replace(/\D/g, ""));
+      setRemoteId(id.replace(/\D/g, "").replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3"));
     }
   }, [searchParams]);
 
-  const handleConnect = () => {
+  const handleConnect = useCallback(() => {
     if (!remoteId.trim()) {
       toast.error("Nenhum ID remoto detectado");
       return;
     }
-    toast.success(`Iniciando conexão segura com ID ${remoteId}...`);
-  };
+    setIsConnecting(true);
+    toast.info(`Iniciando conexão com ID ${remoteId}...`);
+    setTimeout(() => {
+      setIsConnecting(false);
+      toast.success("Conexão estabelecida!");
+    }, 1500);
+  }, [remoteId]);
 
-  const handleFinish = () => {
+  const handleFinish = useCallback(() => {
     toast.success("Atendimento finalizado com sucesso");
     navigate("/admin");
-  };
+  }, [navigate]);
 
-  // Format ID for display (e.g., 000 000 000)
-  const formattedId = remoteId.replace(/(\d{3})(\d{3})(\d{3})/, "$1 $2 $3");
+  const { label, dotClass } = STATUS_CONFIG[status];
+
+  const tabs = [
+    { icon: Clock, label: "Recentes" },
+    { icon: Star, label: "Favoritos" },
+    { icon: Link2, label: "Descoberta" },
+    { icon: Users, label: "Catálogo" },
+    { icon: Monitor, label: "Dispositivos" },
+  ];
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
+    <div className="flex min-h-screen items-center justify-center bg-background p-4 font-sans selection:bg-primary/20">
       <div className="w-full max-w-3xl">
-        {/* Main window - matches Index layout structure */}
+        {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
-          
-          {/* Decorative background glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
             <div className="flex items-center gap-3">
@@ -60,7 +77,7 @@ export default function Tecnico() {
               <button
                 onClick={() => navigate("/admin")}
                 className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
+                title="Voltar ao painel"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -68,78 +85,120 @@ export default function Tecnico() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row min-h-[420px] relative z-10">
-            
-            {/* Left panel - Info & Fixed ID */}
-            <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-6 flex flex-col gap-6 bg-muted/5">
+          <div className="flex flex-col md:flex-row min-h-[420px]">
+            {/* Left panel - User Info (The "Technician" module) */}
+            <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 bg-muted/5">
               <div>
-                <h2 className="text-sm font-bold text-foreground mb-1 uppercase tracking-tight">
-                  HÁDRON SUPORTE TÉCNICO
-                </h2>
-                <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
-                  Conexão remota da equipe técnica para assistência especializada.
+                <h2 className="text-sm font-semibold text-foreground mb-0.5">Modulo tecnico</h2>
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  Identificação da sua estação técnica para este atendimento.
                 </p>
               </div>
 
-              {/* ID Section - Premium display as requested */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Shield className="h-3.5 w-3.5 text-primary/70" />
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">ID Remoto Carregado</span>
+              {/* Your Technical ID */}
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Seu ID</span>
+                  <button onClick={copiarId} className="text-muted-foreground hover:text-foreground transition-colors">
+                    <Copy className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-                <div className="p-4 rounded-lg bg-background border border-border/50 shadow-inner group">
-                  <p className="text-2xl font-bold tracking-[0.2em] text-primary font-mono text-center">
-                    {formattedId || "--- --- ---"}
-                  </p>
-                </div>
-                <div className="flex items-center justify-center gap-2 pt-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse-dot" />
-                  <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Sessão Ativa</span>
+                <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono pl-2">
+                  {supportId}
+                </p>
+              </div>
+
+              {/* Session Password */}
+              <div className="space-y-1">
+                <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Token de Acesso</span>
+                <div className="flex items-center gap-2 pl-2">
+                  <span className="text-base font-mono font-semibold text-foreground tracking-wider">{password}</span>
+                  <button onClick={refreshPassword} className="text-muted-foreground hover:text-foreground transition-colors">
+                    <RotateCcw className="h-3.5 w-3.5" />
+                  </button>
                 </div>
               </div>
 
               {/* Action Buttons - Bottom of panel */}
-              <div className="mt-auto space-y-3">
-                <Button
-                  onClick={() => navigate("/admin")}
-                  variant="outline"
-                  className="w-full justify-center gap-2 rounded-lg bg-muted/30 border border-border px-4 py-2.5 text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+              <div className="mt-auto flex flex-col gap-2">
+                <button
+                  onClick={handleFinish}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   Voltar ao painel
-                </Button>
+                </button>
               </div>
             </div>
 
-            {/* Right panel - Action Center */}
-            <div className="flex-1 flex flex-col p-8 items-center justify-center text-center">
-              <div className="mb-8 flex flex-col items-center">
-                <div className="inline-flex items-center justify-center rounded-2xl bg-primary/10 p-6 mb-6 ring-1 ring-primary/20 shadow-xl shadow-primary/5 animate-subtle-float">
-                  <Monitor className="h-12 w-12 text-primary" />
+            {/* Right panel - Remote Connection Target */}
+            <div className="flex-1 flex flex-col p-5 bg-background/50">
+              {/* Remote connection display (Pre-filled) */}
+              <div className="flex flex-col items-center gap-4 mb-8 pt-4">
+                <div className="p-4 rounded-2xl bg-primary/5 ring-1 ring-primary/10 mb-2">
+                  <Monitor className="h-10 w-10 text-primary" />
                 </div>
-                <h3 className="text-xl font-bold text-foreground">Conexão Remota</h3>
-                <p className="text-xs text-muted-foreground mt-2 max-w-[240px] leading-relaxed">
-                  Pronto para estabelecer controle remoto seguro via infraestrutura HÁDRON.
-                </p>
-              </div>
+                <h3 className="text-sm font-semibold text-foreground">Conexão com Cliente Remoto</h3>
+                
+                {/* Fixed ID display instead of input */}
+                <div className="w-full max-w-[280px] p-4 rounded-xl border border-border/60 bg-muted/20 flex flex-col items-center justify-center gap-1 group transition-all hover:border-primary/30">
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">ID do Cliente Carregado</span>
+                  <p className="text-2xl font-extrabold text-primary tracking-[0.15em] font-mono">
+                    {remoteId || "--- --- ---"}
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-1">
+                    <Shield className="h-3 w-3 text-emerald-500/70" />
+                    <span className="text-[9px] font-medium text-muted-foreground/70 uppercase">Conexão Criptografada</span>
+                  </div>
+                </div>
 
-              <div className="flex flex-col gap-3 w-full max-w-[280px]">
                 <Button
                   onClick={handleConnect}
-                  className="h-14 gap-3 bg-primary text-primary-foreground hover:bg-primary/90 font-bold text-base shadow-lg shadow-primary/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  disabled={!remoteId}
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-bold px-12 py-6 text-base rounded-xl transition-all shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-[0.98]"
                 >
-                  <Plug className="h-5 w-5" />
-                  Conectar
+                  <Plug className="mr-2 h-5 w-5" />
+                  Conectar Agora
                 </Button>
-                
-                <Button
-                  onClick={handleFinish}
-                  variant="ghost"
-                  className="h-12 gap-2 text-destructive hover:bg-destructive/10 hover:text-destructive font-semibold text-sm transition-all"
-                >
-                  <XCircle className="h-4 w-4" />
-                  Finalizar suporte
-                </Button>
+              </div>
+
+              {/* Tabs UI - Matches Index/Home exactly */}
+              <div className="flex items-center justify-between border-b border-border mb-4 px-2">
+                <div className="flex gap-1">
+                  {tabs.map((tab, i) => (
+                    <button
+                      key={tab.label}
+                      onClick={() => setActiveTab(i)}
+                      className={`p-2.5 rounded-t transition-colors ${
+                        activeTab === i
+                          ? "text-foreground border-b-2 border-secondary"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                      title={tab.label}
+                    >
+                      <tab.icon className="h-4 w-4" />
+                    </button>
+                  ))}
+                </div>
+                <div className="flex gap-1">
+                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+                    <Search className="h-4 w-4" />
+                  </button>
+                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
+                    <LayoutGrid className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Empty state or Logs */}
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 py-6 px-4">
+                <div className="rounded-full bg-muted/50 p-4">
+                  <Clock className="h-8 w-8 text-muted-foreground/60" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground">Histórico de Sessões</p>
+                  <p className="text-[11px] text-muted-foreground/60">As sessões recentes com este cliente aparecerão aqui.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -147,14 +206,16 @@ export default function Tecnico() {
           {/* Status bar */}
           <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
             <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse-dot shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+              <span className={`h-2 w-2 rounded-full ${isConnecting ? "bg-primary animate-pulse-dot" : dotClass}`} />
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                Conexão Segura Ativa
+                {isConnecting ? "Negociando conexão..." : label}
               </span>
             </div>
-            <span className="text-[9px] text-muted-foreground/30 font-mono uppercase tracking-tighter">
-              H3-SEC-NODE-T1
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="text-[9px] text-muted-foreground/40 font-mono uppercase tracking-widest hidden sm:inline">
+                H3-TEC-SEC-V2
+              </span>
+            </div>
           </div>
         </div>
       </div>
