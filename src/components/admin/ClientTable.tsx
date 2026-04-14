@@ -9,6 +9,8 @@ interface ClientTableProps {
   clients: DbClient[];
   loading: boolean;
   onViewDetails: (client: DbClient) => void;
+  onUpdateClient?: (id: string, status: string, tecnico?: string) => Promise<void>;
+  emptyMessage?: string;
 }
 
 export default function ClientTable({ clients, loading, onViewDetails }: ClientTableProps) {
