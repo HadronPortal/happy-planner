@@ -39,7 +39,7 @@ export default function HadronSuporte() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row h-auto">
+          <div className="flex flex-col md:flex-row h-[480px]">
             {/* Left panel */}
             <div className="w-full md:w-[260px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5">
               <div>
