@@ -80,7 +80,7 @@ export default function HadronSuporte() {
                 <div className="relative inline-block">
                   <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl animate-pulse" />
                   <div className="relative rounded-full bg-card border border-border p-6 shadow-xl">
-                    <ShieldCheck className="h-12 w-12 text-primary" />
+                    <img src={logoSrc} alt="Hádron" className="h-12 w-12 object-contain" />
                   </div>
                 </div>
 
