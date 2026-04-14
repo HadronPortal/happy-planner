@@ -22,7 +22,8 @@ export default function HadronSuporte() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
             <div className="flex items-center gap-2">
-              <img src={logoSrc} alt="Hádron" className="h-7 object-contain" />
+              <div className="h-2 w-2 rounded-full bg-primary/40" />
+              <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Suporte Remoto</span>
             </div>
             <div className="flex items-center gap-1">
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
