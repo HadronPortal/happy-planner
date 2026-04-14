@@ -22,7 +22,6 @@ export default function HadronSuporte() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
             <div className="flex items-center gap-2">
-              <img src={logoSrc} alt="Hádron" className="h-7 object-contain" />
             </div>
             <div className="flex items-center gap-1">
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
@@ -71,6 +70,9 @@ export default function HadronSuporte() {
                     <RotateCcw className="h-3.5 w-3.5" />
                   </button>
                 </div>
+              </div>
+              <div className="mt-auto flex justify-center pb-2">
+                <img src={logoSrc} alt="Hádron" className="h-6 object-contain opacity-40 grayscale hover:opacity-80 transition-opacity" />
               </div>
             </div>
 
