@@ -116,7 +116,7 @@ export default function HadronSuporte() {
                     <div>
                       <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Privacidade</h4>
                       <p className="text-xs text-muted-foreground leading-relaxed">
-                        Você tem controle total. A conexão pode ser encerrada a qualquer momento clicando em "Finalizar suporte".
+                        Você tem controle total. A conexão pode ser encerrada a qualquer momento fechando o aplicativo.
                       </p>
                     </div>
                   </div>
