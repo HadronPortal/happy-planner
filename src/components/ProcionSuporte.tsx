@@ -16,7 +16,7 @@ export default function HadronSuporte() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-4xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
           {/* Title bar */}
@@ -72,15 +72,6 @@ export default function HadronSuporte() {
                   </button>
                 </div>
               </div>
-
-              {/* Restart */}
-              <button
-                onClick={reiniciar}
-                className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Finalizar suporte
-              </button>
             </div>
 
             {/* Right panel */}
@@ -100,30 +91,22 @@ export default function HadronSuporte() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 pt-4">
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border text-left transition-all hover:border-primary/30 group">
-                    <div className="mt-1 p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Activity className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Status da Sessão</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Seu computador está pronto para receber conexões. Mantenha este aplicativo aberto.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border text-left transition-all hover:border-primary/30 group">
-                    <div className="mt-1 p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <HelpCircle className="h-4 w-4" />
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Privacidade</h4>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
-                        Você tem controle total. A conexão pode ser encerrada a qualquer momento clicando em "Finalizar suporte".
-                      </p>
-                    </div>
-                  </div>
+                <div className="grid grid-cols-1 gap-3 pt-4">
+                  <button
+                    onClick={fechar}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-xs font-semibold text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all duration-200"
+                  >
+                    <X className="h-4 w-4" />
+                    Finalizar Suporte
+                  </button>
+                  
+                  <button
+                    onClick={reiniciar}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-3 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    Reiniciar Conexão
+                  </button>
                 </div>
               </div>
             </div>
