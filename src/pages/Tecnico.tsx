@@ -1,11 +1,22 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X, ArrowLeft } from "lucide-react";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
+import { supabase } from "@/integrations/supabase/client";
+
+declare global {
+  interface Window {
+    hadronTecnicoAPI?: {
+      openRustDesk: (id: string) => void;
+      closeWindow: () => void;
+    };
+  }
+}
+
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
