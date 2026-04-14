@@ -50,87 +50,85 @@ const Tecnico = () => {
   // fechar removed since it was in PageHeader which is now in layout
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-xl">
-        {/* Main window */}
-        <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
-{/* Header removed, now in MainLayout */}
+    <div className="h-full flex flex-col p-8 lg:p-12">
+      <div className="flex-1 flex flex-col items-center justify-center text-center gap-12 py-4 max-w-2xl mx-auto">
+        <div className="space-y-4">
+          <div className="relative inline-block">
+            <div className="absolute inset-0 bg-secondary/20 blur-2xl rounded-full scale-125" />
+            <h2 className="relative text-4xl font-black tracking-tight text-foreground uppercase">Conexão Remota</h2>
+          </div>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            Insira o ID remoto do cliente para iniciar o atendimento técnico assistido com controle de tela seguro.
+          </p>
+        </div>
 
-          {/* Body */}
-          <div className="p-8 flex flex-col items-center gap-8 min-h-[400px] justify-center text-center">
-            <div className="space-y-2">
-              <h2 className="text-2xl font-bold tracking-tight text-foreground">Conexão de Suporte</h2>
-              <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                Insira o ID remoto do cliente para iniciar o atendimento técnico assistido.
-              </p>
+        <div className="w-full max-w-md space-y-10">
+          {/* ID Remoto Section */}
+          <div className="space-y-4 text-left">
+            <div className="flex items-center justify-between px-2">
+              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Identificador Remoto</span>
+              <button 
+                onClick={handlePasteId}
+                className="flex items-center gap-2 text-xs text-secondary hover:text-secondary/80 transition-all font-bold px-3 py-1.5 rounded-lg hover:bg-secondary/10"
+              >
+                <Copy className="h-4 w-4" />
+                COLAR ID
+              </button>
             </div>
-
-            <div className="w-full max-w-sm space-y-6">
-              {/* ID Remoto Section */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between px-1">
-                  <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">ID Remoto</span>
-                  <button 
-                    onClick={handlePasteId}
-                    className="flex items-center gap-1.5 text-xs text-secondary hover:text-secondary/80 transition-colors font-semibold"
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                    Colar ID
-                  </button>
-                </div>
-                
-                <div className="relative group">
-                  <Input
-                    value={remoteId}
-                    onChange={(e) => setRemoteId(e.target.value)}
-                    placeholder="000 000 000"
-                    className="h-20 text-3xl font-bold text-center tracking-[0.15em] bg-muted/40 border-border border-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all font-mono"
-                  />
-                  <div className="absolute inset-0 rounded-md bg-secondary/5 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity" />
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="grid grid-cols-1 gap-3 pt-4">
-                <Button
-                  onClick={handleConnect}
-                  size="lg"
-                  className="h-14 text-lg font-bold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 group transition-all"
-                >
-                  <Play className="mr-2 h-5 w-5 fill-current transition-transform group-hover:scale-110" />
-                  Conectar
-                </Button>
-                
-                <Button
-                  onClick={handleFinish}
-                  variant="outline"
-                  size="lg"
-                  className="h-12 border-red-500/30 text-red-500 hover:bg-red-500/10 hover:border-red-500 transition-colors font-bold uppercase tracking-wider text-xs"
-                >
-                  <Power className="mr-2 h-4 w-4" />
-                  Finalizar Atendimento
-                </Button>
-              </div>
+            
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-secondary/20 to-secondary/5 rounded-2xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
+              <Input
+                value={remoteId}
+                onChange={(e) => setRemoteId(e.target.value)}
+                placeholder="000 000 000"
+                className="relative h-24 text-4xl font-black text-center tracking-[0.2em] bg-card border-border/50 border-2 focus-visible:ring-secondary focus-visible:border-secondary transition-all font-mono rounded-2xl shadow-xl"
+              />
             </div>
-
-            {/* Hint */}
-            <p className="text-[10px] text-muted-foreground/60 uppercase tracking-tighter">
-              Sistema de Suporte Técnico Hádron • Versão Premium
-            </p>
           </div>
 
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-[hsl(var(--status-connected))] animate-pulse" />
-              <span className="text-xs font-medium text-muted-foreground">
-                Técnico Online
-              </span>
-            </div>
-            <div className="text-[10px] text-muted-foreground font-mono">
-              Ready for session
-            </div>
+          {/* Action Buttons */}
+          <div className="grid grid-cols-1 gap-4 pt-4">
+            <Button
+              onClick={handleConnect}
+              size="lg"
+              className="h-16 text-xl font-black bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-2xl shadow-secondary/20 group transition-all rounded-2xl uppercase tracking-widest"
+            >
+              <Play className="mr-3 h-6 w-6 fill-current transition-transform group-hover:scale-125" />
+              Iniciar Conexão
+            </Button>
+            
+            <Button
+              onClick={handleFinish}
+              variant="outline"
+              size="lg"
+              className="h-12 border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive transition-all font-bold uppercase tracking-widest text-[10px] rounded-xl"
+            >
+              <Power className="mr-2 h-4 w-4" />
+              Finalizar Atendimento
+            </Button>
           </div>
+        </div>
+
+        {/* Hint */}
+        <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-widest pt-10">
+          Hádron Suporte Corporativo • Versão 2.5.0
+        </p>
+      </div>
+
+      {/* Status bar */}
+      <div className="flex items-center justify-between px-6 py-3 border-t border-border/30 bg-muted/10">
+        <div className="flex items-center gap-3">
+          <div className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[hsl(var(--status-connected))] opacity-75" />
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-[hsl(var(--status-connected))]" />
+          </div>
+          <span className="text-xs font-bold text-muted-foreground tracking-wide uppercase">
+            SISTEMA: TÉCNICO ONLINE
+          </span>
+        </div>
+        <div className="text-[10px] text-muted-foreground font-black uppercase tracking-widest opacity-40">
+          Ready for session
         </div>
       </div>
     </div>
