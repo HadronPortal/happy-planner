@@ -92,8 +92,8 @@ export default function HadronSuporte() {
                 </div>
 
                 <div className="grid grid-cols-1 gap-3 pt-4">
-                  <div className="flex items-center justify-center py-2">
-                    <img src={logoSrc} alt="Logo" className="h-12 w-auto object-contain opacity-80" />
+                  <div className="flex items-center justify-center py-4">
+                    <img src={logoSrc} alt="Logo" className="h-16 w-auto object-contain" />
                   </div>
                   
                   <button
