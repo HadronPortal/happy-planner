@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Clock, Link2, Users, Monitor, X } from "lucide-react";
-import logoSrc from "@/assets/icone.png";
+import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X } from "lucide-react";
+import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -110,6 +110,13 @@ export default function Tecnico() {
 
   const { label, dotClass } = STATUS_CONFIG[status];
 
+  const tabs = [
+    { icon: Clock, label: "Recentes" },
+    { icon: Star, label: "Favoritos" },
+    { icon: Link2, label: "Descoberta" },
+    { icon: Users, label: "Catálogo" },
+    { icon: Monitor, label: "Dispositivos" },
+  ];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
