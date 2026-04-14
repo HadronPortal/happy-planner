@@ -9,7 +9,7 @@ import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClien
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
-  connecting: { label: "Conectando...", dotClass: "bg-primary animate-pulse-dot" },
+  connecting: { label: "Conectando...", dotClass: "bg-secondary animate-pulse-dot" },
   connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
 };
 
@@ -66,7 +66,7 @@ export default function Tecnico() {
             <div className="flex items-center gap-3">
               <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
               <div className="h-4 w-px bg-border mx-1" />
-              <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 font-bold uppercase tracking-wider text-[10px] px-2 py-0 h-5">
+              <Badge variant="outline" className="border-secondary/50 text-secondary bg-secondary/10 font-bold uppercase tracking-wider text-[10px] px-2 py-0 h-5">
                 AMBIENTE TÉCNICO
               </Badge>
             </div>
@@ -134,16 +134,16 @@ export default function Tecnico() {
             {/* Right panel - Remote Connection Target */}
             <div className="flex-1 flex flex-col p-5 bg-background/50">
               {/* Remote connection display (Pre-filled) */}
-              <div className="flex flex-col items-center gap-4 mb-8 pt-4">
-                <div className="p-4 rounded-2xl bg-primary/5 ring-1 ring-primary/10 mb-2">
-                  <Monitor className="h-10 w-10 text-primary" />
+              <div className="flex flex-col items-center gap-3 mb-6 pt-0">
+                <div className="p-4 rounded-2xl bg-secondary/5 ring-1 ring-secondary/10 mb-2">
+                  <Monitor className="h-10 w-10 text-secondary" />
                 </div>
                 <h3 className="text-sm font-semibold text-foreground">Conexão com Cliente Remoto</h3>
                 
                 {/* Fixed ID display instead of input */}
-                <div className="w-full max-w-[280px] p-4 rounded-xl border border-border/60 bg-muted/20 flex flex-col items-center justify-center gap-1 group transition-all hover:border-primary/30">
+                <div className="w-full max-w-[280px] p-4 rounded-xl border border-border/60 bg-muted/20 flex flex-col items-center justify-center gap-1 group transition-all hover:border-secondary/30">
                   <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">ID do Cliente Carregado</span>
-                  <p className="text-2xl font-extrabold text-primary tracking-[0.15em] font-mono">
+                  <p className="text-2xl font-extrabold text-secondary tracking-[0.15em] font-mono">
                     {remoteId || "--- --- ---"}
                   </p>
                   <div className="flex items-center gap-1.5 mt-1">
@@ -155,7 +155,7 @@ export default function Tecnico() {
                 <Button
                   onClick={handleConnect}
                   disabled={!remoteId}
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-bold px-12 py-6 text-base rounded-xl transition-all shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-[0.98]"
+                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 py-2.5 text-sm rounded-xl transition-all shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-[0.98]"
                 >
                   <Plug className="mr-2 h-5 w-5" />
                   Conectar Agora
@@ -206,7 +206,7 @@ export default function Tecnico() {
           {/* Status bar */}
           <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
             <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${isConnecting ? "bg-primary animate-pulse-dot" : dotClass}`} />
+              <span className={`h-2 w-2 rounded-full ${isConnecting ? "bg-secondary animate-pulse-dot" : dotClass}`} />
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 {isConnecting ? "Negociando conexão..." : label}
               </span>
