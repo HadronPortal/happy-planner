@@ -47,7 +47,7 @@ export default function HadronSuporte() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-3xl">
+      <div className="w-full max-w-2xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
           {/* Title bar */}
