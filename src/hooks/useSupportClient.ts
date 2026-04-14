@@ -6,6 +6,7 @@ declare global {
     procionAPI?: {
       startSupport: () => Promise<{ ok: boolean }>;
       getSupportId: () => Promise<string>;
+      getHostname?: () => string;
     };
   }
 }
@@ -37,6 +38,7 @@ export function useSupportClient() {
   const [status, setStatus] = useState<ConnectionStatus>("initializing");
   const [supportId, setSupportId] = useState("--");
   const [password, setPassword] = useState(() => generatePassword());
+  const [hostname, setHostname] = useState("Seu Computador");
 
   useEffect(() => {
     let mounted = true;
@@ -92,6 +94,18 @@ export function useSupportClient() {
             setSupportId("--");
           }
           return;
+        }
+
+        // Get hostname
+        if (window.procionAPI.getHostname) {
+          try {
+            const name = window.procionAPI.getHostname();
+            if (name && mounted) {
+              setHostname(name);
+            }
+          } catch (e) {
+            console.error("Erro ao obter hostname:", e);
+          }
         }
 
         if (mounted) {
@@ -187,6 +201,7 @@ export function useSupportClient() {
     status,
     supportId,
     password,
+    hostname,
     copiarId,
     fechar,
     reiniciar,
