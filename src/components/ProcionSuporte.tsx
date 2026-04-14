@@ -76,7 +76,7 @@ export default function HadronSuporte() {
 
               {/* Security check */}
               <div className="mt-auto flex justify-center">
-                <img src={securityLogo} alt="Segurança" className="h-8 object-contain" />
+                <img src={securityLogo} alt="Segurança" className="h-14 object-contain" />
               </div>
             </div>
             {/* Right panel */}
