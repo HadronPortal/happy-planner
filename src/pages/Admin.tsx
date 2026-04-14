@@ -69,7 +69,7 @@ export default function AdminPanel() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex items-center gap-4">
-            <img src={logoSrc} alt="Hádron" className="h-10 object-contain" />
+            <img src={logoSrc} alt="Hádron" className="h-10 object-contain hue-rotate-[160deg] saturate-[1.5]" />
             <div>
               <h1 className="text-lg sm:text-xl font-bold tracking-tight">Painel de suporte técnico</h1>
               <p className="text-xs text-muted-foreground">Clientes online e atendimentos remotos</p>

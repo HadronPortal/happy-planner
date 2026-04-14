@@ -13,7 +13,7 @@
     --popover: 220 15% 12%;
     --popover-foreground: 200 20% 92%;
 
-    --primary: 50 95% 55%;
+    --primary: 217 85% 55%;
     --primary-foreground: 220 15% 8%;
 
     --secondary: 217 85% 55%;
@@ -35,7 +35,7 @@
     --radius: 0.75rem;
 
     --status-idle: 210 15% 45%;
-    --status-connecting: 50 95% 55%;
+    --status-connecting: 217 85% 55%;
     --status-connected: 150 70% 45%;
 
     --sidebar-background: 220 15% 10%;
