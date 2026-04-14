@@ -64,7 +64,7 @@ export default function Tecnico() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
             <div className="flex items-center gap-3">
-              <img src={logoSrc} alt="Hádron" className="h-5 object-contain" />
+              <img src={logoSrc} alt="Hádron" className="h-7 object-contain" />
               <div className="h-4 w-px bg-border mx-1" />
               <Badge variant="outline" className="border-secondary/50 text-secondary bg-secondary/10 font-bold uppercase tracking-wider text-[10px] px-2 py-0 h-5">
                 AMBIENTE TÉCNICO
