@@ -74,13 +74,9 @@ export default function HadronSuporte() {
               </div>
 
               {/* Restart */}
-              <button
-                onClick={reiniciar}
-                className="mt-auto flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                Finalizar suporte
-              </button>
+              <div className="mt-auto flex items-center justify-center p-2 opacity-80">
+                <img src={logoSrc} alt="Hádron" className="h-9 object-contain grayscale" />
+              </div>
             </div>
 
             {/* Right panel */}
