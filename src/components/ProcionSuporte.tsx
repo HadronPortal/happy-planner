@@ -1,49 +1,18 @@
-import { useState, useCallback } from "react";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, Frown, X } from "lucide-react";
+import { useCallback } from "react";
+import { Copy, RotateCcw, X, ShieldCheck, HelpCircle, Activity } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
   connecting: { label: "Conectando...", dotClass: "bg-primary animate-pulse-dot" },
-  connected: { label: "Pronto", dotClass: "bg-[hsl(var(--status-connected))]" },
+  connected: { label: "Pronto para conexão", dotClass: "bg-[hsl(var(--status-connected))]" },
 };
 
 export default function HadronSuporte() {
-  const { status, supportId, password, copiarId, refreshPassword, reiniciar: originalReiniciar, fechar } = useSupportClient();
-  const [remoteId, setRemoteId] = useState("");
-  const [activeTab, setActiveTab] = useState(0);
-  const [attendingTechnician, setAttendingTechnician] = useState<string | null>(null);
-
-  const handleConnect = useCallback(() => {
-    if (!remoteId.trim()) {
-      toast.error("Informe o ID Remoto");
-      return;
-    }
-    toast.info(`Conectando ao ID ${remoteId}...`);
-    setTimeout(() => {
-      setAttendingTechnician("João Silva");
-      toast.success("Conexão estabelecida!");
-    }, 1500);
-  }, [remoteId]);
-
-  const reiniciar = useCallback(() => {
-    setAttendingTechnician(null);
-    originalReiniciar();
-  }, [originalReiniciar]);
+  const { status, supportId, password, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
 
   const { label, dotClass } = STATUS_CONFIG[status];
-
-  const tabs = [
-    { icon: Clock, label: "Recentes" },
-    { icon: Star, label: "Favoritos" },
-    { icon: Link2, label: "Descoberta" },
-    { icon: Users, label: "Catálogo" },
-    { icon: Monitor, label: "Dispositivos" },
-  ];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
@@ -115,60 +84,46 @@ export default function HadronSuporte() {
             </div>
 
             {/* Right panel */}
-            <div className="flex-1 flex flex-col p-5">
-              {/* Remote connect */}
-              <div className="flex flex-col items-center gap-3 mb-6">
-                <h3 className="text-sm font-semibold text-foreground">Controle um Computador Remoto</h3>
-                <Input
-                  placeholder="Informe o ID Remoto"
-                  value={remoteId}
-                  onChange={(e) => setRemoteId(e.target.value)}
-                  className="max-w-xs text-center bg-muted/40 border-border"
-                />
-                <Button
-                  onClick={handleConnect}
-                  className="bg-secondary text-secondary-foreground hover:bg-secondary/85 font-semibold px-8 transition-colors"
-                >
-                  Conectar
-                </Button>
-              </div>
+            <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
+              <div className="max-w-md w-full text-center space-y-8">
+                <div className="relative inline-block">
+                  <div className="absolute -inset-4 bg-primary/10 rounded-full blur-2xl animate-pulse" />
+                  <div className="relative rounded-full bg-card border border-border p-6 shadow-xl">
+                    <ShieldCheck className="h-12 w-12 text-primary" />
+                  </div>
+                </div>
 
-              {/* Tabs */}
-              <div className="flex items-center justify-between border-b border-border mb-4">
-                <div className="flex gap-1">
-                  {tabs.map((tab, i) => (
-                    <button
-                      key={tab.label}
-                      onClick={() => setActiveTab(i)}
-                      className={`p-2.5 rounded-t transition-colors ${
-                        activeTab === i
-                          ? "text-foreground border-b-2 border-secondary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                      title={tab.label}
-                    >
-                      <tab.icon className="h-4 w-4" />
-                    </button>
-                  ))}
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-foreground">Aguardando Técnico</h3>
+                  <p className="text-sm text-muted-foreground px-4">
+                    Informe o ID e a Senha para que o técnico possa iniciar o atendimento remoto com segurança.
+                  </p>
                 </div>
-                <div className="flex gap-1">
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <Search className="h-4 w-4" />
-                  </button>
-                  <button className="p-2 text-muted-foreground hover:text-foreground transition-colors">
-                    <LayoutGrid className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
 
-              {/* Empty state */}
-              <div className="flex-1 flex flex-col items-center justify-center text-center gap-3 py-8">
-                <div className="rounded-full bg-muted/50 p-4">
-                  <Frown className="h-8 w-8 text-muted-foreground" />
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Ops, não há sessões recentes!</p>
-                  <p className="text-xs text-muted-foreground/70">Hora de planejar uma nova.</p>
+                <div className="grid grid-cols-1 gap-4 pt-4">
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border text-left transition-all hover:border-primary/30 group">
+                    <div className="mt-1 p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Activity className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Status da Sessão</h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Seu computador está pronto para receber conexões. Mantenha este aplicativo aberto.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3 p-4 rounded-xl bg-card border border-border text-left transition-all hover:border-primary/30 group">
+                    <div className="mt-1 p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <HelpCircle className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-1">Privacidade</h4>
+                      <p className="text-xs text-muted-foreground leading-relaxed">
+                        Você tem controle total. A conexão pode ser encerrada a qualquer momento clicando em "Finalizar suporte".
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -177,17 +132,11 @@ export default function HadronSuporte() {
           {/* Status bar */}
           <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
             <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${attendingTechnician ? "bg-[hsl(var(--status-connected))]" : dotClass}`} />
+              <span className={`h-2 w-2 rounded-full ${dotClass}`} />
               <span className="text-xs font-medium text-muted-foreground">
-                {attendingTechnician ? "Em atendimento" : label}
+                {label}
               </span>
             </div>
-            {attendingTechnician && (
-              <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1.5">
-                <Users className="h-3 w-3" />
-                Técnico: {attendingTechnician}
-              </span>
-            )}
           </div>
         </div>
       </div>
