@@ -1,7 +1,6 @@
 import { useCallback } from "react";
 import { Copy, RotateCcw, X, ShieldCheck, HelpCircle, Activity } from "lucide-react";
-import logoSrc from "@/assets/logo.png";
-import iconeSrc from "@/assets/icone.png";
+import logoSrc from "@/assets/icone.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
@@ -76,7 +75,7 @@ export default function HadronSuporte() {
 
               {/* Logo replacement */}
               <div className="mt-auto flex justify-center pb-2 opacity-30 grayscale transition-all hover:opacity-100 hover:grayscale-0 duration-300">
-                <img src={iconeSrc} alt="Logo" className="h-10 object-contain" />
+                <img src={logoSrc} alt="Logo" className="h-10 object-contain" />
               </div>
             </div>
 
