@@ -21,7 +21,6 @@ const App = () => (
           <Route path="/" element={<Download />} />
           <Route path="/suporte" element={<Index />} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/tecnico" element={<Index />} />
           <Route path="/tecnico" element={<Tecnico />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
