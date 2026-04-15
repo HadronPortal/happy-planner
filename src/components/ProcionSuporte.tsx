@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { Copy, RotateCcw, X, HelpCircle, Activity } from "lucide-react";
 import techAvatarSrc from "@/assets/technician-avatar.png";
 import logoSrc from "@/assets/logo.png";
-import securityLogo from "@/assets/security-check.png";
+import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
