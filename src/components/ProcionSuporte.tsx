@@ -84,7 +84,7 @@ export default function HadronSuporte() {
             <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
               <div className="max-w-sm w-full text-center space-y-8">
                 <div className="relative inline-block">
-                  <img src={techAvatarSrc} alt="Técnico" className="h-24 w-24 object-contain" loading="lazy" width={512} height={512} />
+                  <img src={techAvatarSrc} alt="Técnico" <img src={techAvatarSrc} alt="Técnico" className="h-32 w-32 object-contain" loading="lazy" width={512} height={512} /> loading="lazy" width={512} height={512} />
                 </div>
 
                 <div className="space-y-2">
