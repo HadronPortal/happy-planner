@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 declare global {
   interface Window {
     procionAPI?: {
       startSupport: () => Promise<{ ok: boolean }>;
+      stopSupport?: () => void;
       getSupportId: () => Promise<string>;
       getHostname?: () => string;
     };
