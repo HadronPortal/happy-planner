@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import logoSrc from "@/assets/logo.png";
+import procionLogo from "@/assets/procion-sidebar-logo.png";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
