@@ -7,10 +7,6 @@ const RELEASE_DATE = "15.05.2024";
 
 const platforms = [
   { icon: Monitor, label: "Windows", version: "x64", active: true },
-  { icon: Apple, label: "macOS", version: "Intel/M1", active: false },
-  { icon: Cpu, label: "Linux", version: "Deb/AppImage", active: false },
-  { icon: Smartphone, label: "Android", version: "APK", active: false },
-  { icon: Smartphone, label: "iOS", version: "App Store", active: false },
 ];
 
 export default function DownloadPage() {
