@@ -11,7 +11,7 @@ import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 export default function AdminPanel() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
-  const [techFilter, setTechFilter] = useState("all");
+  
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 
@@ -23,8 +23,7 @@ export default function AdminPanel() {
         !search ||
         c.empresa.toLowerCase().includes(search.toLowerCase()) ||
         c.rustdesk_id.replace(/\s/g, "").includes(search.replace(/\s/g, ""));
-      const matchTech = techFilter === "all" || c.tecnico_responsavel === techFilter;
-      return matchSearch && matchTech;
+      return matchSearch;
     });
 
     const active = baseList
@@ -42,7 +41,7 @@ export default function AdminPanel() {
       .sort((a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime());
 
     return { activeClients: active, finishedClients: finished };
-  }, [clients, search, techFilter]);
+  }, [clients, search]);
 
   const stats = useMemo(() => ({
     online: clients.filter((c) => c.status === "online").length,
@@ -99,8 +98,6 @@ export default function AdminPanel() {
           <ClientFilters
             search={search}
             onSearchChange={setSearch}
-            techFilter={techFilter}
-            onTechFilterChange={setTechFilter}
           />
         </div>
 

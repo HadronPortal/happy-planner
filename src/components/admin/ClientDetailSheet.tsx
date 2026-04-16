@@ -124,7 +124,7 @@ export default function ClientDetailSheet({ client, open, onClose, onUpdateClien
           </DetailBlock>
 
           <DetailBlock title="Controle Operacional">
-            <DetailItem icon={FileText} label="Técnico Responsável" value={client.tecnico_responsavel || "Aguardando..."} />
+            <DetailItem icon={FileText} label="Operador Responsável" value={client.tecnico_responsavel || "Aguardando..."} />
           </DetailBlock>
 
           <DetailBlock title="Histórico Temporal">
