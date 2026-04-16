@@ -129,7 +129,10 @@ export default function DownloadPage() {
         {/* Footer */}
         <footer className="bg-slate-900 text-slate-400 py-12 px-4">
           <div className="mx-auto max-w-5xl flex flex-col md:flex-row justify-between items-center gap-6">
-            <img src={logoSrc} alt="Hádron Suporte" className="h-8 grayscale brightness-200" />
+            <div className="flex items-center gap-4">
+              <img src={logoSrc} alt="Hádron Suporte" className="h-8 grayscale brightness-200" />
+              <img src={logo3Src} alt="Procion" className="h-8 grayscale brightness-200" />
+            </div>
             <p className="text-xs">
               © {new Date().getFullYear()} Hádron Suporte — Soluções em Tecnologia. Todos os direitos reservados.
             </p>
