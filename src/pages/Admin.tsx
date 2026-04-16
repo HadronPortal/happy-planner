@@ -11,7 +11,7 @@ import { useSupportClients, type DbClient } from "@/hooks/useSupportClients";
 export default function AdminPanel() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("active");
-  const [techFilter, setTechFilter] = useState("all");
+  
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
 

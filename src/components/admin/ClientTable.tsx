@@ -1,9 +1,16 @@
 import { Copy, Eye, Plug, XCircle, WifiOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { STATUS_CONFIG } from "@/data/supportData";
+import { STATUS_CONFIG, OPERATORS } from "@/data/supportData";
 import type { DbClient } from "@/hooks/useSupportClients";
 import { useNavigate } from "react-router-dom";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface ClientTableProps {
   clients: DbClient[];
@@ -25,7 +32,6 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
     try {
       const cleanId = client.rustdesk_id.replace(/\s/g, "");
       
-      // Update status to em_atendimento if it's currently online
       if (client.status === "online" && onUpdateClient) {
         await onUpdateClient(client.id, "em_atendimento");
       }
@@ -48,6 +54,18 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
     } catch (error) {
       console.error(error);
       toast.error("Erro ao encerrar atendimento");
+    }
+  };
+
+  const handleOperatorChange = async (client: DbClient, operator: string) => {
+    try {
+      if (onUpdateClient) {
+        await onUpdateClient(client.id, client.status, operator);
+        toast.success(`Operador ${operator} atribuído a ${client.empresa}`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao atribuir operador");
     }
   };
 
@@ -82,7 +100,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">ID</th>
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Status</th>
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
-              <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Técnico</th>
+              <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Operador</th>
               <th className="text-right px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Ações</th>
             </tr>
           </thead>
@@ -106,8 +124,20 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                     </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground text-xs">{time}</td>
-                  <td className="px-4 py-3 text-xs">
-                    {client.tecnico_responsavel || <span className="text-muted-foreground/50">—</span>}
+                  <td className="px-4 py-3">
+                    <Select
+                      value={client.tecnico_responsavel || ""}
+                      onValueChange={(val) => handleOperatorChange(client, val)}
+                    >
+                      <SelectTrigger className="h-7 w-[130px] text-[11px] bg-muted/30 border-border/50">
+                        <SelectValue placeholder="Selecionar" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {OPERATORS.map((op) => (
+                          <SelectItem key={op} value={op} className="text-xs">{op}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
@@ -180,6 +210,22 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
               <div className="flex items-center justify-between text-xs">
                 <span className="font-mono tracking-wider">{client.rustdesk_id}</span>
                 <span className="text-muted-foreground">{time}</span>
+              </div>
+
+              <div>
+                <Select
+                  value={client.tecnico_responsavel || ""}
+                  onValueChange={(val) => handleOperatorChange(client, val)}
+                >
+                  <SelectTrigger className="h-7 w-full text-[11px] bg-muted/30 border-border/50">
+                    <SelectValue placeholder="Selecionar operador" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {OPERATORS.map((op) => (
+                      <SelectItem key={op} value={op} className="text-xs">{op}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="flex flex-wrap gap-1.5">

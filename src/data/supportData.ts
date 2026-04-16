@@ -23,4 +23,8 @@ export const STATUS_CONFIG: Record<string, { label: string; dotClass: string; ba
   },
 };
 
-export const TECHNICIANS = ["Carlos Silva", "Ana Costa", "Pedro Santos", "Maria Oliveira"];
+export const OPERATORS = [
+  "PRCPET", "PRCCRIS", "PRCEDU", "PRCVIT", "PRCJUL", "PRCPED",
+  "PRCROG", "TESADM", "PRCGIN", "PRCSUZ", "PRCMEK", "PRCWAG",
+  "PRCPRW", "PRCAND", "PRCTR1", "PRCWLS", "PRCGGC", "PRCREN", "PRCGAB",
+];
