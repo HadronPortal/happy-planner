@@ -124,7 +124,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                     </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground text-xs">{time}</td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 align-middle">
                     <Select
                       value={client.tecnico_responsavel || ""}
                       onValueChange={(val) => handleOperatorChange(client, val)}
@@ -132,7 +132,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                       <SelectTrigger className="h-7 w-[130px] text-[11px] bg-muted/30 border-border/50">
                         <SelectValue placeholder="Selecionar" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent side="bottom" align="start">
                         {OPERATORS.map((op) => (
                           <SelectItem key={op} value={op} className="text-xs">{op}</SelectItem>
                         ))}
