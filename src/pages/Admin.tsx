@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import logoSrc from "@/assets/logo.png";
+import procionLogo from "@/assets/procion-sidebar-logo.png";
 import StatsBar from "@/components/admin/StatsBar";
 import ClientFilters from "@/components/admin/ClientFilters";
 import ClientTable from "@/components/admin/ClientTable";
@@ -75,7 +76,8 @@ export default function AdminPanel() {
               <p className="text-xs text-muted-foreground">Clientes online e atendimentos remotos</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <img src={procionLogo} alt="Prócion" className="h-7 object-contain" />
             <span className="inline-flex items-center gap-1.5 rounded-full border border-[hsl(var(--status-connected))]/30 bg-[hsl(var(--status-connected))]/10 px-3 py-1 text-[11px] font-medium text-[hsl(var(--status-connected))]">
               <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--status-connected))]" />
               Sistema ativo
