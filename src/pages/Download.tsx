@@ -1,5 +1,6 @@
 import { Shield, Lock, UserCheck, Monitor, AlertTriangle } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
+import logo3Src from "@/assets/logo-3.png";
 import { Button } from "@/components/ui/button";
 
 const APP_VERSION = "1.0.0";
@@ -128,7 +129,10 @@ export default function DownloadPage() {
         {/* Footer */}
         <footer className="bg-slate-900 text-slate-400 py-12 px-4">
           <div className="mx-auto max-w-5xl flex flex-col md:flex-row justify-between items-center gap-6">
-            <img src={logoSrc} alt="Hádron Suporte" className="h-8 grayscale brightness-200" />
+            <div className="flex items-center gap-4">
+              <img src={logoSrc} alt="Hádron Suporte" className="h-8 grayscale brightness-200" />
+              <img src={logo3Src} alt="Procion" className="h-8 grayscale brightness-200" />
+            </div>
             <p className="text-xs">
               © {new Date().getFullYear()} Hádron Suporte — Soluções em Tecnologia. Todos os direitos reservados.
             </p>
