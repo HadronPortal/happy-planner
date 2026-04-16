@@ -141,13 +141,15 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-end gap-1.5">
-                      <Button
-                        size="sm"
-                        onClick={() => handleConnect(client)}
-                        className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
-                      >
-                        <Plug className="h-3 w-3" /> Conectar
-                      </Button>
+                      {client.status === "online" && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleConnect(client)}
+                          className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
+                        >
+                          <Plug className="h-3 w-3" /> Conectar
+                        </Button>
+                      )}
 
                       <Button
                         size="sm"
@@ -229,13 +231,15 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
               </div>
 
               <div className="flex flex-wrap gap-1.5">
-                <Button
-                  size="sm"
-                  onClick={() => handleConnect(client)}
-                  className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
-                >
-                  <Plug className="h-3 w-3" /> Conectar
-                </Button>
+                {client.status === "online" && (
+                  <Button
+                    size="sm"
+                    onClick={() => handleConnect(client)}
+                    className="h-7 px-2.5 text-[11px] font-bold bg-primary text-primary-foreground hover:bg-primary/85 gap-1"
+                  >
+                    <Plug className="h-3 w-3" /> Conectar
+                  </Button>
+                )}
 
                 <Button
                   size="sm"
