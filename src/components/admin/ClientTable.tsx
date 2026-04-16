@@ -48,7 +48,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
   const handleEnd = async (client: DbClient) => {
     try {
       if (onUpdateClient) {
-        await onUpdateClient(client.id, "finalizado");
+        await onUpdateClient(client.id, "offline");
         toast.info(`Atendimento encerrado: ${client.empresa}`);
       }
     } catch (error) {
