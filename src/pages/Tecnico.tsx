@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, Search, Clock, Star, Link2, Users, Monitor, LayoutGrid, X } from "lucide-react";
+import { Copy, RotateCcw, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +28,6 @@ export default function Tecnico() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
-  const [activeTab, setActiveTab] = useState(0);
   const [isConnecting] = useState(false);
 
   useEffect(() => {
@@ -110,14 +109,6 @@ export default function Tecnico() {
   }, [navigate, searchParams]);
 
   const { label, dotClass } = STATUS_CONFIG[status];
-
-  const tabs = [
-    { icon: Clock, label: "Recentes" },
-    { icon: Star, label: "Favoritos" },
-    { icon: Link2, label: "Descoberta" },
-    { icon: Users, label: "Catálogo" },
-    { icon: Monitor, label: "Dispositivos" },
-  ];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
