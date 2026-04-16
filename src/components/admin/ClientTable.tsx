@@ -100,7 +100,7 @@ export default function ClientTable({ clients, loading, onViewDetails, onUpdateC
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">ID</th>
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Status</th>
               <th className="text-left px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Hora</th>
-              <th className="text-left px-4 py-3 pl-8 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Operador</th>
+              <th className="text-left px-4 py-3 pl-12 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Operador</th>
               <th className="text-right px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Ações</th>
             </tr>
           </thead>
