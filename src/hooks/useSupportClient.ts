@@ -160,12 +160,32 @@ export function useSupportClient() {
     }
   }, [supportId]);
 
-  const fechar = useCallback(() => {
-    if (window.close) {
-      window.close();
+  const fechar = useCallback(async () => {
+    try {
+      // Update status to offline in Supabase using rustdesk_id
+      const cleanId = supportId.replace(/\s/g, "");
+      if (cleanId && cleanId !== "--") {
+        await supabase
+          .from("support_online_clients")
+          .update({ status: "offline", updated_at: new Date().toISOString() })
+          .eq("rustdesk_id", cleanId);
+      }
+
+      // Call Electron stop support
+      if (window.procionAPI?.stopSupport) {
+        window.procionAPI.stopSupport();
+      }
+
+      toast.info("Suporte finalizado");
+
+      if (window.close) {
+        window.close();
+      }
+    } catch (error) {
+      console.error("Erro ao finalizar suporte:", error);
+      toast.error("Erro ao finalizar suporte");
     }
-    toast.info("Fechando suporte...");
-  }, []);
+  }, [supportId]);
 
   const reiniciar = useCallback(async () => {
     try {
