@@ -37,7 +37,7 @@ export default function AdminPanel() {
       });
 
     const finished = baseList
-      .filter((c) => c.status === "finalizado")
+      .filter((c) => c.status === "finalizado" || c.status === "offline")
       .sort((a, b) => new Date(b.opened_at).getTime() - new Date(a.opened_at).getTime());
 
     return { activeClients: active, finishedClients: finished };

@@ -82,7 +82,7 @@ export default function Tecnico() {
         const { error } = await supabase
           .from("support_online_clients")
           .update({ 
-            status: "finalizado", 
+            status: "offline", 
             updated_at: new Date().toISOString() 
           })
           .eq("rustdesk_id", cleanId)
