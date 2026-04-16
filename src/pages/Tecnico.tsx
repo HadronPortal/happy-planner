@@ -65,11 +65,12 @@ export default function Tecnico() {
 
     if (window.hadronTecnicoAPI) {
       window.hadronTecnicoAPI.openRustDesk(cleanId);
-      toast.success("Abrindo RustDesk do técnico");
+      toast.success("Abrindo conexão remota");
+      navigate("/admin");
     } else {
       toast.error("Função disponível apenas no app técnico");
     }
-  }, [remoteId]);
+  }, [remoteId, navigate]);
 
   const handleFinish = useCallback(async () => {
     try {
