@@ -42,6 +42,21 @@ export function useSupportClient() {
   const [password, setPassword] = useState(() => generatePassword());
   const [hostname, setHostname] = useState("Seu Computador");
 
+  const resolveCurrentSupportId = useCallback(async () => {
+    const currentId = supportId.replace(/\s/g, "");
+
+    if (currentId && currentId !== "--") {
+      return currentId;
+    }
+
+    if (window.procionAPI?.getSupportId) {
+      const fallbackId = await window.procionAPI.getSupportId();
+      return fallbackId?.replace(/\D/g, "") || "";
+    }
+
+    return "";
+  }, [supportId]);
+
   useEffect(() => {
     let mounted = true;
 
@@ -162,18 +177,20 @@ export function useSupportClient() {
 
   const fechar = useCallback(async () => {
     try {
-      // Update status to offline in Supabase using rustdesk_id
-      const cleanId = supportId.replace(/\s/g, "");
-      if (cleanId && cleanId !== "--") {
-        await supabase
-          .from("support_online_clients")
-          .update({ status: "finalizado", updated_at: new Date().toISOString() })
-          .eq("rustdesk_id", cleanId);
+      if (window.procionAPI?.stopSupport) {
+        await window.procionAPI.stopSupport();
       }
 
-      // Call Electron stop support
-      if (window.procionAPI?.stopSupport) {
-        window.procionAPI.stopSupport();
+      const cleanId = await resolveCurrentSupportId();
+      if (cleanId) {
+        const { error } = await supabase
+          .from("support_online_clients")
+          .update({ status: "offline", updated_at: new Date().toISOString() })
+          .eq("rustdesk_id", cleanId);
+
+        if (error) {
+          throw error;
+        }
       }
 
       toast.info("Suporte finalizado");
@@ -185,7 +202,7 @@ export function useSupportClient() {
       console.error("Erro ao finalizar suporte:", error);
       toast.error("Erro ao finalizar suporte");
     }
-  }, [supportId]);
+  }, [resolveCurrentSupportId]);
 
   const reiniciar = useCallback(async () => {
     try {
