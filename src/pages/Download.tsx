@@ -1,5 +1,6 @@
 import { Shield, Lock, UserCheck, Monitor, AlertTriangle } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
+import logo3Src from "@/assets/logo-3.png";
 import { Button } from "@/components/ui/button";
 
 const APP_VERSION = "1.0.0";
