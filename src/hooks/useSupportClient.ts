@@ -177,27 +177,40 @@ export function useSupportClient() {
 
   const fechar = useCallback(async () => {
     try {
+      // 1. Resolve ID FIRST (before stopping support which may kill the process)
+      const cleanId = await resolveCurrentSupportId();
+      console.log("Finalizando suporte para ID:", cleanId);
+
+      // 2. Update Supabase status to offline BEFORE stopping support
+      if (cleanId) {
+        const { error, data } = await supabase
+          .from("support_online_clients")
+          .update({ status: "offline", updated_at: new Date().toISOString() })
+          .eq("rustdesk_id", cleanId)
+          .select();
+
+        if (error) {
+          console.error("Erro ao atualizar Supabase:", error);
+          throw error;
+        }
+        console.log("Status atualizado para offline:", data);
+      } else {
+        console.warn("Nenhum ID disponível para atualizar status");
+      }
+
+      // 3. Stop RustDesk locally
       if (window.procionAPI?.stopSupport) {
         await window.procionAPI.stopSupport();
       }
 
-      const cleanId = await resolveCurrentSupportId();
-      if (cleanId) {
-        const { error } = await supabase
-          .from("support_online_clients")
-          .update({ status: "offline", updated_at: new Date().toISOString() })
-          .eq("rustdesk_id", cleanId);
-
-        if (error) {
-          throw error;
-        }
-      }
-
       toast.info("Suporte finalizado");
 
-      if (window.close) {
-        window.close();
-      }
+      // 4. Close window after a brief delay to ensure toast/update completes
+      setTimeout(() => {
+        if (window.close) {
+          window.close();
+        }
+      }, 500);
     } catch (error) {
       console.error("Erro ao finalizar suporte:", error);
       toast.error("Erro ao finalizar suporte");
