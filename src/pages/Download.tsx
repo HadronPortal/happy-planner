@@ -41,7 +41,7 @@ export default function DownloadPage() {
         <section className="px-4 pb-20">
           <div className="mx-auto max-w-5xl">
             <h2 className="text-xl font-bold mb-8 text-center text-slate-800">Selecione o arquivo para download:</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div className="flex justify-center">
               {platforms.map((platform) => (
                 <div 
                   key={platform.label}
