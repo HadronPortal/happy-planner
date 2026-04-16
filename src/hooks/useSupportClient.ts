@@ -167,7 +167,7 @@ export function useSupportClient() {
       if (cleanId && cleanId !== "--") {
         await supabase
           .from("support_online_clients")
-          .update({ status: "offline", updated_at: new Date().toISOString() })
+          .update({ status: "finalizado", updated_at: new Date().toISOString() })
           .eq("rustdesk_id", cleanId);
       }
 
