@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useCallback, useEffect, useState } from "react";
+=======
+import { useState, useCallback, useEffect } from "react";
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -51,12 +55,21 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de iniciar suporte ${attempt}/${maxAttempts}`);
+<<<<<<< HEAD
           if (window.procionAPI) {
             await window.procionAPI.startSupport();
             console.log("Support iniciado com sucesso.");
             return true;
           }
           return false;
+=======
+
+          if (!window.procionAPI) return false;
+
+          await window.procionAPI.startSupport();
+          console.log("Support iniciado com sucesso.");
+          return true;
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
         } catch (error) {
           console.error(`Falha ao iniciar suporte na tentativa ${attempt}`, error);
           if (attempt < maxAttempts) {
@@ -64,6 +77,7 @@ export function useSupportClient() {
           }
         }
       }
+
       return false;
     }
 
@@ -73,22 +87,41 @@ export function useSupportClient() {
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de obter ID ${attempt}/${maxAttempts}`);
+<<<<<<< HEAD
           if (window.procionAPI) {
             const id = await window.procionAPI.getSupportId();
             if (id) {
               return id;
             }
+=======
+
+          if (!window.procionAPI) return "--";
+
+          const id = await window.procionAPI.getSupportId();
+
+          if (id) {
+            return id;
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
           }
         } catch (error) {
           console.error(`Falha ao obter ID na tentativa ${attempt}`, error);
         }
+
         await sleep(1200);
       }
+
       return "--";
     }
 
     async function iniciar() {
       try {
+        if (window.procionAPI?.getHostname) {
+          const hostname = await window.procionAPI.getHostname();
+          if (mounted) {
+            setComputerName(hostname || "Seu Computador");
+          }
+        }
+
         if (!window.procionAPI) {
           console.log("Electron não detectado.");
           if (mounted) {
@@ -136,6 +169,7 @@ export function useSupportClient() {
         setStatus("connected");
       } catch (error) {
         console.error("Erro ao iniciar suporte:", error);
+
         if (mounted) {
           setStatus("connected");
           setSupportId("--");
@@ -160,6 +194,7 @@ export function useSupportClient() {
     }
   }, [supportId]);
 
+<<<<<<< HEAD
   const fechar = useCallback(async () => {
     try {
       // Update status to offline in Supabase using rustdesk_id
@@ -186,6 +221,12 @@ export function useSupportClient() {
       toast.error("Erro ao finalizar suporte");
     }
   }, [supportId]);
+=======
+  const refreshPassword = useCallback(() => {
+    setPassword(generatePassword());
+    toast.info("Senha atualizada");
+  }, []);
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
 
   const reiniciar = useCallback(async () => {
     try {
@@ -214,17 +255,50 @@ export function useSupportClient() {
     }
   }, []);
 
+<<<<<<< HEAD
   const refreshPassword = useCallback(() => {
     setPassword(generatePassword());
     toast.info("Senha atualizada");
+=======
+  const fechar = useCallback(() => {
+    if (window.close) {
+      window.close();
+    }
+    toast.info("Fechando suporte...");
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
   }, []);
+
+  const finalizar = useCallback(async () => {
+  try {
+    if (!window.procionAPI?.stopSupport) {
+      toast.error("API do Electron não disponível");
+      return;
+    }
+
+    await window.procionAPI.stopSupport();
+    setStatus("connected");
+    setSupportId("--");
+    toast.info("Suporte finalizado");
+  } catch (error) {
+    console.error("Erro ao finalizar suporte:", error);
+    toast.error("Erro ao finalizar suporte");
+  }
+}, []);
 
   return {
     status,
     supportId,
     password,
+<<<<<<< HEAD
     hostname,
     copiarId,
+=======
+    computerName,
+    copiarId,
+    refreshPassword,
+    reiniciar,
+    finalizar,
+>>>>>>> 2fc8fe9 (backup versao estavel antes do multiacesso)
     fechar,
     reiniciar,
     refreshPassword,
