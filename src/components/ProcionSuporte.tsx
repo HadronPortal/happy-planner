@@ -110,7 +110,7 @@ export default function HadronSuporte() {
 
               {/* Logo */}
               <div className="pt-4">
-                <img src={logoSrc} alt="Hádron" className="h-10 object-contain opacity-80" />
+                <img src={logoSrc} alt="Hádron" className="h-20 object-contain opacity-90" />
               </div>
             </div>
           </div>
