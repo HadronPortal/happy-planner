@@ -155,11 +155,12 @@ export function useSupportClient() {
 
         await sleep(1500);
 
-        const id = await tryGetSupportId();
+        const result = await tryGetSupportId();
 
         if (!mounted) return;
 
-        setSupportId(formatSupportId(id));
+        setSupportId(formatSupportId(result.id));
+        if (result.password) setPassword(result.password);
         setStatus("connected");
       } catch (error) {
         console.error("Erro ao iniciar suporte:", error);
