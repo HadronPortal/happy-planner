@@ -18,7 +18,7 @@ export default function HadronSuporte() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-3xl">
         {/* Main window */}
         <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden">
           {/* Title bar */}
@@ -41,7 +41,7 @@ export default function HadronSuporte() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col items-center justify-center px-6 py-6 md:py-8">
+          <div className="flex flex-col items-center justify-center px-6 min-h-[480px]">
             <div className="w-full max-w-xl flex flex-col items-center text-center space-y-4">
               {/* Hostname */}
               <div className="space-y-1">
