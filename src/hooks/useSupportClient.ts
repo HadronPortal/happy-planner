@@ -36,6 +36,16 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function parseSupportResponse(value: unknown): { id: string; password: string } {
+  if (!value) return { id: "", password: "" };
+  if (typeof value === "string") return { id: value, password: "" };
+  if (typeof value === "object") {
+    const obj = value as { id?: string; password?: string };
+    return { id: obj.id ?? "", password: obj.password ?? "" };
+  }
+  return { id: "", password: "" };
+}
+
 export function useSupportClient() {
   const [status, setStatus] = useState<ConnectionStatus>("initializing");
   const [supportId, setSupportId] = useState("--");
