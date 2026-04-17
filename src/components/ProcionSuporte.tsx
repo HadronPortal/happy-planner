@@ -57,8 +57,8 @@ export default function HadronSuporte() {
                 </p>
 
                 <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-6 py-5 shadow-lg shadow-primary/10">
-                  <p className="text-3xl md:text-4xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-none">
-                    {supportId}
+                  <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono leading-none">
+                    {supportId.replace(/\s+/g, "")}
                   </p>
                 </div>
 
