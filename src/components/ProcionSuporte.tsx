@@ -50,34 +50,47 @@ export default function HadronSuporte() {
                 </p>
               </div>
 
-              {/* ID em destaque */}
+              {/* ID em destaque com barra lateral */}
               <div className="w-full space-y-3">
                 <p className="text-sm text-muted-foreground">
                   Informe este código ao técnico
                 </p>
 
-                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-6 py-5 shadow-lg shadow-primary/10">
-                  <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono leading-none">
-                    {supportId.replace(/\s+/g, "")}
-                  </p>
+                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-6 py-5 shadow-lg shadow-primary/10 text-left">
+                  <div className="flex items-stretch gap-4">
+                    <div className="w-1 rounded-full bg-primary shrink-0" />
+                    <div className="flex-1">
+                      <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">ID</p>
+                      <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono leading-none">
+                        {supportId.replace(/\s+/g, "")}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Senha com barra lateral */}
+                <div className="rounded-2xl border border-border bg-muted/20 px-6 py-4 text-left">
+                  <div className="flex items-stretch gap-4">
+                    <div className="w-1 rounded-full bg-primary shrink-0" />
+                    <div className="flex-1 flex items-center justify-between gap-3">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Senha de uso único</p>
+                        <p className="font-mono font-semibold text-foreground tracking-wider text-base">{password}</p>
+                      </div>
+                      <button
+                        onClick={refreshPassword}
+                        className="text-muted-foreground hover:text-foreground transition-colors p-1.5 rounded hover:bg-muted"
+                        title="Gerar nova senha"
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
                 <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
                   Envie este código ao suporte para iniciar o atendimento remoto.
                 </p>
-              </div>
-
-              {/* Senha discreta */}
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <span className="uppercase tracking-wider">Senha</span>
-                <span className="font-mono font-semibold text-foreground tracking-wider text-sm">{password}</span>
-                <button
-                  onClick={refreshPassword}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                  title="Gerar nova senha"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                </button>
               </div>
 
               {/* Ações */}
