@@ -5,6 +5,7 @@ const MAX_ITEMS = 20;
 
 export interface RecentConnection {
   id: string;
+  name?: string;
   lastUsedAt: number;
 }
 
@@ -18,6 +19,7 @@ function readStorage(): RecentConnection[] {
       .filter((item) => item && typeof item.id === "string")
       .map((item) => ({
         id: item.id.replace(/\D/g, ""),
+        name: typeof item.name === "string" ? item.name : undefined,
         lastUsedAt: typeof item.lastUsedAt === "number" ? item.lastUsedAt : Date.now(),
       }))
       .filter((item) => item.id.length > 0)
@@ -42,12 +44,30 @@ export function useConnectionHistory() {
     setHistory(readStorage());
   }, []);
 
-  const addConnection = useCallback((rawId: string) => {
+  const addConnection = useCallback((rawId: string, name?: string) => {
     const cleanId = rawId.replace(/\D/g, "");
     if (!cleanId) return;
     setHistory((prev) => {
+      const existing = prev.find((item) => item.id === cleanId);
       const filtered = prev.filter((item) => item.id !== cleanId);
-      const next = [{ id: cleanId, lastUsedAt: Date.now() }, ...filtered].slice(0, MAX_ITEMS);
+      const next = [
+        {
+          id: cleanId,
+          name: name ?? existing?.name,
+          lastUsedAt: Date.now(),
+        },
+        ...filtered,
+      ].slice(0, MAX_ITEMS);
+      writeStorage(next);
+      return next;
+    });
+  }, []);
+
+  const renameConnection = useCallback((id: string, name: string) => {
+    setHistory((prev) => {
+      const next = prev.map((item) =>
+        item.id === id ? { ...item, name: name.trim() || undefined } : item,
+      );
       writeStorage(next);
       return next;
     });
@@ -66,7 +86,7 @@ export function useConnectionHistory() {
     setHistory([]);
   }, []);
 
-  return { history, addConnection, removeConnection, clearHistory };
+  return { history, addConnection, renameConnection, removeConnection, clearHistory };
 }
 
 export function formatRustDeskId(rawId: string): string {
