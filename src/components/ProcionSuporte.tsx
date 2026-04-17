@@ -52,16 +52,30 @@ export default function HadronSuporte() {
               </div>
 
               {/* ID */}
-              <div className="space-y-1">
+              <div className="space-y-2 rounded-lg border border-primary/30 bg-primary/5 p-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2">ID</span>
-                  <button onClick={copiarId} className="text-muted-foreground hover:text-foreground transition-colors">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">Seu ID</span>
+                  <button
+                    onClick={copiarId}
+                    className="text-muted-foreground hover:text-primary transition-colors"
+                    title="Copiar ID"
+                  >
                     <Copy className="h-3.5 w-3.5" />
                   </button>
                 </div>
-                <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono pl-2">
+                <p className="text-3xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-tight">
                   {supportId}
                 </p>
+                <p className="text-[11px] text-muted-foreground leading-snug">
+                  Informe este código ao técnico
+                </p>
+                <button
+                  onClick={copiarId}
+                  className="w-full flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-3 py-2 text-xs font-semibold"
+                >
+                  <Copy className="h-3.5 w-3.5" />
+                  Copiar ID
+                </button>
               </div>
 
               {/* Password */}
