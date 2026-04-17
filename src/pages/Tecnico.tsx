@@ -38,38 +38,39 @@ export default function Tecnico() {
   }, [searchParams]);
 
   const handleConnect = useCallback(async () => {
-    const cleanId = remoteId.replace(/\s/g, "");
+    const cleanId = remoteId.replace(/\D/g, "");
     if (!cleanId) {
-      toast.error("Informe o ID remoto");
+      toast.error("Informe um ID válido");
       return;
     }
 
-    // Atualiza status para "em_atendimento" no banco
     try {
       const { error } = await supabase
         .from("support_online_clients")
-        .update({ 
-          status: "em_atendimento", 
-          updated_at: new Date().toISOString() 
+        .update({
+          status: "em_atendimento",
+          updated_at: new Date().toISOString(),
         })
         .eq("rustdesk_id", cleanId)
         .in("status", ["online", "em_atendimento"]);
 
-      if (error) {
-        console.error("Erro ao atualizar status para em_atendimento:", error);
-      }
+      if (error) console.error("Erro ao atualizar status:", error);
     } catch (err) {
       console.error("Erro inesperado ao conectar:", err);
     }
 
-    if (window.hadronTecnicoAPI) {
-      window.hadronTecnicoAPI.openRustDesk(cleanId);
-      toast.success("Abrindo conexão remota");
-      navigate("/admin");
-    } else {
-      toast.error("Função disponível apenas no app técnico");
+    try {
+      if (window.hadronTecnicoAPI) {
+        window.hadronTecnicoAPI.openRustDesk(cleanId);
+        toast.success("Abrindo conexão remota");
+      } else {
+        toast.error("Função disponível apenas no app técnico");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, navigate]);
+  }, [remoteId]);
 
   const handleFinish = useCallback(async () => {
     try {
@@ -186,31 +187,42 @@ export default function Tecnico() {
               </div>
             </div>
 
-            {/* Right panel - Remote Connection Target */}
+            {/* Right panel - Manual Connection */}
             <div className="flex-1 flex flex-col p-6 items-center justify-center text-center">
-              {/* Remote connection display (Pre-filled) */}
-              <div className="flex flex-col items-center gap-4 w-full max-w-md">
+              <div className="flex flex-col items-center gap-5 w-full max-w-md">
                 <div className="space-y-2">
-                  <h3 className="text-lg font-semibold text-foreground">Conexão com Cliente Remoto</h3>
-                  <p className="text-sm text-muted-foreground">Estabeleça a conexão com o dispositivo do cliente selecionado.</p>
-                </div>
-                
-                {/* Fixed ID display instead of input */}
-                <div className="w-full p-4 rounded-xl border border-border bg-muted/40 flex items-center justify-center shadow-inner">
-                  <p className="text-2xl font-bold text-secondary tracking-[0.15em] font-mono">
-                    {remoteId || "--- --- ---"}
-                  </p>
+                  <h3 className="text-lg font-semibold text-foreground">Conectar a um cliente</h3>
+                  <p className="text-sm text-muted-foreground">Digite ou cole o ID do RustDesk do cliente.</p>
                 </div>
 
-                <div className="flex justify-center w-full">
-                  <Button
-                    onClick={handleConnect}
-                    disabled={!remoteId}
-                    className="px-6 bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-9 text-xs uppercase tracking-wide transition-all shadow-sm"
-                  >
-                    Conectar agora
-                  </Button>
-                </div>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  autoFocus
+                  maxLength={15}
+                  value={remoteId}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
+                    const formatted = digits.replace(
+                      /(\d{3})(\d{0,3})(\d{0,3})/,
+                      (_, a, b, c) => [a, b, c].filter(Boolean).join(" ")
+                    );
+                    setRemoteId(formatted);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleConnect();
+                  }}
+                  placeholder="000 000 000"
+                  className="w-full px-4 py-4 rounded-xl border border-border bg-muted/40 text-center text-2xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
+                />
+
+                <Button
+                  onClick={handleConnect}
+                  disabled={!remoteId.replace(/\D/g, "")}
+                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-11 text-sm uppercase tracking-wide transition-all shadow-sm"
+                >
+                  Conectar
+                </Button>
               </div>
             </div>
           </div>
