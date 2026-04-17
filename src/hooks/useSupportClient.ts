@@ -61,22 +61,12 @@ export function useSupportClient() {
 
     if (window.procionAPI?.getSupportId) {
       const fallback = await window.procionAPI.getSupportId();
-      const fallbackId = typeof fallback === "string" ? fallback : (fallback?.id ?? "");
-      return fallbackId?.replace(/\D/g, "") || "";
+      const parsed = parseSupportResponse(fallback);
+      return parsed.id?.replace(/\D/g, "") || "";
     }
 
     return "";
   }, [supportId]);
-
-  function parseSupportResponse(value: unknown): { id: string; password: string } {
-    if (!value) return { id: "", password: "" };
-    if (typeof value === "string") return { id: value, password: "" };
-    if (typeof value === "object") {
-      const obj = value as { id?: string; password?: string };
-      return { id: obj.id ?? "", password: obj.password ?? "" };
-    }
-    return { id: "", password: "" };
-  }
 
   useEffect(() => {
     let mounted = true;
