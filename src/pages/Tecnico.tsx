@@ -38,38 +38,39 @@ export default function Tecnico() {
   }, [searchParams]);
 
   const handleConnect = useCallback(async () => {
-    const cleanId = remoteId.replace(/\s/g, "");
+    const cleanId = remoteId.replace(/\D/g, "");
     if (!cleanId) {
-      toast.error("Informe o ID remoto");
+      toast.error("Informe um ID válido");
       return;
     }
 
-    // Atualiza status para "em_atendimento" no banco
     try {
       const { error } = await supabase
         .from("support_online_clients")
-        .update({ 
-          status: "em_atendimento", 
-          updated_at: new Date().toISOString() 
+        .update({
+          status: "em_atendimento",
+          updated_at: new Date().toISOString(),
         })
         .eq("rustdesk_id", cleanId)
         .in("status", ["online", "em_atendimento"]);
 
-      if (error) {
-        console.error("Erro ao atualizar status para em_atendimento:", error);
-      }
+      if (error) console.error("Erro ao atualizar status:", error);
     } catch (err) {
       console.error("Erro inesperado ao conectar:", err);
     }
 
-    if (window.hadronTecnicoAPI) {
-      window.hadronTecnicoAPI.openRustDesk(cleanId);
-      toast.success("Abrindo conexão remota");
-      navigate("/admin");
-    } else {
-      toast.error("Função disponível apenas no app técnico");
+    try {
+      if (window.hadronTecnicoAPI) {
+        window.hadronTecnicoAPI.openRustDesk(cleanId);
+        toast.success("Abrindo conexão remota");
+      } else {
+        toast.error("Função disponível apenas no app técnico");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, navigate]);
+  }, [remoteId]);
 
   const handleFinish = useCallback(async () => {
     try {
