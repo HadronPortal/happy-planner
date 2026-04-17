@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Copy, RotateCcw, X } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
+import procionLogoSrc from "@/assets/procion-logo.png";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -119,7 +120,7 @@ export default function Tecnico() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30 shrink-0">
             <div className="flex items-center gap-3">
-              <img src={logoSrc} alt="Hádron" className="h-7 object-contain" />
+              <img src={procionLogoSrc} alt="Procion" className="h-7 object-contain" />
               <div className="h-4 w-px bg-border mx-1" />
               <Badge variant="outline" className="border-secondary/50 text-secondary bg-secondary/10 font-bold uppercase tracking-wider text-[10px] px-2 py-0 h-5">
                 AMBIENTE TÉCNICO
@@ -175,11 +176,12 @@ export default function Tecnico() {
               </div>
 
               {/* Action Buttons - Bottom of panel */}
-              <div className="mt-auto flex flex-col gap-2">
+              <div className="mt-auto flex flex-col gap-3 items-center">
+                <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
                 <button
                   onClick={handleFinish}
                   disabled={!remoteId}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <X className="h-3.5 w-3.5" />
                   Finalizar suporte
