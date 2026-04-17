@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, X, History, Plug, Trash2 } from "lucide-react";
+import { Copy, RotateCcw, X, History, Plug, Trash2, Pencil, Check } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import procionLogoSrc from "@/assets/procion-logo.png";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,10 @@ export default function Tecnico() {
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [isConnecting] = useState(false);
-  const { history, addConnection, removeConnection, clearHistory } = useConnectionHistory();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState("");
+  const { history, addConnection, renameConnection, removeConnection, clearHistory } =
+    useConnectionHistory();
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -40,6 +43,24 @@ export default function Tecnico() {
     }
   }, [searchParams]);
 
+  const lookupClientName = useCallback(async (cleanId: string): Promise<string | undefined> => {
+    try {
+      const { data } = await supabase
+        .from("support_online_clients")
+        .select("hostname, empresa")
+        .eq("rustdesk_id", cleanId)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (data) {
+        return data.empresa || data.hostname || undefined;
+      }
+    } catch (err) {
+      console.error("Erro ao buscar nome do cliente:", err);
+    }
+    return undefined;
+  }, []);
+
   const handleConnect = useCallback(async () => {
     const cleanId = remoteId.replace(/\D/g, "");
     if (!cleanId) {
@@ -47,6 +68,7 @@ export default function Tecnico() {
       return;
     }
 
+    let clientName: string | undefined;
     try {
       const { error } = await supabase
         .from("support_online_clients")
@@ -58,6 +80,7 @@ export default function Tecnico() {
         .in("status", ["online", "em_atendimento"]);
 
       if (error) console.error("Erro ao atualizar status:", error);
+      clientName = await lookupClientName(cleanId);
     } catch (err) {
       console.error("Erro inesperado ao conectar:", err);
     }
@@ -65,43 +88,47 @@ export default function Tecnico() {
     try {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(cleanId);
-        addConnection(cleanId);
+        addConnection(cleanId, clientName);
         toast.success("Abrindo conexão remota");
       } else {
-        addConnection(cleanId);
+        addConnection(cleanId, clientName);
         toast.error("Função disponível apenas no app técnico");
       }
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, addConnection]);
+  }, [remoteId, addConnection, lookupClientName]);
 
   const handleSelectHistory = useCallback((id: string) => {
     setRemoteId(formatRustDeskId(id));
   }, []);
 
   const handleQuickConnect = useCallback(
-    async (id: string) => {
+    async (id: string, existingName?: string) => {
       setRemoteId(formatRustDeskId(id));
+      let clientName = existingName;
       try {
         await supabase
           .from("support_online_clients")
           .update({ status: "em_atendimento", updated_at: new Date().toISOString() })
           .eq("rustdesk_id", id)
           .in("status", ["online", "em_atendimento"]);
+        if (!clientName) {
+          clientName = await lookupClientName(id);
+        }
       } catch (err) {
         console.error(err);
       }
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(id);
-        addConnection(id);
+        addConnection(id, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         toast.error("Função disponível apenas no app técnico");
       }
     },
-    [addConnection],
+    [addConnection, lookupClientName],
   );
 
   const handleCopyHistory = useCallback(async (id: string) => {
@@ -113,18 +140,30 @@ export default function Tecnico() {
     }
   }, []);
 
+  const startEditing = useCallback((id: string, currentName?: string) => {
+    setEditingId(id);
+    setEditingName(currentName ?? "");
+  }, []);
+
+  const commitEditing = useCallback(() => {
+    if (editingId) {
+      renameConnection(editingId, editingName);
+      toast.success("Nome atualizado");
+    }
+    setEditingId(null);
+    setEditingName("");
+  }, [editingId, editingName, renameConnection]);
+
   const handleFinish = useCallback(async () => {
     try {
       const rawId = searchParams.get("id");
       if (rawId) {
         const cleanId = rawId.replace(/\s/g, "");
-        
-        // Finaliza o atendimento no banco de dados
         const { error } = await supabase
           .from("support_online_clients")
-          .update({ 
-            status: "offline", 
-            updated_at: new Date().toISOString() 
+          .update({
+            status: "offline",
+            updated_at: new Date().toISOString(),
           })
           .eq("rustdesk_id", cleanId)
           .in("status", ["online", "em_atendimento"]);
@@ -136,13 +175,11 @@ export default function Tecnico() {
       }
 
       toast.success("Atendimento finalizado com sucesso");
-      
-      // Fecha a janela se estiver no Electron
+
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.closeWindow();
       }
-      
-      // Navega para o admin se o app continuar aberto
+
       navigate("/admin");
     } catch (err) {
       console.error("Erro inesperado:", err);
@@ -182,7 +219,7 @@ export default function Tecnico() {
 
           {/* Body */}
           <div className="flex flex-col md:flex-row min-h-[480px]">
-            {/* Left panel - User Info (The "Technician" module) */}
+            {/* Left panel - User Info */}
             <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 shrink-0">
               <div>
                 <h2 className="text-sm font-semibold text-foreground mb-0.5">Modulo tecnico</h2>
@@ -191,7 +228,6 @@ export default function Tecnico() {
                 </p>
               </div>
 
-              {/* Your Technical ID */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Seu ID</span>
@@ -204,7 +240,6 @@ export default function Tecnico() {
                 </p>
               </div>
 
-              {/* Session Password */}
               <div className="space-y-1">
                 <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Token de Acesso</span>
                 <div className="flex items-center gap-2 pl-2">
@@ -215,7 +250,6 @@ export default function Tecnico() {
                 </div>
               </div>
 
-              {/* Action Buttons - Bottom of panel */}
               <div className="mt-auto flex flex-col gap-3 items-center">
                 <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
                 <button
@@ -231,10 +265,10 @@ export default function Tecnico() {
 
             {/* Right panel - Manual Connection */}
             <div className="flex-1 flex flex-col p-6 gap-5">
-              <div className="flex flex-col items-center gap-5 w-full max-w-md mx-auto">
-                <div className="space-y-2 text-center">
+              <div className="flex flex-col items-center gap-4 w-full max-w-md mx-auto">
+                <div className="space-y-1 text-center">
                   <h3 className="text-lg font-semibold text-foreground">Conectar a um cliente</h3>
-                  <p className="text-sm text-muted-foreground">Digite ou cole o ID do RustDesk do cliente.</p>
+                  <p className="text-xs text-muted-foreground">Digite ou cole o ID do RustDesk do cliente.</p>
                 </div>
 
                 <input
@@ -255,20 +289,20 @@ export default function Tecnico() {
                     if (e.key === "Enter") handleConnect();
                   }}
                   placeholder="000 000 000"
-                  className="w-full px-4 py-4 rounded-xl border border-border bg-muted/40 text-center text-2xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
+                  className="w-full px-4 py-3 rounded-xl border border-border bg-muted/40 text-center text-xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
                 />
 
                 <Button
                   onClick={handleConnect}
                   disabled={!remoteId.replace(/\D/g, "")}
-                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-11 text-sm uppercase tracking-wide transition-all shadow-sm"
+                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-sm uppercase tracking-wide transition-all shadow-sm"
                 >
                   Conectar
                 </Button>
               </div>
 
-              {/* Recent connections */}
-              <div className="w-full max-w-md mx-auto mt-2 flex-1 flex flex-col min-h-0">
+              {/* Recent connections - card grid */}
+              <div className="w-full mt-1 flex-1 flex flex-col min-h-0">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <History className="h-3.5 w-3.5 text-muted-foreground" />
@@ -290,49 +324,107 @@ export default function Tecnico() {
                 </div>
 
                 {history.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center">
+                  <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-8 text-center">
                     <p className="text-xs text-muted-foreground/70">
                       Nenhuma conexão recente. IDs conectados aparecerão aqui.
                     </p>
                   </div>
                 ) : (
-                  <div className="flex-1 overflow-y-auto rounded-lg border border-border bg-muted/10 divide-y divide-border max-h-[200px]">
-                    {history.map((item) => (
-                      <div
-                        key={item.id}
-                        className="group flex items-center gap-2 px-3 py-2 hover:bg-muted/40 transition-colors"
-                      >
-                        <button
-                          onClick={() => handleSelectHistory(item.id)}
-                          className="flex-1 text-left font-mono text-sm font-semibold text-foreground tracking-wider hover:text-secondary transition-colors"
-                          title="Preencher campo com este ID"
-                        >
-                          {formatRustDeskId(item.id)}
-                        </button>
-                        <button
-                          onClick={() => handleCopyHistory(item.id)}
-                          className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
-                          title="Copiar ID"
-                        >
-                          <Copy className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          onClick={() => removeConnection(item.id)}
-                          className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
-                          title="Remover do histórico"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleQuickConnect(item.id)}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-secondary/15 text-secondary text-[11px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
-                          title="Conectar novamente"
-                        >
-                          <Plug className="h-3 w-3" />
-                          Conectar
-                        </button>
-                      </div>
-                    ))}
+                  <div className="flex-1 overflow-y-auto max-h-[260px] pr-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {history.map((item) => {
+                        const isRecent = Date.now() - item.lastUsedAt < 1000 * 60 * 60 * 24;
+                        const isEditing = editingId === item.id;
+                        return (
+                          <div
+                            key={item.id}
+                            className="group relative rounded-xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-secondary/40 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 transition-all p-3 flex flex-col gap-2"
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex items-center gap-2 min-w-0 flex-1">
+                                <span
+                                  className={`h-2 w-2 rounded-full shrink-0 ${
+                                    isRecent ? "bg-[hsl(var(--status-connected))]" : "bg-muted-foreground/40"
+                                  }`}
+                                  title={isRecent ? "Recente" : "Antigo"}
+                                />
+                                {isEditing ? (
+                                  <input
+                                    autoFocus
+                                    value={editingName}
+                                    onChange={(e) => setEditingName(e.target.value)}
+                                    onBlur={commitEditing}
+                                    onKeyDown={(e) => {
+                                      if (e.key === "Enter") commitEditing();
+                                      if (e.key === "Escape") {
+                                        setEditingId(null);
+                                        setEditingName("");
+                                      }
+                                    }}
+                                    placeholder="Nome do cliente"
+                                    className="flex-1 min-w-0 bg-background border border-border rounded px-1.5 py-0.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                                  />
+                                ) : (
+                                  <button
+                                    onClick={() => handleSelectHistory(item.id)}
+                                    className="text-xs font-semibold text-foreground truncate text-left hover:text-secondary transition-colors"
+                                    title="Preencher campo com este ID"
+                                  >
+                                    {item.name || "Sem nome"}
+                                  </button>
+                                )}
+                              </div>
+                              <button
+                                onClick={() =>
+                                  isEditing ? commitEditing() : startEditing(item.id, item.name)
+                                }
+                                className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
+                                title={isEditing ? "Salvar nome" : "Editar nome"}
+                              >
+                                {isEditing ? (
+                                  <Check className="h-3 w-3" />
+                                ) : (
+                                  <Pencil className="h-3 w-3" />
+                                )}
+                              </button>
+                            </div>
+
+                            <button
+                              onClick={() => handleSelectHistory(item.id)}
+                              className="text-left font-mono text-sm font-bold text-foreground tracking-wider hover:text-secondary transition-colors"
+                              title="Preencher campo com este ID"
+                            >
+                              {formatRustDeskId(item.id)}
+                            </button>
+
+                            <div className="flex items-center gap-1.5 mt-auto">
+                              <button
+                                onClick={() => handleQuickConnect(item.id, item.name)}
+                                className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md bg-secondary/15 text-secondary text-[10px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                                title="Conectar novamente"
+                              >
+                                <Plug className="h-3 w-3" />
+                                Conectar
+                              </button>
+                              <button
+                                onClick={() => handleCopyHistory(item.id)}
+                                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                title="Copiar ID"
+                              >
+                                <Copy className="h-3 w-3" />
+                              </button>
+                              <button
+                                onClick={() => removeConnection(item.id)}
+                                className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                                title="Remover do histórico"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </div>
