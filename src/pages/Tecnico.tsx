@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, X } from "lucide-react";
+import { Copy, RotateCcw, X, History, Plug, Trash2 } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import procionLogoSrc from "@/assets/procion-logo.png";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 import { supabase } from "@/integrations/supabase/client";
+import { useConnectionHistory, formatRustDeskId } from "@/hooks/useConnectionHistory";
 
 declare global {
   interface Window {
@@ -30,6 +31,7 @@ export default function Tecnico() {
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [isConnecting] = useState(false);
+  const { history, addConnection, removeConnection, clearHistory } = useConnectionHistory();
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -63,15 +65,53 @@ export default function Tecnico() {
     try {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(cleanId);
+        addConnection(cleanId);
         toast.success("Abrindo conexão remota");
       } else {
+        addConnection(cleanId);
         toast.error("Função disponível apenas no app técnico");
       }
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId]);
+  }, [remoteId, addConnection]);
+
+  const handleSelectHistory = useCallback((id: string) => {
+    setRemoteId(formatRustDeskId(id));
+  }, []);
+
+  const handleQuickConnect = useCallback(
+    async (id: string) => {
+      setRemoteId(formatRustDeskId(id));
+      try {
+        await supabase
+          .from("support_online_clients")
+          .update({ status: "em_atendimento", updated_at: new Date().toISOString() })
+          .eq("rustdesk_id", id)
+          .in("status", ["online", "em_atendimento"]);
+      } catch (err) {
+        console.error(err);
+      }
+      if (window.hadronTecnicoAPI) {
+        window.hadronTecnicoAPI.openRustDesk(id);
+        addConnection(id);
+        toast.success("Abrindo conexão remota");
+      } else {
+        toast.error("Função disponível apenas no app técnico");
+      }
+    },
+    [addConnection],
+  );
+
+  const handleCopyHistory = useCallback(async (id: string) => {
+    try {
+      await navigator.clipboard.writeText(id);
+      toast.success("ID copiado");
+    } catch {
+      toast.error("Não foi possível copiar");
+    }
+  }, []);
 
   const handleFinish = useCallback(async () => {
     try {
