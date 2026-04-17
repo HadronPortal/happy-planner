@@ -41,90 +41,76 @@ export default function HadronSuporte() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row h-[480px]">
-            {/* Left panel */}
-            <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5">
-              <div>
-                <h2 className="text-sm font-semibold text-foreground mb-0.5">{hostname}</h2>
-                <p className="text-[11px] text-muted-foreground leading-snug">
-                  Seu computador pode ser acessado com este ID e senha.
+          <div className="flex flex-col items-center justify-center px-6 py-12 md:py-16 min-h-[480px]">
+            <div className="w-full max-w-xl flex flex-col items-center text-center space-y-8">
+              {/* Hostname */}
+              <div className="space-y-1">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-semibold">
+                  {hostname}
                 </p>
               </div>
 
-              {/* ID */}
-              <div className="space-y-2 rounded-lg border border-primary/30 bg-primary/5 p-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-primary">Seu ID</span>
-                  <button
-                    onClick={copiarId}
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                    title="Copiar ID"
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <p className="text-3xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-tight">
-                  {supportId}
-                </p>
-                <p className="text-[11px] text-muted-foreground leading-snug">
+              {/* ID em destaque */}
+              <div className="w-full space-y-5">
+                <p className="text-sm text-muted-foreground">
                   Informe este código ao técnico
                 </p>
-                <button
-                  onClick={copiarId}
-                  className="w-full flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-3 py-2 text-xs font-semibold"
-                >
-                  <Copy className="h-3.5 w-3.5" />
-                  Copiar ID
-                </button>
-              </div>
 
-              {/* Password */}
-              <div className="space-y-1">
-                <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2">Senha de uso único</span>
-                <div className="flex items-center gap-2 pl-2">
-                  <span className="text-base font-mono font-semibold text-foreground tracking-wider">{password}</span>
-                  <button onClick={refreshPassword} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <RotateCcw className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Security check */}
-              <div className="mt-auto flex justify-center">
-                <img src={logoSrc} alt="Hádron" className="h-14 object-contain" />
-              </div>
-            </div>
-            {/* Right panel */}
-            <div className="flex-1 flex flex-col items-center justify-center p-8 bg-muted/5">
-              <div className="max-w-sm w-full text-center space-y-8">
-                <div className="relative inline-block">
-                  <img src={techAvatarSrc} alt="Técnico" className="h-40 w-40 object-contain" loading="lazy" width={512} height={512} />
-                </div>
-
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-foreground">Aguardando Técnico</h3>
-                  <p className="text-sm text-muted-foreground px-4">
-                    Informe o ID e a Senha para que o técnico possa iniciar o atendimento remoto com segurança.
+                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-8 py-8 shadow-lg shadow-primary/10">
+                  <p className="text-5xl md:text-6xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-none">
+                    {supportId}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 pt-4">
-                  <button
-                    onClick={fechar}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-3 text-xs font-semibold text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all duration-200"
-                  >
-                    <X className="h-4 w-4" />
-                    Finalizar Suporte
-                  </button>
-                  
+                <p className="text-xs text-muted-foreground max-w-md mx-auto leading-relaxed">
+                  Envie este código ao suporte para iniciar o atendimento remoto.
+                </p>
+              </div>
+
+              {/* Senha discreta */}
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                <span className="uppercase tracking-wider">Senha</span>
+                <span className="font-mono font-semibold text-foreground tracking-wider text-sm">{password}</span>
+                <button
+                  onClick={refreshPassword}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                  title="Gerar nova senha"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                </button>
+              </div>
+
+              {/* Ações */}
+              <div className="w-full max-w-xs flex flex-col gap-2 pt-2">
+                <button
+                  onClick={copiarId}
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-4 py-3 text-sm font-semibold shadow-md shadow-primary/20"
+                >
+                  <Copy className="h-4 w-4" />
+                  Copiar ID
+                </button>
+
+                <div className="grid grid-cols-2 gap-2">
                   <button
                     onClick={reiniciar}
-                    className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-3 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                    className="flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-3 py-2 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                   >
-                    <RotateCcw className="h-4 w-4" />
-                    Reiniciar Conexão
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    Reiniciar
+                  </button>
+                  <button
+                    onClick={fechar}
+                    className="flex items-center justify-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2 text-xs font-semibold text-destructive hover:bg-destructive hover:text-destructive-foreground transition-all"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    Finalizar
                   </button>
                 </div>
+              </div>
+
+              {/* Logo */}
+              <div className="pt-4">
+                <img src={logoSrc} alt="Hádron" className="h-10 object-contain opacity-80" />
               </div>
             </div>
           </div>
