@@ -41,8 +41,8 @@ export default function HadronSuporte() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col items-center justify-center px-6 py-12 md:py-16 min-h-[480px]">
-            <div className="w-full max-w-xl flex flex-col items-center text-center space-y-8">
+          <div className="flex flex-col items-center justify-center px-6 py-6 md:py-8">
+            <div className="w-full max-w-xl flex flex-col items-center text-center space-y-4">
               {/* Hostname */}
               <div className="space-y-1">
                 <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-semibold">
@@ -51,13 +51,13 @@ export default function HadronSuporte() {
               </div>
 
               {/* ID em destaque */}
-              <div className="w-full space-y-5">
+              <div className="w-full space-y-3">
                 <p className="text-sm text-muted-foreground">
                   Informe este código ao técnico
                 </p>
 
-                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-8 py-8 shadow-lg shadow-primary/10">
-                  <p className="text-5xl md:text-6xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-none">
+                <div className="rounded-2xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 px-6 py-5 shadow-lg shadow-primary/10">
+                  <p className="text-3xl md:text-4xl font-extrabold tracking-[0.18em] text-foreground font-mono leading-none">
                     {supportId}
                   </p>
                 </div>
@@ -81,10 +81,10 @@ export default function HadronSuporte() {
               </div>
 
               {/* Ações */}
-              <div className="w-full max-w-xs flex flex-col gap-2 pt-2">
+              <div className="w-full max-w-xs flex flex-col gap-2 pt-1">
                 <button
                   onClick={copiarId}
-                  className="flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-4 py-3 text-sm font-semibold shadow-md shadow-primary/20"
+                  className="flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors px-4 py-2.5 text-sm font-semibold shadow-md shadow-primary/20"
                 >
                   <Copy className="h-4 w-4" />
                   Copiar ID
@@ -109,8 +109,8 @@ export default function HadronSuporte() {
               </div>
 
               {/* Logo */}
-              <div className="pt-4">
-                <img src={logoSrc} alt="Hádron" className="h-20 object-contain opacity-90" />
+              <div className="pt-2">
+                <img src={logoSrc} alt="Hádron" className="h-14 object-contain opacity-90" />
               </div>
             </div>
           </div>
