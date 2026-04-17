@@ -181,7 +181,7 @@ export default function Tecnico() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col md:flex-row h-[480px]">
+          <div className="flex flex-col md:flex-row min-h-[480px]">
             {/* Left panel - User Info (The "Technician" module) */}
             <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 shrink-0">
               <div>
@@ -230,9 +230,9 @@ export default function Tecnico() {
             </div>
 
             {/* Right panel - Manual Connection */}
-            <div className="flex-1 flex flex-col p-6 items-center justify-center text-center">
-              <div className="flex flex-col items-center gap-5 w-full max-w-md">
-                <div className="space-y-2">
+            <div className="flex-1 flex flex-col p-6 gap-5">
+              <div className="flex flex-col items-center gap-5 w-full max-w-md mx-auto">
+                <div className="space-y-2 text-center">
                   <h3 className="text-lg font-semibold text-foreground">Conectar a um cliente</h3>
                   <p className="text-sm text-muted-foreground">Digite ou cole o ID do RustDesk do cliente.</p>
                 </div>
@@ -265,6 +265,76 @@ export default function Tecnico() {
                 >
                   Conectar
                 </Button>
+              </div>
+
+              {/* Recent connections */}
+              <div className="w-full max-w-md mx-auto mt-2 flex-1 flex flex-col min-h-0">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <History className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      Conexões recentes
+                    </span>
+                    {history.length > 0 && (
+                      <span className="text-[10px] text-muted-foreground/60">({history.length})</span>
+                    )}
+                  </div>
+                  {history.length > 0 && (
+                    <button
+                      onClick={clearHistory}
+                      className="text-[10px] uppercase tracking-wider text-muted-foreground/70 hover:text-destructive transition-colors"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                </div>
+
+                {history.length === 0 ? (
+                  <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center">
+                    <p className="text-xs text-muted-foreground/70">
+                      Nenhuma conexão recente. IDs conectados aparecerão aqui.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="flex-1 overflow-y-auto rounded-lg border border-border bg-muted/10 divide-y divide-border max-h-[200px]">
+                    {history.map((item) => (
+                      <div
+                        key={item.id}
+                        className="group flex items-center gap-2 px-3 py-2 hover:bg-muted/40 transition-colors"
+                      >
+                        <button
+                          onClick={() => handleSelectHistory(item.id)}
+                          className="flex-1 text-left font-mono text-sm font-semibold text-foreground tracking-wider hover:text-secondary transition-colors"
+                          title="Preencher campo com este ID"
+                        >
+                          {formatRustDeskId(item.id)}
+                        </button>
+                        <button
+                          onClick={() => handleCopyHistory(item.id)}
+                          className="p-1.5 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
+                          title="Copiar ID"
+                        >
+                          <Copy className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => removeConnection(item.id)}
+                          className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                          title="Remover do histórico"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleQuickConnect(item.id)}
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-secondary/15 text-secondary text-[11px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                          title="Conectar novamente"
+                        >
+                          <Plug className="h-3 w-3" />
+                          Conectar
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
