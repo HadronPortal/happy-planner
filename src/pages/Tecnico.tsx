@@ -380,9 +380,9 @@ export default function Tecnico() {
                                   />
                                 ) : (
                                   <button
-                                    onClick={() => handleSelectHistory(item.id)}
+                                    onClick={() => handleSelectHistory(item.id, item.password)}
                                     className="text-xs font-semibold text-foreground truncate text-left hover:text-secondary transition-colors"
-                                    title="Preencher campo com este ID"
+                                    title="Preencher ID e senha"
                                   >
                                     {item.name || "Sem nome"}
                                   </button>
