@@ -11,14 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useConnectionHistory, formatRustDeskId } from "@/hooks/useConnectionHistory";
 import { useActiveSessions, formatSessionTime } from "@/hooks/useActiveSessions";
 
-declare global {
-  interface Window {
-    hadronTecnicoAPI?: {
-      openRustDesk: (id: string) => void;
-      closeWindow: () => void;
-    };
-  }
-}
+// hadronTecnicoAPI typed in src/vite-env.d.ts
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -331,14 +324,14 @@ export default function Tecnico() {
                             <div className="flex items-center gap-2 min-w-0 flex-1">
                               <span className="h-2 w-2 rounded-full bg-[hsl(var(--status-connected))] animate-pulse-dot shrink-0" />
                               <span className="text-xs font-semibold text-foreground truncate">
-                                {s.clientName || formatRustDeskId(s.clientId)}
+                                {s.hostname || s.clientName || formatRustDeskId(s.clientId)}
                               </span>
                             </div>
                             <Badge
                               variant="outline"
                               className="border-[hsl(var(--status-connected))]/50 text-[hsl(var(--status-connected))] bg-[hsl(var(--status-connected))]/10 font-bold uppercase tracking-wider text-[9px] px-1.5 py-0 h-4 shrink-0"
                             >
-                              Ativa
+                              {s.status || "Ativa"}
                             </Badge>
                           </div>
                           <span className="font-mono text-xs font-bold text-foreground tracking-wider">
@@ -346,15 +339,16 @@ export default function Tecnico() {
                           </span>
                           <div className="flex items-center justify-between gap-2 mt-auto">
                             <span className="text-[10px] font-mono text-muted-foreground">
-                              início {formatSessionTime(s.startedAt)}
+                              Iniciado às {formatSessionTime(s.startedAt)}
                             </span>
                             <button
-                              onClick={() => endSession(s.clientId)}
-                              className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                              onClick={() => endSession(s.id)}
+                              className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
                               title="Encerrar sessão"
                               aria-label="Encerrar sessão"
                             >
                               <PhoneOff className="h-3 w-3" />
+                              Encerrar
                             </button>
                           </div>
                         </div>
