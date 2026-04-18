@@ -46,7 +46,7 @@ export function useConnectionHistory() {
     setHistory(readStorage());
   }, []);
 
-  const addConnection = useCallback((rawId: string, name?: string) => {
+  const addConnection = useCallback((rawId: string, name?: string, password?: string) => {
     const cleanId = rawId.replace(/\D/g, "");
     if (!cleanId) return;
     setHistory((prev) => {
@@ -56,6 +56,7 @@ export function useConnectionHistory() {
         {
           id: cleanId,
           name: name ?? existing?.name,
+          password: password ?? existing?.password,
           lastUsedAt: Date.now(),
         },
         ...filtered,
