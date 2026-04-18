@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      support_access_history: {
+        Row: {
+          client_hostname: string | null
+          client_rustdesk_id: string | null
+          created_at: string | null
+          id: string
+          technician_hostname: string | null
+        }
+        Insert: {
+          client_hostname?: string | null
+          client_rustdesk_id?: string | null
+          created_at?: string | null
+          id?: string
+          technician_hostname?: string | null
+        }
+        Update: {
+          client_hostname?: string | null
+          client_rustdesk_id?: string | null
+          created_at?: string | null
+          id?: string
+          technician_hostname?: string | null
+        }
+        Relationships: []
+      }
       support_online_clients: {
         Row: {
           app_version: string
