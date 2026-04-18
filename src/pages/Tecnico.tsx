@@ -101,13 +101,15 @@ export default function Tecnico() {
     }
   }, [remoteId, remotePassword, addConnection, lookupClientName]);
 
-  const handleSelectHistory = useCallback((id: string) => {
+  const handleSelectHistory = useCallback((id: string, savedPassword?: string) => {
     setRemoteId(formatRustDeskId(id));
+    if (savedPassword !== undefined) setRemotePassword(savedPassword);
   }, []);
 
   const handleQuickConnect = useCallback(
-    async (id: string, existingName?: string) => {
+    async (id: string, existingName?: string, savedPassword?: string) => {
       setRemoteId(formatRustDeskId(id));
+      if (savedPassword !== undefined) setRemotePassword(savedPassword);
       let clientName = existingName;
       try {
         await supabase
@@ -123,7 +125,7 @@ export default function Tecnico() {
       }
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(id);
-        addConnection(id, clientName);
+        addConnection(id, clientName, savedPassword);
         toast.success("Abrindo conexão remota");
       } else {
         toast.error("Função disponível apenas no app técnico");
