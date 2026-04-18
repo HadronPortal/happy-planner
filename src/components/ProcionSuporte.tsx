@@ -1,4 +1,4 @@
-import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
+import { Copy, RotateCcw, X, Pencil, History, Trash2 } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
