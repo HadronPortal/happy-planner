@@ -11,14 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useConnectionHistory, formatRustDeskId } from "@/hooks/useConnectionHistory";
 import { useActiveSessions, formatSessionTime } from "@/hooks/useActiveSessions";
 
-declare global {
-  interface Window {
-    hadronTecnicoAPI?: {
-      openRustDesk: (id: string) => void;
-      closeWindow: () => void;
-    };
-  }
-}
+// hadronTecnicoAPI typed in src/vite-env.d.ts
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
