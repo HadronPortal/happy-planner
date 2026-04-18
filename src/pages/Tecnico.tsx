@@ -30,7 +30,6 @@ export default function Tecnico() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
-  const [remotePassword, setRemotePassword] = useState("");
   const [isConnecting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
@@ -89,27 +88,25 @@ export default function Tecnico() {
     try {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(cleanId);
-        addConnection(cleanId, clientName, remotePassword || undefined);
+        addConnection(cleanId, clientName);
         toast.success("Abrindo conexão remota");
       } else {
-        addConnection(cleanId, clientName, remotePassword || undefined);
+        addConnection(cleanId, clientName);
         toast.error("Função disponível apenas no app técnico");
       }
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, remotePassword, addConnection, lookupClientName]);
+  }, [remoteId, addConnection, lookupClientName]);
 
-  const handleSelectHistory = useCallback((id: string, savedPassword?: string) => {
+  const handleSelectHistory = useCallback((id: string) => {
     setRemoteId(formatRustDeskId(id));
-    if (savedPassword !== undefined) setRemotePassword(savedPassword);
   }, []);
 
   const handleQuickConnect = useCallback(
-    async (id: string, existingName?: string, savedPassword?: string) => {
+    async (id: string, existingName?: string) => {
       setRemoteId(formatRustDeskId(id));
-      if (savedPassword !== undefined) setRemotePassword(savedPassword);
       let clientName = existingName;
       try {
         await supabase
@@ -125,7 +122,7 @@ export default function Tecnico() {
       }
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(id);
-        addConnection(id, clientName, savedPassword);
+        addConnection(id, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         toast.error("Função disponível apenas no app técnico");
@@ -291,19 +288,8 @@ export default function Tecnico() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleConnect();
                   }}
-                  placeholder="ID do cliente"
+                  placeholder=""
                   className="w-full px-4 py-3 rounded-xl border border-border bg-muted/40 text-center text-xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
-                />
-
-                <input
-                  type="text"
-                  value={remotePassword}
-                  onChange={(e) => setRemotePassword(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleConnect();
-                  }}
-                  placeholder="Senha de acesso"
-                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/40 text-center text-base font-semibold text-foreground tracking-[0.2em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
                 />
 
                 <Button
@@ -380,9 +366,9 @@ export default function Tecnico() {
                                   />
                                 ) : (
                                   <button
-                                    onClick={() => handleSelectHistory(item.id, item.password)}
+                                    onClick={() => handleSelectHistory(item.id)}
                                     className="text-xs font-semibold text-foreground truncate text-left hover:text-secondary transition-colors"
-                                    title="Preencher ID e senha"
+                                    title="Preencher campo com este ID"
                                   >
                                     {item.name || "Sem nome"}
                                   </button>
@@ -404,25 +390,16 @@ export default function Tecnico() {
                             </div>
 
                             <button
-                              onClick={() => handleSelectHistory(item.id, item.password)}
+                              onClick={() => handleSelectHistory(item.id)}
                               className="text-left font-mono text-sm font-bold text-foreground tracking-wider hover:text-secondary transition-colors"
-                              title="Preencher ID e senha"
+                              title="Preencher campo com este ID"
                             >
                               {formatRustDeskId(item.id)}
                             </button>
 
-                            {item.password && (
-                              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
-                                <span className="uppercase tracking-wider opacity-70">Senha:</span>
-                                <span className="text-foreground/80 tracking-widest">
-                                  {"•".repeat(Math.min(item.password.length, 8))}
-                                </span>
-                              </div>
-                            )}
-
                             <div className="flex items-center gap-1.5 mt-auto">
                               <button
-                                onClick={() => handleQuickConnect(item.id, item.name, item.password)}
+                                onClick={() => handleQuickConnect(item.id, item.name)}
                                 className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md bg-secondary/15 text-secondary text-[10px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
                                 title="Conectar novamente"
                               >

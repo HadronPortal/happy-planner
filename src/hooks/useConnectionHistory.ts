@@ -6,7 +6,6 @@ const MAX_ITEMS = 20;
 export interface RecentConnection {
   id: string;
   name?: string;
-  password?: string;
   lastUsedAt: number;
 }
 
@@ -21,7 +20,6 @@ function readStorage(): RecentConnection[] {
       .map((item) => ({
         id: item.id.replace(/\D/g, ""),
         name: typeof item.name === "string" ? item.name : undefined,
-        password: typeof item.password === "string" ? item.password : undefined,
         lastUsedAt: typeof item.lastUsedAt === "number" ? item.lastUsedAt : Date.now(),
       }))
       .filter((item) => item.id.length > 0)
@@ -46,7 +44,7 @@ export function useConnectionHistory() {
     setHistory(readStorage());
   }, []);
 
-  const addConnection = useCallback((rawId: string, name?: string, password?: string) => {
+  const addConnection = useCallback((rawId: string, name?: string) => {
     const cleanId = rawId.replace(/\D/g, "");
     if (!cleanId) return;
     setHistory((prev) => {
@@ -56,7 +54,6 @@ export function useConnectionHistory() {
         {
           id: cleanId,
           name: name ?? existing?.name,
-          password: password ?? existing?.password,
           lastUsedAt: Date.now(),
         },
         ...filtered,
