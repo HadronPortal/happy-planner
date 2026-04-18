@@ -291,8 +291,19 @@ export default function Tecnico() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleConnect();
                   }}
-                  placeholder=""
+                  placeholder="ID do cliente"
                   className="w-full px-4 py-3 rounded-xl border border-border bg-muted/40 text-center text-xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
+                />
+
+                <input
+                  type="text"
+                  value={remotePassword}
+                  onChange={(e) => setRemotePassword(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleConnect();
+                  }}
+                  placeholder="Senha de acesso"
+                  className="w-full px-4 py-2.5 rounded-xl border border-border bg-muted/40 text-center text-base font-semibold text-foreground tracking-[0.2em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
                 />
 
                 <Button
