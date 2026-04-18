@@ -310,6 +310,60 @@ export default function Tecnico() {
                 </Button>
               </div>
 
+              {/* Active sessions - live connections in this app session */}
+              {sessions.length > 0 && (
+                <div className="w-full mt-1 flex flex-col">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Radio className="h-3.5 w-3.5 text-[hsl(var(--status-connected))] animate-pulse-dot" />
+                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      Sessões ativas
+                    </span>
+                    <span className="text-[10px] text-muted-foreground/60">({sessions.length})</span>
+                  </div>
+                  <div className="overflow-y-auto max-h-[180px] pr-1 scrollbar-themed">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {sessions.map((s) => (
+                        <div
+                          key={s.id}
+                          className="group relative rounded-xl border border-[hsl(var(--status-connected))]/40 bg-[hsl(var(--status-connected))]/5 p-3 flex flex-col gap-1.5"
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <span className="h-2 w-2 rounded-full bg-[hsl(var(--status-connected))] animate-pulse-dot shrink-0" />
+                              <span className="text-xs font-semibold text-foreground truncate">
+                                {s.clientName || formatRustDeskId(s.clientId)}
+                              </span>
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className="border-[hsl(var(--status-connected))]/50 text-[hsl(var(--status-connected))] bg-[hsl(var(--status-connected))]/10 font-bold uppercase tracking-wider text-[9px] px-1.5 py-0 h-4 shrink-0"
+                            >
+                              Ativa
+                            </Badge>
+                          </div>
+                          <span className="font-mono text-xs font-bold text-foreground tracking-wider">
+                            {formatRustDeskId(s.clientId)}
+                          </span>
+                          <div className="flex items-center justify-between gap-2 mt-auto">
+                            <span className="text-[10px] font-mono text-muted-foreground">
+                              início {formatSessionTime(s.startedAt)}
+                            </span>
+                            <button
+                              onClick={() => endSession(s.clientId)}
+                              className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                              title="Encerrar sessão"
+                              aria-label="Encerrar sessão"
+                            >
+                              <PhoneOff className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Recent connections - card grid */}
               <div className="w-full mt-1 flex-1 flex flex-col min-h-0">
                 <div className="flex items-center justify-between mb-2">
