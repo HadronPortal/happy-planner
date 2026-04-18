@@ -404,16 +404,25 @@ export default function Tecnico() {
                             </div>
 
                             <button
-                              onClick={() => handleSelectHistory(item.id)}
+                              onClick={() => handleSelectHistory(item.id, item.password)}
                               className="text-left font-mono text-sm font-bold text-foreground tracking-wider hover:text-secondary transition-colors"
-                              title="Preencher campo com este ID"
+                              title="Preencher ID e senha"
                             >
                               {formatRustDeskId(item.id)}
                             </button>
 
+                            {item.password && (
+                              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-mono">
+                                <span className="uppercase tracking-wider opacity-70">Senha:</span>
+                                <span className="text-foreground/80 tracking-widest">
+                                  {"•".repeat(Math.min(item.password.length, 8))}
+                                </span>
+                              </div>
+                            )}
+
                             <div className="flex items-center gap-1.5 mt-auto">
                               <button
-                                onClick={() => handleQuickConnect(item.id, item.name)}
+                                onClick={() => handleQuickConnect(item.id, item.name, item.password)}
                                 className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md bg-secondary/15 text-secondary text-[10px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
                                 title="Conectar novamente"
                               >
