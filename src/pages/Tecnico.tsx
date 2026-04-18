@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, X, History, Plug, Trash2, Pencil, Check } from "lucide-react";
+import { Copy, RotateCcw, X, History, Plug, Trash2, Pencil, Check, Radio, PhoneOff } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import procionLogoSrc from "@/assets/procion-logo.png";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 import { supabase } from "@/integrations/supabase/client";
 import { useConnectionHistory, formatRustDeskId } from "@/hooks/useConnectionHistory";
+import { useActiveSessions, formatSessionTime } from "@/hooks/useActiveSessions";
 
 declare global {
   interface Window {
@@ -35,6 +36,7 @@ export default function Tecnico() {
   const [editingName, setEditingName] = useState("");
   const { history, addConnection, renameConnection, removeConnection, clearHistory } =
     useConnectionHistory();
+  const { sessions, startSession, endSession } = useActiveSessions();
 
   useEffect(() => {
     const id = searchParams.get("id");
