@@ -45,22 +45,11 @@ export function useClientAccessHistory() {
     setHistory(readStorage());
   }, []);
 
+  // Histórico só é gravado por gatilho explícito (ex: copiarId/atendimento real).
+  // Abrir a tela, inicializar o app ou carregar o ID NÃO devem criar registros.
   useEffect(() => {
-    if (status === "connecting" && lastStatusRef.current !== "connecting") {
-      const cleanId = supportId?.replace(/\s/g, "");
-      const entry: ClientAccessEntry = {
-        hostname: hostname && hostname !== "Seu Computador" ? hostname : "",
-        supportId: cleanId && cleanId !== "--" ? cleanId : undefined,
-        accessedAt: Date.now(),
-      };
-      setHistory((prev) => {
-        const next = [entry, ...prev].slice(0, MAX_ITEMS);
-        writeStorage(next);
-        return next;
-      });
-    }
     lastStatusRef.current = status;
-  }, [status, hostname, supportId]);
+  }, [status]);
 
   return { history };
 }
