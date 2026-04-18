@@ -50,8 +50,9 @@ export function useSupportClient() {
     }
 
     if (window.procionAPI?.getSupportId) {
-      const fallbackId = await window.procionAPI.getSupportId();
-      return fallbackId?.replace(/\D/g, "") || "";
+      const result: any = await window.procionAPI.getSupportId();
+      const rawId = typeof result === "string" ? result : result?.id ?? "";
+      return rawId?.replace(/\D/g, "") || "";
     }
 
     return "";
