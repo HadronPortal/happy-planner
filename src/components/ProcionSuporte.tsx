@@ -1,4 +1,4 @@
-import { Copy, RotateCcw, X, Pencil, History, Trash2 } from "lucide-react";
+import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
@@ -21,7 +21,7 @@ function formatId(value: string): string {
 
 export default function HadronSuporte() {
   const { status, supportId, password, hostname, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
-  const { history, removeEntry } = useClientAccessHistory();
+  const { history } = useClientAccessHistory();
 
   const { label, dotClass } = STATUS_CONFIG[status];
   const displayId = formatId(supportId);
@@ -151,27 +151,19 @@ export default function HadronSuporte() {
                 ) : (
                   <div className="overflow-y-auto max-h-[180px] pr-1">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {history.map((item, idx) => (
+                      {history.map((item) => (
                         <div
-                          key={`${item.accessedAt}-${idx}`}
-                          className="group relative rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
+                          key={item.id}
+                          className="rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
                         >
-                          <button
-                            onClick={() => removeEntry(item.accessedAt)}
-                            className="absolute top-2 right-2 p-1 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
-                            title="Excluir acesso"
-                            aria-label="Excluir acesso"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                          <div className="flex items-center gap-2 min-w-0 pr-6">
+                          <div className="flex items-center gap-2 min-w-0">
                             <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
                             <span className="text-xs font-semibold text-foreground truncate">
                               {getAccessTitle(item)}
                             </span>
                           </div>
                           <span className="text-[11px] font-mono text-muted-foreground tracking-wide">
-                            {formatAccessDate(item.accessedAt)}
+                            {formatAccessDate(item.createdAt)}
                           </span>
                         </div>
                       ))}
