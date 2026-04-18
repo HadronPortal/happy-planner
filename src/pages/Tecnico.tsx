@@ -30,6 +30,7 @@ export default function Tecnico() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
+  const [remotePassword, setRemotePassword] = useState("");
   const [isConnecting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
