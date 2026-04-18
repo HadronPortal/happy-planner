@@ -156,9 +156,17 @@ export default function HadronSuporte() {
                       {history.map((item, idx) => (
                         <div
                           key={`${item.accessedAt}-${idx}`}
-                          className="rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
+                          className="group relative rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
                         >
-                          <div className="flex items-center gap-2 min-w-0">
+                          <button
+                            onClick={() => removeEntry(item.accessedAt)}
+                            className="absolute top-2 right-2 p-1 rounded-md text-muted-foreground/50 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100"
+                            title="Excluir acesso"
+                            aria-label="Excluir acesso"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                          <div className="flex items-center gap-2 min-w-0 pr-6">
                             <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
                             <span className="text-xs font-semibold text-foreground truncate">
                               {getAccessTitle(item)}
