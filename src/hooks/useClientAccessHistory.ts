@@ -42,7 +42,12 @@ export function useClientAccessHistory() {
   const lastStatusRef = useRef<string | null>(null);
 
   useEffect(() => {
-    setHistory(readStorage());
+    const stored = readStorage();
+    const cleaned = stored.filter(
+      (i) => (i.hostname && i.hostname !== "Seu Computador") || (i.supportId && i.supportId !== "--")
+    );
+    if (cleaned.length !== stored.length) writeStorage(cleaned);
+    setHistory(cleaned);
   }, []);
 
   // Histórico só é gravado por gatilho explícito (ex: copiarId/atendimento real).
