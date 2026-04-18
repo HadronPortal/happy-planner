@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useSupportClient } from "./useSupportClient";
 
 const MAX_ITEMS = 10;
+const HIDDEN_KEY = "hadron:client-access-history:hidden";
 
 export interface ClientAccessEntry {
   id: string;
@@ -10,19 +11,41 @@ export interface ClientAccessEntry {
   createdAt: string;
 }
 
+function loadHidden(): Set<string> {
+  try {
+    const raw = localStorage.getItem(HIDDEN_KEY);
+    if (!raw) return new Set();
+    const arr = JSON.parse(raw);
+    return new Set(Array.isArray(arr) ? arr : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveHidden(set: Set<string>) {
+  try {
+    localStorage.setItem(HIDDEN_KEY, JSON.stringify(Array.from(set)));
+  } catch {
+    /* ignore */
+  }
+}
+
 /**
  * Carrega o histórico real de acessos do técnico a este cliente,
  * a partir da tabela support_access_history no Supabase.
+ * Itens ocultados pelo usuário ficam apenas escondidos localmente —
+ * o registro permanece no banco.
  */
 export function useClientAccessHistory() {
   const { supportId, status } = useSupportClient();
-  const [history, setHistory] = useState<ClientAccessEntry[]>([]);
+  const [allHistory, setAllHistory] = useState<ClientAccessEntry[]>([]);
+  const [hidden, setHidden] = useState<Set<string>>(() => loadHidden());
 
   useEffect(() => {
     let cancelled = false;
     const cleanId = supportId.replace(/\D/g, "");
     if (!cleanId || cleanId === "--" || status !== "connected") {
-      setHistory([]);
+      setAllHistory([]);
       return;
     }
 
@@ -37,11 +60,11 @@ export function useClientAccessHistory() {
       if (cancelled) return;
       if (error) {
         console.error("Erro ao carregar histórico de acessos:", error);
-        setHistory([]);
+        setAllHistory([]);
         return;
       }
 
-      setHistory(
+      setAllHistory(
         (data ?? []).map((row) => ({
           id: row.id,
           technicianHostname: row.technician_hostname,
@@ -52,7 +75,6 @@ export function useClientAccessHistory() {
 
     fetchHistory();
 
-    // Realtime: atualiza ao receber novos registros para este cliente
     const channel = supabase
       .channel(`access-history-${cleanId}`)
       .on(
@@ -73,7 +95,18 @@ export function useClientAccessHistory() {
     };
   }, [supportId, status]);
 
-  return { history };
+  const hideEntry = useCallback((id: string) => {
+    setHidden((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      saveHidden(next);
+      return next;
+    });
+  }, []);
+
+  const history = allHistory.filter((item) => !hidden.has(item.id));
+
+  return { history, hideEntry };
 }
 
 export function getAccessTitle(item: ClientAccessEntry): string {

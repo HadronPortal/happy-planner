@@ -1,4 +1,4 @@
-import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
+import { Copy, RotateCcw, X, Pencil, History, Trash2 } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
@@ -21,7 +21,7 @@ function formatId(value: string): string {
 
 export default function HadronSuporte() {
   const { status, supportId, password, hostname, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
-  const { history } = useClientAccessHistory();
+  const { history, hideEntry } = useClientAccessHistory();
 
   const { label, dotClass } = STATUS_CONFIG[status];
   const displayId = formatId(supportId);
@@ -149,18 +149,26 @@ export default function HadronSuporte() {
                     Nenhum acesso recente
                   </p>
                 ) : (
-                  <div className="overflow-y-auto max-h-[180px] pr-1">
+                  <div className="overflow-y-auto max-h-[180px] pr-1 scrollbar-themed">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {history.map((item) => (
                         <div
                           key={item.id}
-                          className="rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
+                          className="group relative rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
                         >
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
-                            <span className="text-xs font-semibold text-foreground truncate">
+                            <span className="text-xs font-semibold text-foreground truncate flex-1">
                               {getAccessTitle(item)}
                             </span>
+                            <button
+                              onClick={() => hideEntry(item.id)}
+                              className="p-1 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                              title="Ocultar este acesso"
+                              aria-label="Ocultar este acesso"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
                           </div>
                           <span className="text-[11px] font-mono text-muted-foreground tracking-wide">
                             {formatAccessDate(item.createdAt)}
