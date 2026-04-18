@@ -370,7 +370,7 @@ export default function Tecnico() {
                                     className="text-xs font-semibold text-foreground truncate text-left hover:text-secondary transition-colors"
                                     title="Preencher campo com este ID"
                                   >
-                                    {item.name || "Sem nome"}
+                                    {item.name || formatRustDeskId(item.id) || "Sem nome"}
                                   </button>
                                 )}
                               </div>
