@@ -1,7 +1,8 @@
-import { Copy, RotateCcw, X, Pencil } from "lucide-react";
+import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
+import { useClientAccessHistory, formatAccessDate } from "@/hooks/useClientAccessHistory";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -20,6 +21,7 @@ function formatId(value: string): string {
 
 export default function HadronSuporte() {
   const { status, supportId, password, hostname, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
+  const { history } = useClientAccessHistory();
 
   const { label, dotClass } = STATUS_CONFIG[status];
   const displayId = formatId(supportId);
@@ -128,6 +130,48 @@ export default function HadronSuporte() {
                     Finalizar
                   </button>
                 </div>
+              </div>
+
+              {/* Últimos acessos - informativo, sem ações */}
+              <div className="w-full mt-2 flex flex-col min-h-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <History className="h-3.5 w-3.5 text-muted-foreground" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    Últimos acessos
+                  </span>
+                  {history.length > 0 && (
+                    <span className="text-[10px] text-muted-foreground/60">({history.length})</span>
+                  )}
+                </div>
+
+                {history.length === 0 ? (
+                  <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center">
+                    <p className="text-xs text-muted-foreground/70">
+                      Nenhum atendimento recente neste computador.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-y-auto max-h-[180px] pr-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {history.map((item, idx) => (
+                        <div
+                          key={`${item.accessedAt}-${idx}`}
+                          className="rounded-xl border border-border bg-muted/20 p-3 flex flex-col gap-1.5 select-none"
+                        >
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
+                            <span className="text-xs font-semibold text-foreground truncate">
+                              {item.hostname}
+                            </span>
+                          </div>
+                          <span className="text-[11px] font-mono text-muted-foreground tracking-wide">
+                            {formatAccessDate(item.accessedAt)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
