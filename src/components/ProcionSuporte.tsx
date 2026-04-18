@@ -145,11 +145,9 @@ export default function HadronSuporte() {
                 </div>
 
                 {history.length === 0 ? (
-                  <div className="rounded-lg border border-dashed border-border bg-muted/20 px-4 py-6 text-center">
-                    <p className="text-xs text-muted-foreground/70">
-                      Nenhum atendimento recente neste computador.
-                    </p>
-                  </div>
+                  <p className="text-[11px] text-muted-foreground/60 italic px-1 py-2">
+                    Nenhum acesso recente
+                  </p>
                 ) : (
                   <div className="overflow-y-auto max-h-[180px] pr-1">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
