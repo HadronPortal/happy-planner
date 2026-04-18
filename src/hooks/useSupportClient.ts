@@ -240,9 +240,14 @@ export function useSupportClient() {
       await window.procionAPI.startSupport();
       await sleep(1200);
 
-      const id = await window.procionAPI.getSupportId();
+      const result: any = await window.procionAPI.getSupportId();
+      const rawId = typeof result === "string" ? result : result?.id ?? "--";
+      const newPassword = typeof result === "object" && result?.password ? result.password : null;
 
-      setSupportId(formatSupportId(id || "--"));
+      setSupportId(formatSupportId(rawId || "--"));
+      if (newPassword) {
+        setPassword(newPassword);
+      }
       setStatus("connected");
       toast.info("Suporte reiniciado");
     } catch (error) {
