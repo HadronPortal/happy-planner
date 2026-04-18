@@ -65,12 +65,20 @@ export function useClientAccessHistory() {
   return { history };
 }
 
+function formatSupportId(value: string): string {
+  const digits = value.replace(/\D/g, "");
+  if (digits.length === 9) {
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)}`;
+  }
+  return digits || value;
+}
+
 export function getAccessTitle(item: ClientAccessEntry): string {
   if (item.hostname && item.hostname.trim() && item.hostname !== "Seu Computador") {
     return item.hostname;
   }
   if (item.supportId && item.supportId !== "--") {
-    return item.supportId;
+    return formatSupportId(item.supportId);
   }
   return "Acesso recente";
 }
