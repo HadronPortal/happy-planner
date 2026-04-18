@@ -91,16 +91,18 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(cleanId);
         addConnection(cleanId, clientName);
+        startSession(cleanId, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         addConnection(cleanId, clientName);
+        startSession(cleanId, clientName);
         toast.error("Função disponível apenas no app técnico");
       }
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, addConnection, lookupClientName]);
+  }, [remoteId, addConnection, lookupClientName, startSession]);
 
   const handleSelectHistory = useCallback((id: string) => {
     setRemoteId(formatRustDeskId(id));
@@ -125,12 +127,13 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(id);
         addConnection(id, clientName);
+        startSession(id, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         toast.error("Função disponível apenas no app técnico");
       }
     },
-    [addConnection, lookupClientName],
+    [addConnection, lookupClientName, startSession],
   );
 
   const handleCopyHistory = useCallback(async (id: string) => {
