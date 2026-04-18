@@ -2,7 +2,7 @@ import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-import { useClientAccessHistory, formatAccessDate } from "@/hooks/useClientAccessHistory";
+import { useClientAccessHistory, formatAccessDate, getAccessTitle } from "@/hooks/useClientAccessHistory";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
