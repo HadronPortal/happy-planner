@@ -179,8 +179,6 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.closeWindow();
       }
-
-      navigate("/admin");
     } catch (err) {
       console.error("Erro inesperado:", err);
       toast.error("Ocorreu um erro ao finalizar");
@@ -208,9 +206,15 @@ export default function Tecnico() {
                 <span className="text-xs">☰</span>
               </button>
               <button
-                onClick={() => navigate("/admin")}
+                onClick={() => {
+                  if (window.hadronTecnicoAPI) {
+                    window.hadronTecnicoAPI.closeWindow();
+                  } else {
+                    window.close();
+                  }
+                }}
                 className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Voltar ao painel"
+                title="Fechar"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
