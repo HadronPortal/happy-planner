@@ -179,8 +179,6 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.closeWindow();
       }
-
-      navigate("/admin");
     } catch (err) {
       console.error("Erro inesperado:", err);
       toast.error("Ocorreu um erro ao finalizar");
