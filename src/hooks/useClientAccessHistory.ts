@@ -1,97 +1,104 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useSupportClient } from "./useSupportClient";
 
-const STORAGE_KEY = "hadron:cliente:access-history";
 const MAX_ITEMS = 10;
 
 export interface ClientAccessEntry {
-  hostname: string;
-  supportId?: string;
-  accessedAt: number;
-}
-
-function readStorage(): ClientAccessEntry[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed
-      .filter((i) => i && typeof i.hostname === "string" && typeof i.accessedAt === "number")
-      .slice(0, MAX_ITEMS);
-  } catch {
-    return [];
-  }
-}
-
-function writeStorage(items: ClientAccessEntry[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch {
-    // ignore
-  }
+  id: string;
+  technicianHostname: string | null;
+  createdAt: string;
 }
 
 /**
- * Tracks every transition into "connecting" status as a remote access event,
- * keeping a small visual log of the most recent attendances on this machine.
+ * Carrega o histórico real de acessos do técnico a este cliente,
+ * a partir da tabela support_access_history no Supabase.
  */
 export function useClientAccessHistory() {
-  const { status, hostname, supportId } = useSupportClient();
+  const { supportId, status } = useSupportClient();
   const [history, setHistory] = useState<ClientAccessEntry[]>([]);
-  const lastStatusRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const stored = readStorage();
-    const cleaned = stored.filter(
-      (i) => (i.hostname && i.hostname !== "Seu Computador") || (i.supportId && i.supportId !== "--")
-    );
-    if (cleaned.length !== stored.length) writeStorage(cleaned);
-    setHistory(cleaned);
-  }, []);
+    let cancelled = false;
+    const cleanId = supportId.replace(/\D/g, "");
+    if (!cleanId || cleanId === "--" || status !== "connected") {
+      setHistory([]);
+      return;
+    }
 
-  // Histórico só é gravado por gatilho explícito (ex: copiarId/atendimento real).
-  // Abrir a tela, inicializar o app ou carregar o ID NÃO devem criar registros.
-  useEffect(() => {
-    lastStatusRef.current = status;
-  }, [status]);
+    async function fetchHistory() {
+      const { data, error } = await supabase
+        .from("support_access_history")
+        .select("id, technician_hostname, created_at")
+        .eq("client_rustdesk_id", cleanId)
+        .order("created_at", { ascending: false })
+        .limit(MAX_ITEMS);
 
-  const removeEntry = (accessedAt: number) => {
-    setHistory((prev) => {
-      const next = prev.filter((i) => i.accessedAt !== accessedAt);
-      writeStorage(next);
-      return next;
-    });
-  };
+      if (cancelled) return;
+      if (error) {
+        console.error("Erro ao carregar histórico de acessos:", error);
+        setHistory([]);
+        return;
+      }
 
-  return { history, removeEntry };
-}
+      setHistory(
+        (data ?? []).map((row) => ({
+          id: row.id,
+          technicianHostname: row.technician_hostname,
+          createdAt: row.created_at ?? new Date().toISOString(),
+        })),
+      );
+    }
 
-function formatSupportId(value: string): string {
-  const digits = value.replace(/\D/g, "");
-  if (digits.length === 9) {
-    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6, 9)}`;
-  }
-  return digits || value;
+    fetchHistory();
+
+    // Realtime: atualiza ao receber novos registros para este cliente
+    const channel = supabase
+      .channel(`access-history-${cleanId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "support_access_history",
+          filter: `client_rustdesk_id=eq.${cleanId}`,
+        },
+        () => fetchHistory(),
+      )
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
+  }, [supportId, status]);
+
+  return { history };
 }
 
 export function getAccessTitle(item: ClientAccessEntry): string {
-  if (item.hostname && item.hostname.trim() && item.hostname !== "Seu Computador") {
-    return item.hostname;
+  if (item.technicianHostname && item.technicianHostname.trim()) {
+    return item.technicianHostname;
   }
-  if (item.supportId && item.supportId !== "--") {
-    return formatSupportId(item.supportId);
-  }
-  return "Acesso recente";
+  return "Técnico";
 }
 
-export function formatAccessDate(ts: number): string {
-  const d = new Date(ts);
-  return d.toLocaleString("pt-BR", {
+export function formatAccessDate(iso: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  const sameDay = d.toDateString() === now.toDateString();
+  const time = d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+  if (sameDay) return `hoje às ${time}`;
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+  if (d.toDateString() === yesterday.toDateString()) return `ontem às ${time}`;
+
+  const date = d.toLocaleDateString("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
   });
+  return `${date} às ${time}`;
 }
