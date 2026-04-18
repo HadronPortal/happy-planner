@@ -2,7 +2,7 @@ import { Copy, RotateCcw, X, Pencil, History } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import securityLogo from "@/assets/procion-logo.png";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
-import { useClientAccessHistory, formatAccessDate } from "@/hooks/useClientAccessHistory";
+import { useClientAccessHistory, formatAccessDate, getAccessTitle } from "@/hooks/useClientAccessHistory";
 
 const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string }> = {
   initializing: { label: "Inicializando...", dotClass: "bg-muted-foreground animate-pulse-dot" },
@@ -161,7 +161,7 @@ export default function HadronSuporte() {
                           <div className="flex items-center gap-2 min-w-0">
                             <span className="h-2 w-2 rounded-full bg-primary/60 shrink-0" />
                             <span className="text-xs font-semibold text-foreground truncate">
-                              {item.hostname}
+                              {getAccessTitle(item)}
                             </span>
                           </div>
                           <span className="text-[11px] font-mono text-muted-foreground tracking-wide">

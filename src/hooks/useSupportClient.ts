@@ -7,7 +7,7 @@ declare global {
     procionAPI?: {
       startSupport: () => Promise<{ ok: boolean }>;
       stopSupport?: () => void;
-      getSupportId: () => Promise<string>;
+      getSupportId: () => Promise<string | { id: string; password?: string }>;
       getHostname?: () => string;
     };
   }
@@ -50,8 +50,9 @@ export function useSupportClient() {
     }
 
     if (window.procionAPI?.getSupportId) {
-      const fallbackId = await window.procionAPI.getSupportId();
-      return fallbackId?.replace(/\D/g, "") || "";
+      const result: any = await window.procionAPI.getSupportId();
+      const rawId = typeof result === "string" ? result : result?.id ?? "";
+      return rawId?.replace(/\D/g, "") || "";
     }
 
     return "";
@@ -82,16 +83,20 @@ export function useSupportClient() {
       return false;
     }
 
-    async function tryGetSupportId() {
+    async function tryGetSupportId(): Promise<{ id: string; password?: string }> {
       const maxAttempts = 5;
 
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de obter ID ${attempt}/${maxAttempts}`);
           if (window.procionAPI) {
-            const id = await window.procionAPI.getSupportId();
-            if (id) {
-              return id;
+            const result: any = await window.procionAPI.getSupportId();
+            if (result) {
+              if (typeof result === "string") {
+                if (result) return { id: result };
+              } else if (result.id) {
+                return { id: result.id, password: result.password };
+              }
             }
           }
         } catch (error) {
@@ -99,7 +104,7 @@ export function useSupportClient() {
         }
         await sleep(1200);
       }
-      return "--";
+      return { id: "--" };
     }
 
     async function iniciar() {
@@ -143,11 +148,14 @@ export function useSupportClient() {
 
         await sleep(1500);
 
-        const id = await tryGetSupportId();
+        const result = await tryGetSupportId();
 
         if (!mounted) return;
 
-        setSupportId(formatSupportId(id));
+        setSupportId(formatSupportId(result.id));
+        if (result.password) {
+          setPassword(result.password);
+        }
         setStatus("connected");
       } catch (error) {
         console.error("Erro ao iniciar suporte:", error);
@@ -232,9 +240,14 @@ export function useSupportClient() {
       await window.procionAPI.startSupport();
       await sleep(1200);
 
-      const id = await window.procionAPI.getSupportId();
+      const result: any = await window.procionAPI.getSupportId();
+      const rawId = typeof result === "string" ? result : result?.id ?? "--";
+      const newPassword = typeof result === "object" && result?.password ? result.password : null;
 
-      setSupportId(formatSupportId(id || "--"));
+      setSupportId(formatSupportId(rawId || "--"));
+      if (newPassword) {
+        setPassword(newPassword);
+      }
       setStatus("connected");
       toast.info("Suporte reiniciado");
     } catch (error) {

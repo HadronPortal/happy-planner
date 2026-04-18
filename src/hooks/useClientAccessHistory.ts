@@ -6,6 +6,7 @@ const MAX_ITEMS = 10;
 
 export interface ClientAccessEntry {
   hostname: string;
+  supportId?: string;
   accessedAt: number;
 }
 
@@ -36,7 +37,7 @@ function writeStorage(items: ClientAccessEntry[]) {
  * keeping a small visual log of the most recent attendances on this machine.
  */
 export function useClientAccessHistory() {
-  const { status, hostname } = useSupportClient();
+  const { status, hostname, supportId } = useSupportClient();
   const [history, setHistory] = useState<ClientAccessEntry[]>([]);
   const lastStatusRef = useRef<string | null>(null);
 
@@ -46,8 +47,10 @@ export function useClientAccessHistory() {
 
   useEffect(() => {
     if (status === "connecting" && lastStatusRef.current !== "connecting") {
+      const cleanId = supportId?.replace(/\s/g, "");
       const entry: ClientAccessEntry = {
-        hostname: hostname || "Computador",
+        hostname: hostname && hostname !== "Seu Computador" ? hostname : "",
+        supportId: cleanId && cleanId !== "--" ? cleanId : undefined,
         accessedAt: Date.now(),
       };
       setHistory((prev) => {
@@ -57,9 +60,19 @@ export function useClientAccessHistory() {
       });
     }
     lastStatusRef.current = status;
-  }, [status, hostname]);
+  }, [status, hostname, supportId]);
 
   return { history };
+}
+
+export function getAccessTitle(item: ClientAccessEntry): string {
+  if (item.hostname && item.hostname.trim() && item.hostname !== "Seu Computador") {
+    return item.hostname;
+  }
+  if (item.supportId && item.supportId !== "--") {
+    return item.supportId;
+  }
+  return "Acesso recente";
 }
 
 export function formatAccessDate(ts: number): string {
