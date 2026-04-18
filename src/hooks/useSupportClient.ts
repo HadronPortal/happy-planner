@@ -83,16 +83,20 @@ export function useSupportClient() {
       return false;
     }
 
-    async function tryGetSupportId() {
+    async function tryGetSupportId(): Promise<{ id: string; password?: string }> {
       const maxAttempts = 5;
 
       for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
           console.log(`Tentativa de obter ID ${attempt}/${maxAttempts}`);
           if (window.procionAPI) {
-            const id = await window.procionAPI.getSupportId();
-            if (id) {
-              return id;
+            const result: any = await window.procionAPI.getSupportId();
+            if (result) {
+              if (typeof result === "string") {
+                if (result) return { id: result };
+              } else if (result.id) {
+                return { id: result.id, password: result.password };
+              }
             }
           }
         } catch (error) {
@@ -100,7 +104,7 @@ export function useSupportClient() {
         }
         await sleep(1200);
       }
-      return "--";
+      return { id: "--" };
     }
 
     async function iniciar() {
