@@ -53,7 +53,7 @@ export default function Tecnico() {
         .limit(1)
         .maybeSingle();
       if (data) {
-        return data.empresa || data.hostname || undefined;
+        return data.hostname || data.empresa || undefined;
       }
     } catch (err) {
       console.error("Erro ao buscar nome do cliente:", err);
