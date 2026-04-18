@@ -56,7 +56,15 @@ export function useClientAccessHistory() {
     lastStatusRef.current = status;
   }, [status]);
 
-  return { history };
+  const removeEntry = (accessedAt: number) => {
+    setHistory((prev) => {
+      const next = prev.filter((i) => i.accessedAt !== accessedAt);
+      writeStorage(next);
+      return next;
+    });
+  };
+
+  return { history, removeEntry };
 }
 
 function formatSupportId(value: string): string {
