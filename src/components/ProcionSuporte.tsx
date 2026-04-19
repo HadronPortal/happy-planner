@@ -41,13 +41,6 @@ export default function HadronSuporte() {
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
-              <button
-                onClick={fechar}
-                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
             </div>
           </div>
 
@@ -85,13 +78,6 @@ export default function HadronSuporte() {
               </div>
 
               <div className="mt-auto flex flex-col gap-3 items-center">
-                <button
-                  onClick={fechar}
-                  className="inline-flex items-center justify-center gap-1.5 rounded-md bg-muted/50 border border-border px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-destructive hover:border-destructive/40 hover:bg-destructive/10 transition-colors"
-                >
-                  <X className="h-3.5 w-3.5" />
-                  Finalizar
-                </button>
                 <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
               </div>
             </aside>
