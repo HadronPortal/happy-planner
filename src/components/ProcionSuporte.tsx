@@ -41,6 +41,13 @@ export default function HadronSuporte() {
               <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
                 <span className="text-xs">☰</span>
               </button>
+              <button
+                onClick={fechar}
+                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+                title="Fechar"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </div>
           </div>
 
