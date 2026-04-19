@@ -104,7 +104,7 @@ export default function HadronSuporte() {
                 </div>
 
                 <div className="w-full px-4 py-3 rounded-xl border border-primary/30 bg-gradient-to-b from-primary/10 to-primary/5 text-center shadow-inner">
-                  <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono leading-none min-h-[1.5rem]">
+                  <p className="text-xl font-bold tracking-[0.2em] text-foreground font-mono leading-none min-h-[1.25rem]">
                     {displayId}
                   </p>
                 </div>
