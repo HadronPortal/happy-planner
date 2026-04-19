@@ -34,6 +34,7 @@ export default function HadronSuporte() {
           {/* Title bar */}
           <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30 shrink-0">
             <div className="flex items-center gap-2">
+              <img src={logoSrc} alt="Hádron Suporte" className="h-7 object-contain" />
               <img src={securityLogo} alt="Procion" className="h-7 object-contain" />
             </div>
             <div className="flex items-center gap-1">
