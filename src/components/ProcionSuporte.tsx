@@ -84,9 +84,13 @@ export default function HadronSuporte() {
               </div>
 
               <div className="mt-auto flex flex-col gap-3 items-center">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground font-semibold">
-                  {hostname}
-                </p>
+                <button
+                  onClick={fechar}
+                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors px-4 py-2.5 text-sm font-semibold shadow-md shadow-destructive/20"
+                >
+                  <X className="h-4 w-4" />
+                  Finalizar
+                </button>
                 <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
               </div>
             </aside>
