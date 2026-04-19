@@ -270,7 +270,7 @@ export default function Tecnico() {
               <div className="flex flex-col items-center gap-4 w-full max-w-md mx-auto">
                 <div className="space-y-1 text-center">
                   <h3 className="text-lg font-semibold text-foreground">Conectar a um cliente</h3>
-                  <p className="text-xs text-muted-foreground">Digite ou cole o ID do RustDesk do cliente.</p>
+                  <p className="text-xs text-muted-foreground">Digite ou cole o ID do Hádron Suporte do cliente.</p>
                 </div>
 
                 <input
