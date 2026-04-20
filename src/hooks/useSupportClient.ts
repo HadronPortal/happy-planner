@@ -15,14 +15,7 @@ declare global {
 
 export type ConnectionStatus = "initializing" | "connecting" | "connected";
 
-function generatePassword(): string {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-  for (let i = 0; i < 6; i++) {
-    result += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return result.toUpperCase();
-}
+const DEFAULT_SUPPORT_PASSWORD = "HADRON2026";
 
 function formatSupportId(value: string): string {
   const digits = value.replace(/\D/g, "");
@@ -39,7 +32,7 @@ function sleep(ms: number) {
 export function useSupportClient() {
   const [status, setStatus] = useState<ConnectionStatus>("initializing");
   const [supportId, setSupportId] = useState("--");
-  const [password, setPassword] = useState(() => generatePassword());
+  const [password, setPassword] = useState(DEFAULT_SUPPORT_PASSWORD);
   const [hostname, setHostname] = useState("Seu Computador");
 
   const resolveCurrentSupportId = useCallback(async () => {
@@ -234,7 +227,7 @@ export function useSupportClient() {
 
       setStatus("initializing");
       setSupportId("--");
-      setPassword(generatePassword());
+      setPassword(DEFAULT_SUPPORT_PASSWORD);
 
       await sleep(800);
       await window.procionAPI.startSupport();
@@ -258,8 +251,8 @@ export function useSupportClient() {
   }, []);
 
   const refreshPassword = useCallback(() => {
-    setPassword(generatePassword());
-    toast.info("Senha atualizada");
+    setPassword(DEFAULT_SUPPORT_PASSWORD);
+    toast.info("Senha padrao fixa em uso");
   }, []);
 
   return {

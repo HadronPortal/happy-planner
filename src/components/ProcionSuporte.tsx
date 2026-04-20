@@ -21,7 +21,7 @@ function formatId(value: string): string {
 
 export default function HadronSuporte() {
   const { status, supportId, password, hostname, copiarId, refreshPassword, reiniciar, fechar } = useSupportClient();
-  const { history, hideEntry } = useClientAccessHistory();
+  const { history, hideEntry } = useClientAccessHistory(supportId);
 
   const { label, dotClass } = STATUS_CONFIG[status];
   const displayId = formatId(supportId);

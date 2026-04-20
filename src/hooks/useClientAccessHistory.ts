@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useSupportClient } from "./useSupportClient";
 
 const MAX_ITEMS = 10;
 const HIDDEN_KEY = "hadron:client-access-history:hidden";
@@ -36,15 +35,14 @@ function saveHidden(set: Set<string>) {
  * Itens ocultados pelo usuário ficam apenas escondidos localmente —
  * o registro permanece no banco.
  */
-export function useClientAccessHistory() {
-  const { supportId, status } = useSupportClient();
+export function useClientAccessHistory(supportId: string) {
   const [allHistory, setAllHistory] = useState<ClientAccessEntry[]>([]);
   const [hidden, setHidden] = useState<Set<string>>(() => loadHidden());
 
   useEffect(() => {
     let cancelled = false;
     const cleanId = supportId.replace(/\D/g, "");
-    if (!cleanId || cleanId === "--" || status !== "connected") {
+    if (!cleanId || cleanId === "--") {
       setAllHistory([]);
       return;
     }
@@ -93,7 +91,7 @@ export function useClientAccessHistory() {
       cancelled = true;
       supabase.removeChannel(channel);
     };
-  }, [supportId, status]);
+  }, [supportId]);
 
   const hideEntry = useCallback((id: string) => {
     setHidden((prev) => {

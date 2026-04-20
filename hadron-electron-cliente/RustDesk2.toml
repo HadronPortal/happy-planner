@@ -1,0 +1,10 @@
+rendezvous_server = '54.94.168.175'
+nat_type = 0
+serial = 0
+unlock_pin = ''
+trusted_devices = ''
+
+[options]
+custom-rendezvous-server = '54.94.168.175'
+relay-server = '54.94.168.175'
+key = 'SUCBZx1OEEziaVmZywrY2ipDtFjDofx8V82vShQNnkE='

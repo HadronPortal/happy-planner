@@ -1,0 +1,18 @@
+{
+  "name": "hadron-electron-cliente",
+  "version": "1.0.0",
+  "description": "Desktop Hádron Suporte Cliente",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack-win": "electron-packager . HadronSuporteCliente --platform=win32 --arch=x64 --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.103.3",
+    "axios": "^1.15.0"
+  }
+}

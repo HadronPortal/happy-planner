@@ -1,0 +1,14 @@
+{
+  "name": "hadron-electron-tecnico",
+  "version": "1.0.0",
+  "description": "Desktop Hádron Suporte Técnico",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack-win": "electron-packager . HadronSuporteTecnico --platform=win32 --arch=x64 --overwrite"
+  },
+  "devDependencies": {
+    "electron": "^37.0.0",
+    "electron-packager": "^17.1.2"
+  }
+}

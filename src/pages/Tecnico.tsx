@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { Copy, RotateCcw, X, History, Plug, Trash2, Pencil, Check, Radio, PhoneOff } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Copy, RotateCcw, X, History, Plug, Trash2, Pencil, Check } from "lucide-react";
 import logoSrc from "@/assets/logo.png";
 import procionLogoSrc from "@/assets/procion-logo.png";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import { toast } from "sonner";
 import { useSupportClient, type ConnectionStatus } from "@/hooks/useSupportClient";
 import { supabase } from "@/integrations/supabase/client";
 import { useConnectionHistory, formatRustDeskId } from "@/hooks/useConnectionHistory";
-import { useActiveSessions, formatSessionTime } from "@/hooks/useActiveSessions";
 
 // hadronTecnicoAPI typed in src/vite-env.d.ts
 
@@ -22,14 +21,12 @@ const STATUS_CONFIG: Record<ConnectionStatus, { label: string; dotClass: string 
 export default function Tecnico() {
   const { status, supportId, password, copiarId, refreshPassword } = useSupportClient();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
   const [remoteId, setRemoteId] = useState("");
   const [isConnecting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
   const { history, addConnection, renameConnection, removeConnection, clearHistory } =
     useConnectionHistory();
-  const { sessions, startSession, endSession } = useActiveSessions();
 
   useEffect(() => {
     const id = searchParams.get("id");
@@ -84,18 +81,16 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(cleanId);
         addConnection(cleanId, clientName);
-        startSession(cleanId, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         addConnection(cleanId, clientName);
-        startSession(cleanId, clientName);
         toast.error("Função disponível apenas no app técnico");
       }
     } catch (err) {
       console.error(err);
       toast.error("Não foi possível iniciar a conexão");
     }
-  }, [remoteId, addConnection, lookupClientName, startSession]);
+  }, [remoteId, addConnection, lookupClientName]);
 
   const handleSelectHistory = useCallback((id: string) => {
     setRemoteId(formatRustDeskId(id));
@@ -120,13 +115,12 @@ export default function Tecnico() {
       if (window.hadronTecnicoAPI) {
         window.hadronTecnicoAPI.openRustDesk(id);
         addConnection(id, clientName);
-        startSession(id, clientName);
         toast.success("Abrindo conexão remota");
       } else {
         toast.error("Função disponível apenas no app técnico");
       }
     },
-    [addConnection, lookupClientName, startSession],
+    [addConnection, lookupClientName],
   );
 
   const handleCopyHistory = useCallback(async (id: string) => {
@@ -181,96 +175,112 @@ export default function Tecnico() {
       console.error("Erro inesperado:", err);
       toast.error("Ocorreu um erro ao finalizar");
     }
-  }, [navigate, searchParams]);
+  }, [searchParams]);
 
   const { label, dotClass } = STATUS_CONFIG[status];
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background p-4">
       <div className="w-full max-w-3xl">
-        {/* Main window */}
-        <div className="rounded-xl border border-border bg-card shadow-2xl shadow-black/50 overflow-hidden relative">
-          {/* Title bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30 shrink-0">
-            <div className="flex items-center gap-3">
-              <img src={procionLogoSrc} alt="Procion" className="h-7 object-contain" />
-              <div className="h-4 w-px bg-border mx-1" />
-              <Badge variant="outline" className="border-secondary/50 text-secondary bg-secondary/10 font-bold uppercase tracking-wider text-[10px] px-2 py-0 h-5">
-                AMBIENTE TÉCNICO
-              </Badge>
-            </div>
-            <div className="flex items-center gap-1">
-              <button className="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
-                <span className="text-xs">☰</span>
-              </button>
-              <button
-                onClick={() => {
-                  if (window.hadronTecnicoAPI) {
-                    window.hadronTecnicoAPI.closeWindow();
-                  } else {
-                    window.close();
-                  }
-                }}
-                className="p-1.5 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
-                title="Fechar"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Body */}
-          <div className="flex flex-col md:flex-row min-h-[480px]">
-            {/* Left panel - User Info */}
-            <div className="w-full md:w-[280px] border-b md:border-b-0 md:border-r border-border p-5 flex flex-col gap-5 shrink-0">
-              <div>
-                <h2 className="text-sm font-semibold text-foreground mb-0.5">Modulo tecnico</h2>
-                <p className="text-[11px] text-muted-foreground leading-snug">
-                  Identificação da sua estação técnica para este atendimento.
-                </p>
+        <div className="relative overflow-hidden rounded-xl border border-border bg-card shadow-2xl shadow-black/50">
+          <div className="shrink-0 border-b border-border bg-muted/30 px-4 py-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img src={procionLogoSrc} alt="Procion" className="h-7 object-contain" />
+                <div className="mx-1 h-4 w-px bg-border" />
+                <Badge
+                  variant="outline"
+                  className="h-5 border-secondary/50 bg-secondary/10 px-2 py-0 text-[10px] font-bold uppercase tracking-wider text-secondary"
+                >
+                  AMBIENTE TÉCNICO
+                </Badge>
               </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Seu ID</span>
-                  <button onClick={copiarId} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <Copy className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-                <p className="text-2xl font-bold tracking-[0.2em] text-foreground font-mono pl-2">
-                  {supportId}
-                </p>
-              </div>
-
-              <div className="space-y-1">
-                <span className="text-[11px] text-muted-foreground border-l-2 border-secondary pl-2 uppercase tracking-wider">Token de Acesso</span>
-                <div className="flex items-center gap-2 pl-2">
-                  <span className="text-base font-mono font-semibold text-foreground tracking-wider">{password}</span>
-                  <button onClick={refreshPassword} className="text-muted-foreground hover:text-foreground transition-colors">
-                    <RotateCcw className="h-3.5 w-3.5" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="mt-auto flex flex-col gap-3 items-center">
-                <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
+              <div className="flex items-center gap-1">
+                <button className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
+                  <span className="text-xs">☰</span>
+                </button>
                 <button
-                  onClick={handleFinish}
-                  disabled={!remoteId}
-                  className="w-full flex items-center justify-center gap-2 rounded-lg bg-muted/50 border border-border px-4 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  onClick={() => {
+                    if (window.hadronTecnicoAPI) {
+                      window.hadronTecnicoAPI.closeWindow();
+                    } else {
+                      window.close();
+                    }
+                  }}
+                  className="rounded p-1.5 text-muted-foreground transition-colors hover:bg-destructive/20 hover:text-destructive"
+                  title="Fechar"
                 >
                   <X className="h-3.5 w-3.5" />
-                  Finalizar suporte
                 </button>
               </div>
             </div>
+          </div>
 
-            {/* Right panel - Manual Connection */}
-            <div className="flex-1 flex flex-col p-6 gap-5">
-              <div className="flex flex-col items-center gap-4 w-full max-w-md mx-auto">
+          <div className="flex min-h-[480px] flex-col md:flex-row">
+            <div className="w-full shrink-0 border-b border-border p-5 md:w-[280px] md:border-b-0 md:border-r">
+              <div className="flex h-full flex-col gap-5">
+                <div>
+                  <h2 className="mb-0.5 text-sm font-semibold text-foreground">Modulo tecnico</h2>
+                  <p className="text-[11px] leading-snug text-muted-foreground">
+                    Identificação da sua estação técnica para este atendimento.
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="border-l-2 border-secondary pl-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+                      Seu ID
+                    </span>
+                    <button
+                      onClick={copiarId}
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <p className="pl-2 font-mono text-2xl font-bold tracking-[0.2em] text-foreground">
+                    {supportId}
+                  </p>
+                </div>
+
+                <div className="space-y-1">
+                  <span className="border-l-2 border-secondary pl-2 text-[11px] uppercase tracking-wider text-muted-foreground">
+                    Token de Acesso
+                  </span>
+                  <div className="flex items-center gap-2 pl-2">
+                    <span className="font-mono text-base font-semibold tracking-wider text-foreground">
+                      {password}
+                    </span>
+                    <button
+                      onClick={refreshPassword}
+                      className="text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mt-auto flex flex-col items-center gap-3">
+                  <img src={logoSrc} alt="Hádron Suporte" className="h-10 object-contain opacity-90" />
+                  <button
+                    onClick={handleFinish}
+                    disabled={!remoteId}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-medium text-muted-foreground transition-all hover:bg-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    Finalizar suporte
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-1 flex-col gap-5 p-6">
+              <div className="mx-auto flex w-full max-w-md flex-col items-center gap-4">
                 <div className="space-y-1 text-center">
                   <h3 className="text-lg font-semibold text-foreground">Conectar a um cliente</h3>
-                  <p className="text-xs text-muted-foreground">Digite ou cole o ID do Hádron Suporte do cliente.</p>
+                  <p className="text-xs text-muted-foreground">
+                    Digite ou cole o ID do RustDesk do cliente.
+                  </p>
                 </div>
 
                 <input
@@ -283,7 +293,7 @@ export default function Tecnico() {
                     const digits = e.target.value.replace(/\D/g, "").slice(0, 9);
                     const formatted = digits.replace(
                       /(\d{3})(\d{0,3})(\d{0,3})/,
-                      (_, a, b, c) => [a, b, c].filter(Boolean).join(" ")
+                      (_, a, b, c) => [a, b, c].filter(Boolean).join(" "),
                     );
                     setRemoteId(formatted);
                   }}
@@ -291,76 +301,20 @@ export default function Tecnico() {
                     if (e.key === "Enter") handleConnect();
                   }}
                   placeholder=""
-                  className="w-full px-4 py-3 rounded-xl border border-border bg-muted/40 text-center text-xl font-bold text-foreground tracking-[0.15em] font-mono shadow-inner focus:outline-none focus:ring-2 focus:ring-secondary/60 focus:border-secondary placeholder:text-muted-foreground/40"
+                  className="w-full rounded-xl border border-border bg-muted/40 px-4 py-3 text-center font-mono text-xl font-bold tracking-[0.15em] text-foreground shadow-inner placeholder:text-muted-foreground/40 focus:border-secondary focus:outline-none focus:ring-2 focus:ring-secondary/60"
                 />
 
                 <Button
                   onClick={handleConnect}
                   disabled={!remoteId.replace(/\D/g, "")}
-                  className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 font-bold h-10 text-sm uppercase tracking-wide transition-all shadow-sm"
+                  className="h-10 w-full bg-secondary text-sm font-bold uppercase tracking-wide text-secondary-foreground shadow-sm transition-all hover:bg-secondary/90"
                 >
                   Conectar
                 </Button>
               </div>
 
-              {/* Active sessions - live connections in this app session */}
-              {sessions.length > 0 && (
-                <div className="w-full mt-1 flex flex-col">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Radio className="h-3.5 w-3.5 text-[hsl(var(--status-connected))] animate-pulse-dot" />
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      Sessões ativas
-                    </span>
-                    <span className="text-[10px] text-muted-foreground/60">({sessions.length})</span>
-                  </div>
-                  <div className="overflow-y-auto max-h-[180px] pr-1 scrollbar-themed">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {sessions.map((s) => (
-                        <div
-                          key={s.id}
-                          className="group relative rounded-xl border border-[hsl(var(--status-connected))]/40 bg-[hsl(var(--status-connected))]/5 p-3 flex flex-col gap-1.5"
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex items-center gap-2 min-w-0 flex-1">
-                              <span className="h-2 w-2 rounded-full bg-[hsl(var(--status-connected))] animate-pulse-dot shrink-0" />
-                              <span className="text-xs font-semibold text-foreground truncate">
-                                {s.hostname || s.clientName || formatRustDeskId(s.clientId)}
-                              </span>
-                            </div>
-                            <Badge
-                              variant="outline"
-                              className="border-[hsl(var(--status-connected))]/50 text-[hsl(var(--status-connected))] bg-[hsl(var(--status-connected))]/10 font-bold uppercase tracking-wider text-[9px] px-1.5 py-0 h-4 shrink-0"
-                            >
-                              {s.status || "Ativa"}
-                            </Badge>
-                          </div>
-                          <span className="font-mono text-xs font-bold text-foreground tracking-wider">
-                            {formatRustDeskId(s.clientId)}
-                          </span>
-                          <div className="flex items-center justify-between gap-2 mt-auto">
-                            <span className="text-[10px] font-mono text-muted-foreground">
-                              Iniciado às {formatSessionTime(s.startedAt)}
-                            </span>
-                            <button
-                              onClick={() => endSession(s.id)}
-                              className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                              title="Encerrar sessão"
-                              aria-label="Encerrar sessão"
-                            >
-                              <PhoneOff className="h-3 w-3" />
-                              Encerrar
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Recent connections - card grid */}
-              <div className="w-full mt-1 flex-1 flex flex-col min-h-0">
-                <div className="flex items-center justify-between mb-2">
+              <div className="mt-1 flex min-h-0 flex-1 flex-col">
+                <div className="mb-2 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <History className="h-3.5 w-3.5 text-muted-foreground" />
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -373,7 +327,7 @@ export default function Tecnico() {
                   {history.length > 0 && (
                     <button
                       onClick={clearHistory}
-                      className="text-[10px] uppercase tracking-wider text-muted-foreground/70 hover:text-destructive transition-colors"
+                      className="text-[10px] uppercase tracking-wider text-muted-foreground/70 transition-colors hover:text-destructive"
                     >
                       Limpar
                     </button>
@@ -387,20 +341,20 @@ export default function Tecnico() {
                     </p>
                   </div>
                 ) : (
-                  <div className="flex-1 overflow-y-auto max-h-[260px] pr-1 scrollbar-themed">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div className="scrollbar-themed max-h-[260px] flex-1 overflow-y-auto pr-1">
+                    <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                       {history.map((item) => {
                         const isRecent = Date.now() - item.lastUsedAt < 1000 * 60 * 60 * 24;
                         const isEditing = editingId === item.id;
                         return (
                           <div
                             key={item.id}
-                            className="group relative rounded-xl border border-border bg-muted/20 hover:bg-muted/40 hover:border-secondary/40 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/30 transition-all p-3 flex flex-col gap-2"
+                            className="group relative flex flex-col gap-2 rounded-xl border border-border bg-muted/20 p-3 transition-all hover:-translate-y-0.5 hover:border-secondary/40 hover:bg-muted/40 hover:shadow-lg hover:shadow-black/30"
                           >
                             <div className="flex items-start justify-between gap-2">
-                              <div className="flex items-center gap-2 min-w-0 flex-1">
+                              <div className="flex min-w-0 flex-1 items-center gap-2">
                                 <span
-                                  className={`h-2 w-2 rounded-full shrink-0 ${
+                                  className={`h-2 w-2 shrink-0 rounded-full ${
                                     isRecent ? "bg-[hsl(var(--status-connected))]" : "bg-muted-foreground/40"
                                   }`}
                                   title={isRecent ? "Recente" : "Antigo"}
@@ -419,12 +373,12 @@ export default function Tecnico() {
                                       }
                                     }}
                                     placeholder="Nome do cliente"
-                                    className="flex-1 min-w-0 bg-background border border-border rounded px-1.5 py-0.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
+                                    className="min-w-0 flex-1 rounded border border-border bg-background px-1.5 py-0.5 text-xs text-foreground focus:outline-none focus:ring-1 focus:ring-secondary"
                                   />
                                 ) : (
                                   <button
                                     onClick={() => handleSelectHistory(item.id)}
-                                    className="text-xs font-semibold text-foreground truncate text-left hover:text-secondary transition-colors"
+                                    className="truncate text-left text-xs font-semibold text-foreground transition-colors hover:text-secondary"
                                     title="Preencher campo com este ID"
                                   >
                                     {item.name || formatRustDeskId(item.id) || "Sem nome"}
@@ -435,29 +389,25 @@ export default function Tecnico() {
                                 onClick={() =>
                                   isEditing ? commitEditing() : startEditing(item.id, item.name)
                                 }
-                                className="p-1 rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100"
+                                className="rounded p-1 text-muted-foreground opacity-0 transition-colors group-hover:opacity-100 hover:bg-muted hover:text-foreground"
                                 title={isEditing ? "Salvar nome" : "Editar nome"}
                               >
-                                {isEditing ? (
-                                  <Check className="h-3 w-3" />
-                                ) : (
-                                  <Pencil className="h-3 w-3" />
-                                )}
+                                {isEditing ? <Check className="h-3 w-3" /> : <Pencil className="h-3 w-3" />}
                               </button>
                             </div>
 
                             <button
                               onClick={() => handleSelectHistory(item.id)}
-                              className="text-left font-mono text-sm font-bold text-foreground tracking-wider hover:text-secondary transition-colors"
+                              className="text-left font-mono text-sm font-bold tracking-wider text-foreground transition-colors hover:text-secondary"
                               title="Preencher campo com este ID"
                             >
                               {formatRustDeskId(item.id)}
                             </button>
 
-                            <div className="flex items-center gap-1.5 mt-auto">
+                            <div className="mt-auto flex items-center gap-1.5">
                               <button
                                 onClick={() => handleQuickConnect(item.id, item.name)}
-                                className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md bg-secondary/15 text-secondary text-[10px] font-bold uppercase tracking-wider hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                                className="flex flex-1 items-center justify-center gap-1 rounded-md bg-secondary/15 px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider text-secondary transition-colors hover:bg-secondary hover:text-secondary-foreground"
                                 title="Conectar novamente"
                               >
                                 <Plug className="h-3 w-3" />
@@ -465,14 +415,14 @@ export default function Tecnico() {
                               </button>
                               <button
                                 onClick={() => handleCopyHistory(item.id)}
-                                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                                className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                                 title="Copiar ID"
                               >
                                 <Copy className="h-3 w-3" />
                               </button>
                               <button
                                 onClick={() => removeConnection(item.id)}
-                                className="p-1.5 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                                className="rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
                                 title="Remover do histórico"
                               >
                                 <Trash2 className="h-3 w-3" />
@@ -488,16 +438,17 @@ export default function Tecnico() {
             </div>
           </div>
 
-          {/* Status bar */}
-          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/20">
+          <div className="flex items-center justify-between border-t border-border bg-muted/20 px-4 py-2">
             <div className="flex items-center gap-2">
-              <span className={`h-2 w-2 rounded-full ${isConnecting ? "bg-secondary animate-pulse-dot" : dotClass}`} />
+              <span
+                className={`h-2 w-2 rounded-full ${isConnecting ? "bg-secondary animate-pulse-dot" : dotClass}`}
+              />
               <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 {isConnecting ? "Negociando conexão..." : label}
               </span>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-[9px] text-muted-foreground/40 font-mono uppercase tracking-widest hidden sm:inline">
+              <span className="hidden font-mono text-[9px] uppercase tracking-widest text-muted-foreground/40 sm:inline">
                 H3-TEC-SEC-V2
               </span>
             </div>

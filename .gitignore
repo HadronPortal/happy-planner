@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+hadron-electron-cliente/HadronSuporteCliente-win32-x64/
+hadron-electron-cliente/build-x-close/
+hadron-electron-tecnico/HadronSuporteTecnico-win32-x64/
+
+*.exe
